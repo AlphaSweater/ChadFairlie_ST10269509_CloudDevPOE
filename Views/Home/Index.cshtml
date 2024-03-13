@@ -1,0 +1,124 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+@* <head>
+    <style>
+        #b1 {
+            background-color: black;
+        }
+        </style>
+</head> *@
+@* <body>
+    <div class="text-center">
+
+        <p>Explore our collection of handcrafted products from artisans worldwide.</p>
+        <a href="@Url.Action("MyWork", "Home")" class="btn btn-primary">View Our Work</a>
+    </div>
+</body> *@
+@* <body style="background-color: aliceblue">
+
+    <main>
+        <section class="hero" style="text-align: justify">
+            <h1 class="display-4">Welcome to KhumaloCraft Emporium</h1>
+            <p>Discover the finest handcrafted artistry from around the globe.</p>
+            <a href="@Url.Action("MyWork", "Home")" class="btn btn-primary">Explore Our Work</a>
+        </section>
+        <section class="intro">
+            <h2>Our Mission</h2>
+            <p>Connecting world-class artisans with connoisseurs of unique, handcrafted products.</p>
+        </section>
+    </main>
+</body> *@
+
+
+
+
+<head>
+    <style>
+        @@import url(https://db.onlinewebfonts.com/c/c8b7ff20d0c0a86dadc1fa5fa77f58dc?family=Alex+Brush); /* Import a custom font */
+
+        body {
+            background: repeating-linear-gradient( to right, #b85e75 0%, #b85e75 14.28%, #e76c6a 14.28%, #e76c6a 28.56%,
+            #e18b50 28.56%, #e18b50 42.84%, #3dabc3 42.84%, #3dabc3 57.12%, #2da696 57.12%, #2da696 71.4%, #48c9af 71.4%,
+            #48c9af 85.68%, #0194c4 85.68%, #0194c4 100% );
+        }
+        .mainPage {
+            padding-top: 50px; /* Add padding to the top of the hero section */
+            
+        }
+        .hero {
+            
+            
+            width: 100%; /* Make the hero section take up the full width of the viewport */
+            margin: auto; /* Center the hero section horizontally */
+            padding-top: 20px; /* Add padding to the top of the hero section */
+            padding-bottom: 20px; /* Add padding to the bottom of the hero section */
+        }
+
+        .slideshow {
+            width: 100%;
+            height: 300px;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 5px; /* Add a space after the slideshow */
+            margin-bottom: 20px; /* Add a space after the slideshow */
+        }
+
+            .slideshow img {
+                max-width: 100%;
+                max-height: 300px;
+                position: absolute;
+                opacity: 0;
+                transition: opacity 2s;
+                border-radius: 15px; /* Round the edges */
+            }
+
+                .slideshow img.active {
+                    opacity: 1;
+                }
+
+        h1 {
+            font-family: "Alex Brush"; /* Use the custom font */
+            font-size: 3em;
+        }
+
+        .btn-primary {
+            
+        }
+    </style>
+</head>
+
+<main class="mainPage" style="text-align: center;">
+    <section class="hero" style="background-color: #fcfffe">
+        <h1>Welcome to KhumaloCraft Emporium</h1>
+        <div class="slideshow">
+            <img src="@Url.Content("https://cdn.shopify.com/s/files/1/0836/2769/files/hands-clay-pottery_600x600.jpg?v=1671439611")" class="active">
+            <img src="@Url.Content("https://www.jackspaint.co.za/images/blog/Woodwork.jpg")">
+            <img src="@Url.Content("https://www.thesprucecrafts.com/thmb/TJt0u47H9d6wdajgPvRzW_Ne3sA=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-922707682-5b90467bc9e77c0025931eef.jpg")">
+            <!-- Add more images as needed -->
+        </div>
+        <p>Discover the finest handcrafted artistry from around the globe.</p>
+        <a href="@Url.Action("Shop", "Home")" class="btn btn-primary" style="display: inline-block;">Shop Now</a>
+    </section>
+
+    <!-- Rest of your page content... -->
+
+</main>
+
+@section Scripts {
+    <script>
+        var slideIndex = 0;
+        var slides = document.querySelectorAll('.slideshow img');
+
+        function showNextSlide() {
+            slides[slideIndex].classList.remove('active');
+            slideIndex = (slideIndex + 1) % slides.length;
+            slides[slideIndex].classList.add('active');
+        }
+
+        setInterval(showNextSlide, 8000); // Change slide every 8 seconds
+    </script>
+}
