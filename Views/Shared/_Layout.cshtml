@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/CloudDevPOE.styles.css" asp-append-version="true" />
+
+    <link rel="stylesheet" href="~/css/navbar.css" asp-append-version="true" />
     
 
     <!-- Boxiocns CDN Link -->
@@ -23,22 +25,15 @@
         }
 
         .main-content {
-            -ms-overflow-style: none; /* IE and Edge */
-            scrollbar-width: none; /* Firefox */
-            border: 20px solid #f0f0f0; /* Add a black border */
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+            border: 20px solid #f0f0f0;
             width: 1270px;
             height: 850px;
             background-color: #f0f0f0;
             border-radius: 30px;
             overflow: auto;
             margin: 25px auto;
-        }
-
-        .navbar {
-            position: sticky;
-            top: 0;
-            width: 100%;
-            border-radius: 10px;
         }
 
         * {
@@ -48,7 +43,7 @@
             font-family: 'Poppins', sans-serif;
         }
 
-        /* Hide scrollbar for Chrome, Safari and Opera */
+        
         .scrollable-content::-webkit-scrollbar {
             display: none;
         }
@@ -59,7 +54,9 @@
     <div class="main-content" >
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div style="width: 20px;"></div> <!-- 20px gap -->
-            <a class="navbar-brand" href="#">Logo</a> <!-- Logo -->
+            <a class="navbar-brand" href="#">
+                <img src="~/images/logo_2.png" alt="Logo of KhumaloCraft Emporium" height="auto" width="200px"> <!-- Logo -->
+            </a> 
             <div style="width: 10px;"></div> <!-- 10px gap -->
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
