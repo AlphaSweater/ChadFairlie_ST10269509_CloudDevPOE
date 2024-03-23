@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/CloudDevPOE.styles.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/sidebar.css" asp-append-version="true" />
+    
 
     <!-- Boxiocns CDN Link -->
     <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
@@ -16,6 +16,29 @@
 
         body {
             background: repeating-linear-gradient( to right, #b85e75 0%, #b85e75 14.28%, #e76c6a 14.28%, #e76c6a 28.56%, #e18b50 28.56%, #e18b50 42.84%, #3dabc3 42.84%, #3dabc3 57.12%, #2da696 57.12%, #2da696 71.4%, #48c9af 71.4%, #48c9af 85.68%, #0194c4 85.68%, #0194c4 100% );
+            overflow: hidden;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+
+        .main-content {
+            -ms-overflow-style: none; /* IE and Edge */
+            scrollbar-width: none; /* Firefox */
+            border: 20px solid #f0f0f0; /* Add a black border */
+            width: 1270px;
+            height: 850px;
+            background-color: #f0f0f0;
+            border-radius: 30px;
+            overflow: auto;
+            margin: 25px auto;
+        }
+
+        .navbar {
+            position: sticky;
+            top: 0;
+            width: 100%;
+            border-radius: 10px;
         }
 
         * {
@@ -24,59 +47,55 @@
             box-sizing: border-box;
             font-family: 'Poppins', sans-serif;
         }
+
+        /* Hide scrollbar for Chrome, Safari and Opera */
+        .scrollable-content::-webkit-scrollbar {
+            display: none;
+        }
+        
     </style>
 </head>
 <body>
-    <div class="sidebar close">
-        <div class="logo-details">
-            <i class='bx bxl-c-plus-plus'></i>
-            <span class="logo_name">CloudDevPOE</span>
+    <div class="main-content" >
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Navbar</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-area="" asp-controller="Home" asp-action="AboutUs">About Us</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-area="" asp-controller="Home" asp-action="ContactUs">ContactUs</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Main">Main</a>
+                </li>
+            </ul>
         </div>
-        <ul class="nav-links">
-            <li>
-                <a href="@Url.Action("Index", "Home")">
-                    <i class='bx bx-grid-alt'></i>
-                    <span class="link_name">Home</span>
-                </a>
-            </li>
-            <li>
-                <a href="@Url.Action("AboutUs", "Home")">
-                    <i class='bx bx-collection'></i>
-                    <span class="link_name">About Us</span>
-                </a>
-            </li>
-            <li>
-                <a href="@Url.Action("ContactUs", "Home")">
-                    <i class='bx bx-book-alt'></i>
-                    <span class="link_name">Contact Us</span>
-                </a>
-            </li>
-            <li>
-                <a href="@Url.Action("MyWork", "Home")">
-                    <i class='bx bx-pie-chart-alt-2'></i>
-                    <span class="link_name">My Work</span>
-                </a>
-            </li>
-            <li>
-                <a href="@Url.Action("Main", "Home")">
-                    <i class='bx bx-line-chart'></i>
-                    <span class="link_name">Main</span>
-                </a>
-            </li>
-            <!-- Add more links as needed -->
-        </ul>
+    </nav>
+        @RenderBody()
     </div>
-    <section class="home-section">
-        <div class="container">
-            <main role="main" class="pb-3">
-                @RenderBody()
-            </main>
-        </div>
-    </section>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-    <script src="~/js/sidebar.js" asp-append-version="true"></script>
+    <script>
+        var mainContent = document.querySelector('.main-content');
+        var scrollSpeed = 0.9; // Adjust this value to change the scroll speed
+
+        document.body.addEventListener('wheel', function (e) {
+            if (!mainContent.contains(e.target)) {
+                var to = mainContent.scrollTop + e.deltaY * scrollSpeed;
+                mainContent.scrollTop = to;
+                e.preventDefault();
+            }
+        });
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

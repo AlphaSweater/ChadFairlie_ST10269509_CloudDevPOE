@@ -9,36 +9,15 @@
     <style>
         @@import url(https://db.onlinewebfonts.com/c/c8b7ff20d0c0a86dadc1fa5fa77f58dc?family=Alex+Brush); /* Import a custom font */
 
-        body {
-            background: repeating-linear-gradient( to right, #b85e75 0%, #b85e75 14.28%, #e76c6a 14.28%, #e76c6a 28.56%, #e18b50 28.56%, #e18b50 42.84%, #3dabc3 42.84%, #3dabc3 57.12%, #2da696 57.12%, #2da696 71.4%, #48c9af 71.4%, #48c9af 85.68%, #0194c4 85.68%, #0194c4 100% );
-        }
-
-        .mainPage {
-            padding-top: 50px;
-            
-            
-        }
-
-        #section1 {
-            
-
-        }
-
         .container {
-            
-            
-            
-
             display: grid;
-            grid-template-columns: repeat(4, 280px); /* Define a 4-column grid, each 25% of the container width */
+            grid-template-columns: repeat(4, 280px);
             
-            grid-template-rows: repeat(3, 280px); /* Define a 3-row grid, each 340px tall */
-            grid-gap: 10px; /* Add a 5px gap between grid items */
+            grid-template-rows: repeat(6, 280px); 
+            grid-gap: 10px; 
             
-            
-            
-            padding-top: 40px;
-            
+            padding-top: 15px;
+            /* padding-bottom: 40px; */
             padding-left: 40px;
             padding-right: 40px;
             box-sizing: border-box; /* Include padding and border in element's total width and height */
@@ -49,24 +28,21 @@
             width: auto;
             height: auto;
             
-            border-radius: 25px; /* Round the edges */
+            border-radius: 25px; 
         }
 
         #box1 {
-            grid-column: span 3; /* Make box1 span 3 columns starting from the first column */
-            grid-row: span 2; /* Make box1 span 2 rows starting from the second row */
+            grid-column: span 3; 
+            grid-row: span 2; 
             width: auto;
             height: auto;
             background-color: #c41010;
         }
 
         #box4 {
-            grid-column: span 2; /* Make box1 span 3 columns starting from the first column */
-            
-            
+            grid-column: span 2; 
+ 
         }
-
-        
 
         </style >
 </head>
@@ -75,9 +51,33 @@
 <main class="mainPage" style="text-align: center;">
 
 
-    <div style="width: 1230px; height: 910px; background-color: #f0f0f0;border-radius: 30px;">
+    <div>
         
         <div class="container" id="container1">
+            <div class="box" id="box1">
+                1
+            </div>
+
+            <div class="box" id="box2" style="background-color: #b86f26">
+                2
+            </div>
+
+            <div class="box" id="box3" style="background-color: #00FA9A">
+                3
+            </div>
+
+            <div class="box" id="box4" style="background-color: #D40AFD">
+                4
+            </div>
+
+            <div class="box" id="box5" style="background-color: #006699">
+                5
+            </div>
+
+            <div class="box" id="box6" style="background-color: #FF4500">
+                6
+            </div>
+
             <div class="box" id="box1">
                 1
             </div>
