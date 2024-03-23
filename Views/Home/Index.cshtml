@@ -1,37 +1,6 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
-@* <head>
-    <style>
-        #b1 {
-            background-color: black;
-        }
-        </style>
-</head> *@
-@* <body>
-    <div class="text-center">
-
-        <p>Explore our collection of handcrafted products from artisans worldwide.</p>
-        <a href="@Url.Action("MyWork", "Home")" class="btn btn-primary">View Our Work</a>
-    </div>
-</body> *@
-@* <body style="background-color: aliceblue">
-
-    <main>
-        <section class="hero" style="text-align: justify">
-            <h1 class="display-4">Welcome to KhumaloCraft Emporium</h1>
-            <p>Discover the finest handcrafted artistry from around the globe.</p>
-            <a href="@Url.Action("MyWork", "Home")" class="btn btn-primary">Explore Our Work</a>
-        </section>
-        <section class="intro">
-            <h2>Our Mission</h2>
-            <p>Connecting world-class artisans with connoisseurs of unique, handcrafted products.</p>
-        </section>
-    </main>
-</body> *@
-
-
-
 
 <head>
     <style>
@@ -88,6 +57,21 @@
         .btn-primary {
             
         }
+
+        .blue-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px; /* Adjust spacing between cells */
+            background-color: grey; 
+            padding: 20px; /* Add some padding around the grid */
+        }
+
+        .grid-cell {
+            background-color: #fcfffe; /* White color for each cell */
+            height: 200px; /* Set the desired height */
+            width: 200px; /* Set the desired width */
+            border-radius: 10px; /* Rounded corners for squares */
+        }
     </style>
 </head>
 
@@ -101,11 +85,15 @@
             <!-- Add more images as needed -->
         </div>
         <p>Discover the finest handcrafted artistry from around the globe.</p>
-        <a href="@Url.Action("Shop", "Home")" class="btn btn-primary" style="display: inline-block;">Shop Now</a>
+        <a href="@Url.Action("MyWork", "Home")" class="btn btn-primary" style="display: inline-block;">Shop Now</a>
     </section>
 
-    <!-- Rest of your page content... -->
-
+    <section class="blue-grid">
+        <div class="grid-cell"></div>
+        <div class="grid-cell"></div>
+        <div class="grid-cell"></div>
+        <div class="grid-cell"></div>
+    </section>
 </main>
 
 @section Scripts {

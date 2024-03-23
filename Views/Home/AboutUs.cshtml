@@ -1,8 +1,38 @@
 ﻿@{
     ViewData["Title"] = "About Us";
 }
+<style>
+    .mainPage {
+        padding-top: 50px;
+    }
 
-<div class="text-left">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+    #section1 {
+    }
+
+    .container {
+        display: grid;
+        grid-template-columns: repeat(4, 280px); /* Define a 4-column grid, each 25% of the container width */
+
+        grid-template-rows: repeat(3, 280px); /* Define a 3-row grid, each 340px tall */
+        grid-gap: 10px; /* Add a 5px gap between grid items */
+
+
+
+        padding-top: 25px;
+        padding-bottom: 25px;
+        padding-left: 40px;
+        padding-right: 40px;
+        box-sizing: border-box; /* Include padding and border in element's total width and height */
+    }
+
+    .box {
+        width: auto;
+        height: auto;
+        border-radius: 5px; /* Round the edges */
+    }
+</style>
+
+
+<main class="mainPage" style="text-align: center;">
+
+</main>
