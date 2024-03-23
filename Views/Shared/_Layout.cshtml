@@ -58,27 +58,37 @@
 <body>
     <div class="main-content" >
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">Navbar</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-                <li class="nav-item active">
-                    <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" asp-area="" asp-controller="Home" asp-action="AboutUs">About Us</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" asp-area="" asp-controller="Home" asp-action="ContactUs">ContactUs</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Main">Main</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
+            <div style="width: 20px;"></div> <!-- 20px gap -->
+            <a class="navbar-brand" href="#">Logo</a> <!-- Logo -->
+            <div style="width: 10px;"></div> <!-- 10px gap -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item active">
+                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="AboutUs">About Us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="ContactUs">ContactUs</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Main">Main</a>
+                    </li>
+                </ul>
+            </div>
+            <div style="width: 40px;"></div> <!-- 40px gap -->
+            <form class="form-inline">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"> <!-- Search bar -->
+            </form>
+            <div style="width: 30px;"></div> <!-- 30px gap -->
+            <i class='bx bx-cog'></i> <!-- Settings icon -->
+            <div style="width: 10px;"></div> <!-- 10px gap -->
+            <i class='bx bx-user'></i> <!-- Account icon -->
+            <div style="width: 10px;"></div> <!-- 10px gap -->
+            <i class='bx bx-cart'></i> <!-- Cart icon -->
+            <div style="width: 30px;"></div> <!-- 30px gap -->
+        </nav>
         @RenderBody()
     </div>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
