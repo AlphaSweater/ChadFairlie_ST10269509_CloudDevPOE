@@ -15,7 +15,7 @@
 
         .mainPage {
             padding-top: 50px;
-           
+            
             
         }
 
@@ -25,17 +25,22 @@
         }
 
         .container {
-            background-color: whitesmoke;
+            
+            
             
 
             display: grid;
             grid-template-columns: repeat(4, 280px); /* Define a 4-column grid, each 25% of the container width */
             
             grid-template-rows: repeat(3, 280px); /* Define a 3-row grid, each 340px tall */
-            grid-gap: 5px; /* Add a 5px gap between grid items */
+            grid-gap: 10px; /* Add a 5px gap between grid items */
             
             
-            padding: 0px; /* Add padding to the container */
+            
+            padding-top: 40px;
+            
+            padding-left: 40px;
+            padding-right: 40px;
             box-sizing: border-box; /* Include padding and border in element's total width and height */
             
         }
@@ -44,7 +49,7 @@
             width: auto;
             height: auto;
             
-            border-radius: 5px; /* Round the edges */
+            border-radius: 25px; /* Round the edges */
         }
 
         #box1 {
@@ -69,7 +74,9 @@
 
 <main class="mainPage" style="text-align: center;">
 
-    
+
+    <div style="width: 1230px; height: 910px; background-color: #f0f0f0;border-radius: 30px;">
+        
         <div class="container" id="container1">
             <div class="box" id="box1">
                 1
@@ -83,7 +90,7 @@
                 3
             </div>
 
-            <div class="box" id="box4">
+            <div class="box" id="box4" style="background-color: #D40AFD">
                 4
             </div>
 
@@ -95,6 +102,10 @@
                 6
             </div>
         </div>
+    </div>
+
+    
+        
       
            
         
