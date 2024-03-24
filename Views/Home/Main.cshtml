@@ -1,7 +1,4 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
     ViewData["Title"] = "Main Page";
 }
 
@@ -9,7 +6,7 @@
     <style>
         @@import url(https://db.onlinewebfonts.com/c/c8b7ff20d0c0a86dadc1fa5fa77f58dc?family=Alex+Brush); /* Import a custom font */
 
-        .container {
+        .gridContainer {
             display: grid;
             grid-template-columns: repeat(4, 280px);
             
@@ -17,7 +14,6 @@
             grid-gap: 10px; 
             
             padding-top: 15px;
-            /* padding-bottom: 40px; */
             padding-left: 40px;
             padding-right: 40px;
             box-sizing: border-box; /* Include padding and border in element's total width and height */
@@ -27,7 +23,6 @@
         .box {
             width: auto;
             height: auto;
-            
             border-radius: 25px; 
         }
 
@@ -36,7 +31,7 @@
             grid-row: span 2; 
             width: auto;
             height: auto;
-            background-color: #cc0000;
+            background-color: #ffc9c9;
         }
 
         #box4 {
@@ -48,33 +43,30 @@
 </head>
 
 
-<main class="mainPage" style="text-align: center;">
-
-
+<main class="content" style="text-align: center;">
     <div>
-        
-        <div class="container" id="container1">
+        <div class="gridContainer" id="gridContainer1">
             <div class="box" id="box1">
                 1
             </div>
 
-            <div class="box" id="box2" style="background-color: #b86f26">
+            <div class="box" id="box2" style="background-color: #b2f2bb">
                 2
             </div>
 
-            <div class="box" id="box3" style="background-color: #00FA9A">
+            <div class="box" id="box3" style="background-color: #a5d8ff">
                 3
             </div>
 
-            <div class="box" id="box4" style="background-color: #D40AFD">
+            <div class="box" id="box4" style="background-color: #eebefa">
                 4
             </div>
 
-            <div class="box" id="box5" style="background-color: #006699">
+            <div class="box" id="box5" style="background-color: #96f2d7">
                 5
             </div>
 
-            <div class="box" id="box6" style="background-color: #FF4500">
+            <div class="box" id="box6" style="background-color: #ffec99">
                 6
             </div>
 
@@ -103,11 +95,4 @@
             </div>
         </div>
     </div>
-
-    
-        
-      
-           
-        
-
 </main>

@@ -4,109 +4,34 @@
 
 <head>
     <style>
-        @@import url(https://db.onlinewebfonts.com/c/c8b7ff20d0c0a86dadc1fa5fa77f58dc?family=Alex+Brush); /* Import a custom font */
-
-        body {
-            background: repeating-linear-gradient( to right, #b85e75 0%, #b85e75 14.28%, #e76c6a 14.28%, #e76c6a 28.56%,
-            #e18b50 28.56%, #e18b50 42.84%, #3dabc3 42.84%, #3dabc3 57.12%, #2da696 57.12%, #2da696 71.4%, #48c9af 71.4%,
-            #48c9af 85.68%, #0194c4 85.68%, #0194c4 100% );
-        }
-        .mainPage {
-            padding-top: 50px; /* Add padding to the top of the hero section */
-            
-        }
-        .hero {
-            
-            
-            width: 100%; /* Make the hero section take up the full width of the viewport */
-            margin: auto; /* Center the hero section horizontally */
-            padding-top: 20px; /* Add padding to the top of the hero section */
-            padding-bottom: 20px; /* Add padding to the bottom of the hero section */
+        .logo {
+            width: 600px;
+            height: auto;
         }
 
-        .slideshow {
-            width: 100%;
-            height: 300px;
-            overflow: hidden;
-            position: relative;
+        .title {
+            font-size: 2em;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        .content {
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
-            margin-top: 5px; /* Add a space after the slideshow */
-            margin-bottom: 20px; /* Add a space after the slideshow */
-        }
-
-            .slideshow img {
-                max-width: 100%;
-                max-height: 300px;
-                position: absolute;
-                opacity: 0;
-                transition: opacity 2s;
-                border-radius: 15px; /* Round the edges */
-            }
-
-                .slideshow img.active {
-                    opacity: 1;
-                }
-
-        h1 {
-            font-family: "Alex Brush"; /* Use the custom font */
-            font-size: 3em;
-        }
-
-        .btn-primary {
             
-        }
-
-        .blue-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px; /* Adjust spacing between cells */
-            background-color: grey; 
-            padding: 20px; /* Add some padding around the grid */
-        }
-
-        .grid-cell {
-            background-color: #fcfffe; /* White color for each cell */
-            height: 200px; /* Set the desired height */
-            width: 200px; /* Set the desired width */
-            border-radius: 10px; /* Rounded corners for squares */
+            height: 100vh;
+            text-align: center;
         }
     </style>
 </head>
 
-<main class="mainPage" style="text-align: center;">
-    <section class="hero" style="background-color: #fcfffe">
-        <h1>Welcome to KhumaloCraft Emporium</h1>
-        <div class="slideshow">
-            <img src="@Url.Content("https://cdn.shopify.com/s/files/1/0836/2769/files/hands-clay-pottery_600x600.jpg?v=1671439611")" class="active">
-            <img src="@Url.Content("https://www.jackspaint.co.za/images/blog/Woodwork.jpg")">
-            <img src="@Url.Content("https://www.thesprucecrafts.com/thmb/TJt0u47H9d6wdajgPvRzW_Ne3sA=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-922707682-5b90467bc9e77c0025931eef.jpg")">
-            <!-- Add more images as needed -->
-        </div>
-        <p>Discover the finest handcrafted artistry from around the globe.</p>
-        <a href="@Url.Action("MyWork", "Home")" class="btn btn-primary" style="display: inline-block;">Shop Now</a>
-    </section>
+<main class="content">
 
-    <section class="blue-grid">
-        <div class="grid-cell"></div>
-        <div class="grid-cell"></div>
-        <div class="grid-cell"></div>
-        <div class="grid-cell"></div>
-    </section>
+    <div>
+        <h1>Welcome to</h1>
+    </div>
+    
+    <img class="logo" src="~/images/logo_1.png" alt="KhumaloCraft Emporium logo">
+
 </main>
-
-@section Scripts {
-    <script>
-        var slideIndex = 0;
-        var slides = document.querySelectorAll('.slideshow img');
-
-        function showNextSlide() {
-            slides[slideIndex].classList.remove('active');
-            slideIndex = (slideIndex + 1) % slides.length;
-            slides[slideIndex].classList.add('active');
-        }
-
-        setInterval(showNextSlide, 8000); // Change slide every 8 seconds
-    </script>
-}

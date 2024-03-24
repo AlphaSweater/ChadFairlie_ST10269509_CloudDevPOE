@@ -7,6 +7,7 @@
     border-radius: 10px;
     z-index: 1000;
 }
+
 nav {
     display: flex;
     flex-wrap: wrap;
@@ -56,6 +57,39 @@ nav {
     fill: #9e9ea7;
     width: 1rem;
     height: 1rem;
+}
+
+/* ===== NAV BUTTONS ===== */
+.nav-buttons {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.nav-link:hover {
+    outline: none;
+    border-color: rgba(234,76,137,0.4);
+    background-color: #fff;
+    box-shadow: 0 0 0 4px rgb(234 76 137 / 10%);
+    color: #777;
+}
+
+.nav-link {
+    width: 93px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    background: none;
+    text-decoration: none;
+    color: #777;
+    font-family: inherit;
+    font-size: inherit;
+    cursor: pointer;
+    padding: 0;
 }
 
 /* ===== NAV DROPDOWN MENUS ===== */
