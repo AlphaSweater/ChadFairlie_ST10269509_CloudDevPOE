@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="~/CloudDevPOE.styles.css" asp-append-version="true" />
 
     <link rel="stylesheet" href="~/css/navbar.css" asp-append-version="true" />
+    @* <script src="~/js/navbar.js" defer></script> *@
     
 
     <!-- Boxiocns CDN Link -->
@@ -52,28 +53,76 @@
 </head>
 <body>
     <div class="main-content">
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <nav class="navbar">
             <div style="width: 20px;"></div> <!-- 20px gap -->
-            <a class="navbar-brand" href="#">
+            <a class="navbar-brand" href="@Url.Action("Index", "Home")">
                 <img src="~/images/logo_2.png" alt="Logo of KhumaloCraft Emporium" height="auto" width="200px"> <!-- Logo -->
             </a>
             <div style="width: 10px;"></div> <!-- 10px gap -->
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item active">
-                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="AboutUs">About Us</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="ContactUs">ContactUs</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Main">Main</a>
-                    </li>
-                </ul>
+            <button class="link" onclick="location.href='@Url.Action("Index", "Home")'">Home</button>
+            <button class="link" onclick="location.href='@Url.Action("AboutUs", "Home")'">About Us</button>
+            <button class="link" onclick="location.href='@Url.Action("ContactUs", "Home")'">ContactUs</button>
+            <div class="dropdown">
+                <button class="link" onclick="location.href='@Url.Action("Index", "Products")'">My Work</button>
+                <div class="dropdown-hover-area">
+                    <div class="dropdown-menu information-grid">
+                        <div>
+                            <div class="dropdown-heading">Jewelry</div>
+                            <div class="dropdown-links">
+                                <a href="@Url.Action("JewelryPage", "Products")" class="link">Necklaces</a>
+                                <!-- ... -->
+                            </div>
+                        </div>
+                        <!-- ... -->
+                        <div>
+                            <div class="dropdown-heading">Jewelry</div>
+                            <div class="dropdown-links">
+                                <a href="@Url.Action("JewelryPage", "Products")" class="link">Necklaces</a>
+                                <!-- ... -->
+                            </div>
+                        </div>
+                        <!-- ... -->
+                        <div>
+                            <div class="dropdown-heading">Jewelry</div>
+                            <div class="dropdown-links">
+                                <a href="@Url.Action("JewelryPage", "Products")" class="link">Necklaces</a>
+                                <!-- ... -->
+                            </div>
+                        </div>
+                        <!-- ... -->
+                        <div>
+                            <div class="dropdown-heading">Jewelry</div>
+                            <div class="dropdown-links">
+                                <a href="@Url.Action("JewelryPage", "Products")" class="link">Necklaces</a>
+                                <!-- ... -->
+                            </div>
+                        </div>
+                        <!-- ... -->
+                        <div>
+                            <div class="dropdown-heading">Jewelry</div>
+                            <div class="dropdown-links">
+                                <a href="@Url.Action("JewelryPage", "Products")" class="link">Necklaces</a>
+                                <!-- ... -->
+                            </div>
+                        </div>
+                        <!-- ... -->
+                        <div>
+                            <div class="dropdown-heading">Jewelry</div>
+                            <div class="dropdown-links">
+                                <a href="@Url.Action("JewelryPage", "Products")" class="link">Necklaces</a>
+                                <!-- ... -->
+                            </div>
+                        </div>
+                        <!-- ... -->
+                    </div>
+                </div>
+                
+                
+                
             </div>
+
+            <button class="link" onclick="location.href='@Url.Action("Main", "Home")'">Main</button>
+
             <div style="width: 40px;"></div> <!-- 40px gap -->
             <div class="group">
                 <img src="~/images/search-icon.svg" class="icon" aria-hidden="true">
@@ -87,6 +136,72 @@
             <div style="width: 10px;"></div> <!-- 10px gap -->
             <i class='bx bx-cart'></i> <!-- Cart icon -->
             <div style="width: 30px;"></div> <!-- 30px gap -->
+
+
+
+
+
+            @* <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+
+                    <li class="nav-item active">
+                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="AboutUs">About Us</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="ContactUs">ContactUs</a>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            My Work
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <h6 class="dropdown-header">Jewelry</h6>
+                            <a class="dropdown-item" asp-controller="Products" asp-action="JewelryPage">Necklaces</a>
+                            <a class="dropdown-item" asp-controller="Products" asp-action="JewelryPage">Bracelets</a>
+                            <a class="dropdown-item" asp-controller="Products" asp-action="JewelryPage">Earrings</a>
+                            <a class="dropdown-item" asp-controller="Products" asp-action="JewelryPage">Rings</a>
+                            <h6 class="dropdown-header">Textiles and Fabrics</h6>
+                            <a class="dropdown-item" asp-controller="Products" asp-action="TextilesPage">Scarves</a>
+                            <a class="dropdown-item" asp-controller="Products" asp-action="TextilesPage">Shawls</a>
+                            <a class="dropdown-item" asp-controller="Products" asp-action="TextilesPage">Clothing</a>
+                            <a class="dropdown-item" asp-controller="Products" asp-action="TextilesPage">Home Textiles</a>
+                            <h6 class="dropdown-header">Pottery and Ceramics</h6>
+                            <a class="dropdown-item" asp-controller="Products" asp-action="PotteryPage">Mugs</a>
+                            <a class="dropdown-item" asp-controller="Products" asp-action="PotteryPage">Bowls</a>
+                            <a class="dropdown-item" asp-controller="Products" asp-action="PotteryPage">Vases</a>
+                            <a class="dropdown-item" asp-controller="Products" asp-action="PotteryPage">Decorative Plates</a>
+                            <h6 class="dropdown-header">Woodwork</h6>
+                            <a class="dropdown-item" asp-controller="Products" asp-action="Woodwork">Wooden Furniture</a>
+                            <a class="dropdown-item" asp-controller="Products" asp-action="Woodwork">Sculptures</a>
+                            <a class="dropdown-item" asp-controller="Products" asp-action="Woodwork">Cutting Boards</a>
+                            <a class="dropdown-item" asp-controller="Products" asp-action="Woodwork">Home Decor Items</a>
+                            <h6 class="dropdown-header">Metal Art</h6>
+                            <a class="dropdown-item" asp-controller="Products" asp-action="MetalArtPage">Sculptures</a>
+                            <a class="dropdown-item" asp-controller="Products" asp-action="MetalArtPage">Wall Hangings</a>
+                            <a class="dropdown-item" asp-controller="Products" asp-action="MetalArtPage">Jewelry</a>
+                            <a class="dropdown-item" asp-controller="Products" asp-action="MetalArtPage">Utensils</a>
+                            <h6 class="dropdown-header">Home Decor and Accessories</h6>
+                            <a class="dropdown-item" asp-controller="Products" asp-action="HomeDecorPage">Handwoven Baskets</a>
+                            <a class="dropdown-item" asp-controller="Products" asp-action="HomeDecorPage">Candles</a>
+                            <a class="dropdown-item" asp-controller="Products" asp-action="HomeDecorPage">Wooden Frames</a>
+                            <a class="dropdown-item" asp-controller="Products" asp-action="HomeDecorPage">Decorative Glassware</a>
+                        </div>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Main">Main</a>
+                    </li>
+
+                </ul>
+            </div> *@
+
+            
         </nav>
         @RenderBody()
     </div>

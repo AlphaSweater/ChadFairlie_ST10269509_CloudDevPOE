@@ -1,11 +1,21 @@
 ﻿/* ==================== NAVIGATION BAR CSS ==================== */
 .navbar {
     position: sticky;
+    background-color: white;
     top: 0;
     width: 100%;
     border-radius: 10px;
     z-index: 1000;
 }
+nav {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+    nav .link, nav .dropdown, nav .group {
+        margin-right: 10px; /* Adjust as needed */
+    }
 /* ===== SEARCH BAR ===== */
 .group {
     display: flex;
@@ -77,6 +87,14 @@
     position: relative;
 }
 
+.dropdown-hover-area {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+}
+
 .dropdown-menu {
     position: absolute;
     left: 0;
@@ -88,10 +106,12 @@
     opacity: 0;
     pointer-events: none;
     transform: translateY(-10px);
-    transition: opacity 150ms ease-in-out, transform 150ms ease-in-out;
+    transition: opacity 550ms ease-in-out, transform 150ms ease-in-out;
+    display: none; /* Hide by default */
 }
 
-.dropdown.active > .link + .dropdown-menu {
+.dropdown:hover .dropdown-menu {
+    display: block; /* Show on hover */
     opacity: 1;
     transform: translateY(0);
     pointer-events: auto;
@@ -107,10 +127,6 @@
     display: flex;
     flex-direction: column;
     gap: .25rem;
-}
-
-.login-form > input {
-    margin-bottom: .5rem;
 }
 
 /* ===== TITLE ===== */
