@@ -1,4 +1,5 @@
-﻿@{
+﻿@*
+@{
     ViewData["Title"] = "Home Page";
 }
 
@@ -97,7 +98,7 @@
     </style>
 </head>
 
-<main class="content">
+ <main class="content">
 
     <div id="row1" class="rowContent">
         <div id="box1" class="box">
@@ -146,6 +147,193 @@
             </p>
         </div>
     </div>
+</main> *@
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<head>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: #333;
+        }
+
+        .logo {
+            width: auto;
+            height: 450px;
+        }
+
+        .content {
+            display: flex;
+            flex-direction: column;
+            
+            padding-top: 15px;
+            padding-left: 40px;
+            padding-right: 40px;
+            padding-bottom: 15px;
+            box-sizing: border-box;
+            width: 100%;
+            text-align: center;
+            gap: 10px;
+        }
+
+        .rowContent {
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+            gap: 10px;
+            justify-content: center;
+
+        }
+
+        .box {
+            height: auto;
+            border-radius: 25px;
+            
+        }
+
+        #row2 {
+            background-color: #a5d8ff;
+            padding: 15px;
+            border-radius: 25px;
+            height: 100%
+        }
+
+        #row3 {
+            background-color: #96f2d7;
+            padding: 15px;
+            border-radius: 25px;
+            height: 100%
+        }
+
+        .rowContent, .boxContent {
+            box-sizing: border-box;
+        }
+
+        h1, h2 {
+            font-family: 'Segoe Print';
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 50px;
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 30px;
+        }
+
+        p {
+            font-size: 18px;
+            margin-bottom: 20px;
+            text-align: justify;
+        }
+
+        .btn-primary {
+            background-color: #0d181c; /* Change the background color */
+            color: #ffffff; /* Change the text color */
+            border: none; /* Remove the border */
+            padding: 10px 20px; /* Add some padding */
+            text-align: center; /* Center the text */
+            text-decoration: none; /* Remove underline */
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            transition-duration: 0.4s; /* Add transition */
+            cursor: pointer;
+        }
+
+            .btn-primary:hover {
+                background-color: #ffffff; /* Change the background color on hover */
+                color: #0d181c; /* Change the text color on hover */
+            }
+
+
+        .slideshow {
+            width: 100%;
+            height: 350px;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 5px;
+            margin-bottom: 5px;
+        }
+
+            .slideshow img {
+                max-width: 100%;
+                max-height: 350px;
+                position: absolute;
+                opacity: 0;
+                transition: opacity 2s;
+                border-radius: 15px; /* Round the edges */
+            }
+
+                .slideshow img.active {
+                    opacity: 1;
+                }
+    </style>
+</head>
+
+<main class="content">
+    <div class="rowContent">
+        <div id="box1" class="box">
+            <div style="max-width: 900px;margin: 0 auto;">
+                <h1>Welcome to KhumaloCraft Emporium</h1>
+                <img class="logo" src="~/images/logo_3.png" alt="KhumaloCraft Emporium logo">
+            </div>
+        </div>
+    </div>
+
+    <div id="row2" class="rowContent">
+        <div class="box" style="display:flex; flex-direction: column; padding-right: 20px;">
+            <div style="max-width: 900px;margin: 0 auto;">
+                <h2>Discover the Artistry</h2>
+            </div>
+
+            <div style="display: flex;flex-direction:column; max-width: 900px; justify-content: center; height: 100%;">
+                <p>
+                    Explore our handcrafted treasures, meticulously crafted
+                    by artisans from around the world. From vibrant textiles
+                    to elegant ceramics, each piece tells a story. Dive into
+                    our gallery and immerse yourself in the beauty of KhumaloCraft.
+                </p>
+                <a href="@Url.Action("Index", "Products")" class="btn btn-primary">Shop Now</a>
+
+            </div>
+        </div>
+
+        <div class="slideshow">
+            <img src="@Url.Content("https://cdn.shopify.com/s/files/1/0836/2769/files/hands-clay-pottery_600x600.jpg?v=1671439611")" class="active">
+            <img src="@Url.Content("https://www.jackspaint.co.za/images/blog/Woodwork.jpg")">
+            <img src="@Url.Content("https://www.thesprucecrafts.com/thmb/TJt0u47H9d6wdajgPvRzW_Ne3sA=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-922707682-5b90467bc9e77c0025931eef.jpg")">
+            <!-- Add more images as needed -->
+        </div>
+    </div>
+
+    <div id="row3" class="rowContent">
+        <div class="box" style="display:flex; flex-direction: column; padding-right: 20px;">
+            <div style="max-width: 900px;margin: 0 auto;">
+                <h2>Our Mission</h2>
+            </div>
+
+            <div style="display: flex; max-width: 900px; align-items: center;height: 100%;">
+                <p>
+                    At KhumaloCraft Emporium, we believe in the power of art to
+                    transform lives. Our mission is to provide a platform for
+                    artisans to showcase their work and connect with a global
+                    audience. By supporting local talent, we hope to preserve
+                    traditional crafts and promote cultural exchange.
+                </p>
+            </div>
+
+        </div>
+    </div>
+    
 </main>
 
 @section Scripts {
