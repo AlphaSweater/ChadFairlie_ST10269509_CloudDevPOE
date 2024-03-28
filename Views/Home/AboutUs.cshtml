@@ -1,38 +1,137 @@
 ﻿@{
     ViewData["Title"] = "About Us";
 }
-<style>
-    .mainPage {
-        padding-top: 50px;
-    }
+<head>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: #333;
+        }
 
-    #section1 {
-    }
+        .logo {
+            width: auto;
+            height: 450px;
+        }
 
-    .container {
-        display: grid;
-        grid-template-columns: repeat(4, 280px); /* Define a 4-column grid, each 25% of the container width */
+        .content {
+            display: flex;
+            flex-direction: column;
+            padding-top: 15px;
+            padding-left: 40px;
+            padding-right: 40px;
+            padding-bottom: 15px;
+            box-sizing: border-box;
+           
+            text-align: center;
+            gap: 30px;
+        }
 
-        grid-template-rows: repeat(3, 280px); /* Define a 3-row grid, each 340px tall */
-        grid-gap: 10px; /* Add a 5px gap between grid items */
+        .rowContent {
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+            gap: 10px;
+            justify-content: center;
+        }
 
+        .box {
+            height: auto;
+            border-radius: 25px;
+        }
 
+        #row2 {
+            background-color: #a5d8ff;
+            padding: 15px;
+            border-radius: 25px;
+            height: 100%
+        }
 
-        padding-top: 25px;
-        padding-bottom: 25px;
-        padding-left: 40px;
-        padding-right: 40px;
-        box-sizing: border-box; /* Include padding and border in element's total width and height */
-    }
+        #row3 {
+            background-color: #96f2d7;
+            padding: 15px;
+            border-radius: 25px;
+            height: 100%
+        }
 
-    .box {
-        width: auto;
-        height: auto;
-        border-radius: 5px; /* Round the edges */
-    }
-</style>
+        .rowContent, .boxContent {
+            box-sizing: border-box;
+        }
 
+        h1, h2 {
+            font-family: 'Segoe Print';
+            margin-bottom: 20px;
+        }
 
-<main class="mainPage" style="text-align: center;">
+        h1 {
+            font-size: 50px;
+            text-align: center;
+        }
 
+        h2 {
+            font-size: 30px;
+        }
+
+        p {
+            font-size: 18px;
+            margin-bottom: 20px;
+            text-align: justify;
+        }
+
+        .btn-primary {
+            background-color: #0d181c; /* Change the background color */
+            color: #ffffff; /* Change the text color */
+            border: none; /* Remove the border */
+            padding: 10px 20px; /* Add some padding */
+            text-align: center; /* Center the text */
+            text-decoration: none; /* Remove underline */
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            transition-duration: 0.4s; /* Add transition */
+            cursor: pointer;
+        }
+
+            .btn-primary:hover {
+                background-color: #ffffff; /* Change the background color on hover */
+                color: #0d181c; /* Change the text color on hover */
+            }
+    </style>
+</head>
+
+<main class="content">
+    <div class="rowContent">
+        <div id="box1" class="box">
+            <div style="max-width: 900px;margin: 0 auto;">
+                <h1>About KhumaloCraft Emporium</h1>
+            </div>
+        </div>
+    </div>
+
+    <div id="row2" class="rowContent">
+        <div class="box" style="display:flex; flex-direction: column; padding-right: 20px;">
+            <div style="max-width: 900px;margin: 0 auto;">
+                <h2>Our Story</h2>
+            </div>
+
+            <div style="display: flex;flex-direction:column; max-width: 900px; justify-content: center; height: 100%;">
+                <p>
+                    KhumaloCraft Emporium was founded by James Khumalo, a visionary entrepreneur with a passion for handcrafted products. Our mission is to connect artisans worldwide with a discerning audience, providing a platform for these talented individuals to showcase their work.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div id="row3" class="rowContent">
+        <div class="box" style="display:flex; flex-direction: column; padding-right: 20px;">
+            <div style="max-width: 900px;margin: 0 auto;">
+                <h2>Our Vision</h2>
+            </div>
+
+            <div style="display: flex; max-width: 900px; align-items: center;height: 100%;">
+                <p>
+                    We envision a world where artistry is valued and celebrated, where artisans can make a living from their craft, and where consumers can find unique, high-quality products that tell a story. Join us in making this vision a reality.
+                </p>
+            </div>
+        </div>
+    </div>
 </main>
