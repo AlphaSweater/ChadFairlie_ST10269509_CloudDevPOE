@@ -1,0 +1,29 @@
+﻿.contentColumn {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    gap: 30px;
+}
+
+.rowContent {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    gap: 20px;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+.rowSection {
+    box-shadow: 0px 10px 30px -5px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    border-radius: 25px;
+    height: 100%;
+    margin-bottom: 40px;
+}
+
+.box {
+    height: auto;
+    border-radius: 25px;
+    box-sizing: border-box;
+}

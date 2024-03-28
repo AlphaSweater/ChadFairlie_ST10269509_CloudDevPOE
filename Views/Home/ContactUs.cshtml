@@ -1,195 +1,158 @@
 ﻿@{
     ViewData["Title"] = "Contact Us";
 }
+
 <head>
+    <link rel="stylesheet" href="~/css/base.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/flex-layout.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/contact-form.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
     <style>
         body {
-            font-family: 'Poppins', sans-serif;
-            color: #333;
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
         }
 
-        .logo {
-            width: auto;
-            height: 450px;
+        h1, h2 {
+            color: #222222;
         }
 
-        .content {
-            display: flex;
-            flex-direction: column;
+        h1 {
+            font-size: 2.5em;
+        }
+
+        h2 {
+            font-size: 2em;
+        }
+
+        p {
+            font-size: 1.1em;
+            color: #292929;
+        }
+
+        .contact-info a {
+            color: #0044CC;
+        }
+
+            .contact-info a:hover {
+                color: #87CEEB
+            }
+
+        #mainContentColumn {
             padding-top: 15px;
             padding-left: 40px;
             padding-right: 40px;
             padding-bottom: 15px;
-            box-sizing: border-box;
-            width: 100%;
             text-align: center;
             gap: 30px;
         }
 
         .rowContent {
             display: flex;
-            flex-direction: row;
-            width: 100%;
-            gap: 10px;
-            justify-content: center;
+            flex-wrap: wrap;
+            justify-content: space-between;
         }
 
-        .box {
-            height: auto;
-            border-radius: 25px;
-        }
-
-        #row2 {
-            background-color: #a5d8ff;
+        .contact-info {
+            flex: 0 0 48%;
+            margin-bottom: 20px;
             padding: 15px;
             border-radius: 25px;
-            height: 100%
+            box-shadow: 0px 10px 30px -5px rgba(0, 0, 0, 0.1);
         }
 
-        #row3 {
+        .general-inquiries {
+            background-color: #EEBEFA;
+        }
+
+        .customer-support {
             background-color: #96f2d7;
-            padding: 15px;
-            border-radius: 25px;
-            height: 100%
         }
 
-        .rowContent, .boxContent {
-            box-sizing: border-box;
+        .careers {
+            
+            background-color: #FDB686;
         }
 
-        h1, h2 {
-            font-family: 'Segoe Print';
-            margin-bottom: 20px;
+        .social-media {
+            background-color: #ffec99;
         }
 
-        h1 {
-            font-size: 50px;
-            text-align: center;
+        .visit-us {
+            background-color: #85EA92;
         }
 
-        h2 {
-            font-size: 30px;
+        .send-message {
+            flex: 0 0 100%;
+            background-color: #FF9999;
         }
-
-        p {
-            font-size: 18px;
-            margin-bottom: 20px;
-            text-align: justify;
-        }
-
-        .btn-primary {
-            background-color: #0d181c; /* Change the background color */
-            color: #ffffff; /* Change the text color */
-            border: none; /* Remove the border */
-            padding: 10px 20px; /* Add some padding */
-            text-align: center; /* Center the text */
-            text-decoration: none; /* Remove underline */
-            display: inline-block;
-            font-size: 16px;
-            margin: 4px 2px;
-            transition-duration: 0.4s; /* Add transition */
-            cursor: pointer;
-        }
-
-            .btn-primary:hover {
-                background-color: #ffffff; /* Change the background color on hover */
-                color: #0d181c; /* Change the text color on hover */
-            }
-
-
-        .slideshow {
-            width: 100%;
-            height: 350px;
-            overflow: hidden;
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-top: 5px;
-            margin-bottom: 5px;
-        }
-
-            .slideshow img {
-                max-width: 100%;
-                max-height: 350px;
-                position: absolute;
-                opacity: 0;
-                transition: opacity 2s;
-                border-radius: 15px; /* Round the edges */
-            }
-
-                .slideshow img.active {
-                    opacity: 1;
-                }
     </style>
 </head>
 
-<main class="content">
+<main id="mainContentColumn" class="contentColumn">
+    <div id="box1" class="box">
+        <div style="max-width: 900px;margin: 0 auto;">
+            <h1>Contact Us</h1>
+            <p>We love hearing from our community. Whether you have a question, feedback, or just want to say hello, here’s how you can reach us:</p>
+            <hr />
+        </div>
+    </div>
+
     <div class="rowContent">
-        <div id="box1" class="box">
-            <div style="max-width: 900px;margin: 0 auto;">
-                <h1>Welcome to KhumaloCraft Emporium</h1>
-                <img class="logo" src="~/images/logo_3.png" alt="KhumaloCraft Emporium logo">
-            </div>
+        <div class="contact-info general-inquiries">
+            <h2><i class="fas fa-info-circle"></i> General Inquiries</h2>
+            <p>For any general questions or concerns, please reach out to us via email or phone.</p>
+            <p><i class="fas fa-envelope"></i> Email: <a href="mailto:support@KCE.co.za">support@KCE.co.za</a></p>
+            <p><i class="fas fa-phone"></i> Phone: <a href="tel:+27215550194">+27 21 555 0194</a></p>
+        </div>
+
+        <div class="contact-info customer-support">
+            <h2><i class="fas fa-headset"></i> Customer Support</h2>
+            <p>Have questions about your order or need assistance? Our customer support team is here to help.</p>
+            <p><i class="fas fa-envelope"></i> Email: <a href="mailto:support@KCE.co.za">support@KCE.co.za</a></p>
+            <p><i class="fas fa-phone"></i> Phone: <a href="tel:+27215550194">+27 21 555 0194</a></p>
+        </div>
+
+        <div class="contact-info careers">
+            <h2><i class="fas fa-briefcase"></i> Careers</h2>
+            <p>Interested in joining our team? Find out about current opportunities and how to apply.</p>
+            <p><i class="fas fa-envelope"></i> Email: <a href="mailto:support@KCE.co.za">support@KCE.co.za</a></p>
+            <p><i class="fas fa-phone"></i> Phone: <a href="tel:+27215550194">+27 21 555 0194</a></p>
+        </div>
+
+        <div class="contact-info social-media">
+            <h2><i class="fas fa-hashtag"></i> Social Media</h2>
+            <p>Stay connected with us through our social channels:</p>
+            <p><i class="fab fa-facebook"></i> Facebook: KhumaloCraftEmporium</p>
+            <p><i class="fab fa-twitter"></i> Twitter: @@KhumaloCraft</p>
+            <p><i class="fab fa-instagram"></i> Instagram: @@KhumaloCraftEmporium</p>
         </div>
     </div>
 
-    <div id="row2" class="rowContent">
-        <div class="box" style="display:flex; flex-direction: column; padding-right: 20px;">
-            <div style="max-width: 900px;margin: 0 auto;">
-                <h2>Discover the Artistry</h2>
+    <div class="rowContent">
+        <div class="contact-info send-message">
+            <h2><i class="fas fa-envelope"></i> Send Us a Message</h2>
+            <p>Use the form below to send us a direct message. We aim to respond within 24 hours.</p>
+            <div class="container">
+                <form>
+                    <label class="inputLabel" for="fname">First Name</label>
+                    <input type="text" id="fname" name="firstname" placeholder="Your name..">
+
+                    <label for="lname">Last Name</label>
+                    <input type="text" id="lname" name="lastname" placeholder="Your last name..">
+
+                    <label for="email">Email</label>
+                    <input type="text" id="email" name="email" placeholder="Your email..">
+
+                    <label for="subject">Subject</label>
+                    <input type="text" id="subject" name="subject" placeholder="Subject">
+
+                    <label for="message">Message</label>
+                    <textarea id="message" name="message" placeholder="Your Message.." style="height:200px"></textarea>
+
+                    <input type="submit" value="Submit">
+                </form>
             </div>
-
-            <div style="display: flex;flex-direction:column; max-width: 900px; justify-content: center; height: 100%;">
-                <p>
-                    Explore our handcrafted treasures, meticulously crafted
-                    by artisans from around the world. From vibrant textiles
-                    to elegant ceramics, each piece tells a story. Dive into
-                    our gallery and immerse yourself in the beauty of KhumaloCraft.
-                </p>
-                <a href="@Url.Action("Index", "Products")" class="btn btn-primary">Shop Now</a>
-
-            </div>
-        </div>
-
-        <div class="slideshow">
-            <img src="@Url.Content("https://cdn.shopify.com/s/files/1/0836/2769/files/hands-clay-pottery_600x600.jpg?v=1671439611")" class="active">
-            <img src="@Url.Content("https://www.jackspaint.co.za/images/blog/Woodwork.jpg")">
-            <img src="@Url.Content("https://www.thesprucecrafts.com/thmb/TJt0u47H9d6wdajgPvRzW_Ne3sA=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-922707682-5b90467bc9e77c0025931eef.jpg")">
-            <!-- Add more images as needed -->
-        </div>
-    </div>
-
-    <div id="row3" class="rowContent">
-        <div class="box" style="display:flex; flex-direction: column; padding-right: 20px;">
-            <div style="max-width: 900px;margin: 0 auto;">
-                <h2>Our Mission</h2>
-            </div>
-
-            <div style="display: flex; max-width: 900px; align-items: center;height: 100%;">
-                <p>
-                    At KhumaloCraft Emporium, we believe in the power of art to
-                    transform lives. Our mission is to provide a platform for
-                    artisans to showcase their work and connect with a global
-                    audience. By supporting local talent, we hope to preserve
-                    traditional crafts and promote cultural exchange.
-                </p>
-            </div>
-
         </div>
     </div>
-
 </main>
-
-@section Scripts {
-    <script>
-        var slideIndex = 0;
-        var slides = document.querySelectorAll('.slideshow img');
-        function showNextSlide() {
-            slides[slideIndex].classList.remove('active');
-            slideIndex = (slideIndex + 1) % slides.length;
-            slides[slideIndex].classList.add('active');
-        }
-        setInterval(showNextSlide, 8000); // Change slide every 8 seconds
-    </script>
-}
