@@ -21,7 +21,7 @@
         background: #FFC300;
         box-shadow: 0 0 0 0.520833vw #FFC30044, 0 0 2.604167vw #FFC300, 0 0 5.208333vw #FFC300;
         animation: animateGrowShrink 15s linear infinite;
-        animation-duration: calc(125s / var(--i));
+        animation-duration: calc(200s / var(--i));
     }
 
         .bubbles span:nth-child(even) {
