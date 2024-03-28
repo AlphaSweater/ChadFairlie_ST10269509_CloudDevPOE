@@ -1,0 +1,23 @@
+﻿h1, h2 {
+    font-family: 'Segoe Print';
+    margin-bottom: 20px;
+}
+
+h1 {
+    font-size: 50px;
+    text-align: center;
+}
+
+h2 {
+    font-size: 30px;
+}
+
+h3 {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+p {
+    font-size: 18px;
+    text-align: justify;
+}

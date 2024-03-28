@@ -2,134 +2,310 @@
     ViewData["Title"] = "About Us";
 }
 <head>
+    <link rel="stylesheet" href="~/css/base.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/flex-layout.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/about-us.css" asp-append-version="true" />
+
     <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-            color: #333;
-        }
-
-        .logo {
-            width: auto;
-            height: 450px;
-        }
-
-        .content {
-            display: flex;
-            flex-direction: column;
+        #mainContentColumn {
             padding-top: 15px;
             padding-left: 40px;
             padding-right: 40px;
             padding-bottom: 15px;
-            box-sizing: border-box;
-           
             text-align: center;
             gap: 30px;
         }
 
-        .rowContent {
-            display: flex;
-            flex-direction: row;
-            width: 100%;
-            gap: 10px;
-            justify-content: center;
+        .column {
+            float: left;
+            width: 33.3%;
+            margin-bottom: 16px;
+            padding: 0 8px;
         }
 
-        .box {
-            height: auto;
-            border-radius: 25px;
+        .card {
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+            height: 100%;
         }
 
-        #row2 {
-            background-color: #a5d8ff;
-            padding: 15px;
-            border-radius: 25px;
-            height: 100%
+        .container {
+            display: grid;
+            grid-template-rows: auto 1fr auto;
+            height: 100%;
+            padding: 0 16px;
         }
 
-        #row3 {
-            background-color: #96f2d7;
-            padding: 15px;
-            border-radius: 25px;
-            height: 100%
-        }
-
-        .rowContent, .boxContent {
-            box-sizing: border-box;
-        }
-
-        h1, h2 {
-            font-family: 'Segoe Print';
-            margin-bottom: 20px;
-        }
-
-        h1 {
-            font-size: 50px;
-            text-align: center;
-        }
-
-        h2 {
-            font-size: 30px;
-        }
-
-        p {
-            font-size: 18px;
-            margin-bottom: 20px;
-            text-align: justify;
-        }
-
-        .btn-primary {
-            background-color: #0d181c; /* Change the background color */
-            color: #ffffff; /* Change the text color */
-            border: none; /* Remove the border */
-            padding: 10px 20px; /* Add some padding */
-            text-align: center; /* Center the text */
-            text-decoration: none; /* Remove underline */
-            display: inline-block;
-            font-size: 16px;
-            margin: 4px 2px;
-            transition-duration: 0.4s; /* Add transition */
-            cursor: pointer;
-        }
-
-            .btn-primary:hover {
-                background-color: #ffffff; /* Change the background color on hover */
-                color: #0d181c; /* Change the text color on hover */
+            .container::after, .row::after {
+                content: "";
+                clear: both;
+                display: table;
             }
+
+        .title {
+            color: grey;
+        }
+
+        .email-label {
+            color: grey;
+        }
+
+        .button {
+            border: none;
+            outline: 0;
+            display: inline-block;
+            padding: 8px;
+            color: white;
+            background-color: #000;
+            text-align: center;
+            cursor: pointer;
+            width: 100%;
+        }
+
+            .button:hover {
+                background-color: #555;
+            }
+
+        #rowMission {
+            background-color: #a5d8ff;
+        }
+
+        #rowVision {
+            background-color: #96f2d7;
+        }
+
+        #rowValues {
+            background-color: #EEBEFA;
+        }
+
+        #rowStory {
+            background-color: #FF9999;
+        }
+
+        #rowImpact {
+            background-color: #ffec99;
+        }
+
+        #rowPromise {
+            background-color: #85EA92;
+        }
+
+        #rowJoinJourney {
+            background-color: #FDB686;
+        }
+
+        p{
+            text-align:left;
+        }
+
     </style>
 </head>
 
-<main class="content">
+<main id="mainContentColumn" class="contentColumn">
     <div class="rowContent">
         <div id="box1" class="box">
             <div style="max-width: 900px;margin: 0 auto;">
                 <h1>About KhumaloCraft Emporium</h1>
+                <hr />
             </div>
         </div>
     </div>
 
-    <div id="row2" class="rowContent">
+    <h2 style="margin: 0">Meet The Team</h2>
+    <div class="rowContent">
+        <div class="column">
+            <div class="card">
+                <img src="~/images/team4.png" alt="James Khumalo" style="width:100%">
+                <div class="container">
+                    <div>
+                        <h2>James Khumalo</h2>
+                        <p class="title">CEO &amp; Founder</p>
+                    </div>
+                    <p>James Khumalo, the heart and soul of KhumaloCraft Emporium,
+                        is a visionary leader with a passion for sustainability and 
+                        global artisanal culture. With a keen eye for detail and a 
+                        deep respect for craftsmanship, James has cultivated a platform 
+                        that not only showcases exquisite handcrafted goods but also fosters 
+                        a community of artisans and appreciators alike.
+                    </p>
+                    <div>
+                        <p><span class="email-label">Email:</span> james.khumalo@kce.co.za</p>
+                        <p><button class="button">Contact</button></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="column">
+            <div class="card">
+                <img src="~/images/team2.png" alt="Samantha Lee" style="width:100%">
+                <div class="container">
+                    <div>
+                        <h2>Samantha Lee</h2>
+                        <p class="title">Chief Technology Officer</p>
+                    </div>
+                    <p>
+                        Samantha Lee is the technological architect behind 
+                        KhumaloCraft Emporium’s seamless online experience. 
+                        With a background in computer science and a flair for 
+                        innovative solutions, Samantha ensures that the platform 
+                        runs smoothly, securely, and is always at the forefront 
+                        of e-commerce technology.
+                    </p>
+                    <div>
+                        <p><span class="email-label">Email:</span> samantha.lee@kce.co.za</p>
+                        <p><button class="button">Contact</button></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="column">
+            <div class="card">
+                <img src="~/images/team3.png" alt="Alex Rivera" style="width:100%">
+                <div class="container">
+                    <div>
+                        <h2>Alex Rivera</h2>
+                        <p class="title">Marketing Director</p>
+                    </div>
+                    <p>
+                        Alex Rivera is the creative force driving KhumaloCraft 
+                        Emporium’s brand into the spotlight. With a knack for 
+                        storytelling and a strategy that intertwines culture and 
+                        commerce, Alex’s campaigns resonate with audiences worldwide, 
+                        bringing the beauty of handcrafted artistry into homes everywhere.
+                    </p>
+                    <div>
+                        <p><span class="email-label">Email:</span> alex.rivera@kce.co.za</p>
+                        <p><button class="button">Contact</button></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="rowMission" class="rowContent rowSection">
+        <div class="box" style="display:flex; flex-direction: column; padding-right: 20px;">
+            <div style="max-width: 900px;margin: 0 auto;">
+                <h2>Our Mission</h2>
+            </div>
+
+            <div style="display: flex;flex-direction:column; max-width: 900px; justify-content: center; height: 100%;">
+                <h3>Empowering Artisans, Enriching Lives</h3>
+                <p>
+                    At KhumaloCraft Emporium, our mission is to create a world where craftsmanship is valued beyond measure. 
+                    We strive to empower artisans from every corner of the globe by providing a platform where their work can 
+                    shine. Our commitment extends beyond commerce; it’s about preserving culture, fostering sustainability, and 
+                    enriching lives through the beauty of handcrafted art.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div id="rowVision" class="rowContent rowSection">
+        <div class="box" style="display:flex; flex-direction: column; padding-right: 20px;">
+            <div style="max-width: 900px;margin: 0 auto;">
+                <h2>Our Vision</h2>
+            </div>
+
+            <div style="display: flex;flex-direction:column; max-width: 900px; justify-content: center; height: 100%;">
+                <h3>A Tapestry of Tradition and Innovation</h3>
+                <p>
+                    We envision KhumaloCraft Emporium as a tapestry woven with threads of tradition and innovation. 
+                    Our goal is to become the premier destination for artisanal treasures, where every purchase tells 
+                    a story and supports the legacy of skilled creators. As we look to the future, we aim to expand 
+                    our reach, embrace new technologies, and continue to set the standard for an exceptional online 
+                    marketplace experience.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div id="rowValues" class="rowContent rowSection">
+        <div class="box" style="display:flex; flex-direction: column; padding-right: 20px;">
+            <div style="max-width: 900px;margin: 0 auto;">
+                <h2>Our Values</h2>
+            </div>
+
+            <div style="display: flex;flex-direction:column; max-width: 900px; justify-content: center; height: 100%;">
+                <h3>Craftsmanship, Community, and Connection</h3>
+                <p>Our values are the pillars that support every decision we make:</p>
+                <ul style="text-align: justify;">
+                    <li>Craftsmanship: We celebrate the meticulous skill and passion that goes into every handmade piece.</li>
+                    <li>Community: We are committed to building a supportive network for artisans and customers alike.</li>
+                    <li>Connection: We bridge the gap between local traditions and global audiences, creating meaningful exchanges through every transaction.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div id="rowStory" class="rowContent rowSection">
         <div class="box" style="display:flex; flex-direction: column; padding-right: 20px;">
             <div style="max-width: 900px;margin: 0 auto;">
                 <h2>Our Story</h2>
             </div>
 
             <div style="display: flex;flex-direction:column; max-width: 900px; justify-content: center; height: 100%;">
+                <h3>From Dream to Global Emporium</h3>
                 <p>
-                    KhumaloCraft Emporium was founded by James Khumalo, a visionary entrepreneur with a passion for handcrafted products. Our mission is to connect artisans worldwide with a discerning audience, providing a platform for these talented individuals to showcase their work.
+                    KhumaloCraft Emporium began as James Khumalo’s dream to honor the unsung heroes of 
+                    the art world - the artisans. From a small online storefront to a bustling global 
+                    emporium, our journey has been one of passion, perseverance, and partnership. 
+                    Each milestone marks our dedication to the craft and our community of talented artisans.
                 </p>
             </div>
         </div>
     </div>
 
-    <div id="row3" class="rowContent">
+    <div id="rowImpact" class="rowContent rowSection">
+    <div class="box" style="display:flex; flex-direction: column; padding-right: 20px;">
+        <div style="max-width: 900px;margin: 0 auto;">
+                <h2>Our Impact</h2>
+        </div>
+
+        <div style="display: flex;flex-direction:column; max-width: 900px; justify-content: center; height: 100%;">
+                <h3>A Ripple Effect of Positive Change</h3>
+            <p>
+                    The impact of KhumaloCraft Emporium is felt far and wide. Artisans gain a global stage, 
+                    customers acquire unique goods with a soul, and together, we contribute to a more sustainable 
+                    and equitable world. Our platform is more than a marketplace; it’s a catalyst for positive change, 
+                    one handcrafted item at a time.
+            </p>
+        </div>
+    </div>
+</div>
+
+    <div id="rowPromise" class="rowContent rowSection">
         <div class="box" style="display:flex; flex-direction: column; padding-right: 20px;">
             <div style="max-width: 900px;margin: 0 auto;">
-                <h2>Our Vision</h2>
+                <h2>Our Promise</h2>
             </div>
 
-            <div style="display: flex; max-width: 900px; align-items: center;height: 100%;">
+            <div style="display: flex;flex-direction:column; max-width: 900px; justify-content: center; height: 100%;">
+                <h3>Your Trust, Our Treasure</h3>
                 <p>
-                    We envision a world where artistry is valued and celebrated, where artisans can make a living from their craft, and where consumers can find unique, high-quality products that tell a story. Join us in making this vision a reality.
+                    We promise to uphold the highest standards of quality and service. Your trust is our most 
+                    treasured asset, and we pledge to ensure every interaction with KhumaloCraft Emporium is 
+                    secure, enjoyable, and exceeds expectations. Welcome to a shopping experience as unique and 
+                    valuable as the products we offer.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div id="rowJoinJourney" class="rowContent rowSection">
+        <div class="box" style="display:flex; flex-direction: column; padding-right: 20px;">
+            <div style="max-width: 900px;margin: 0 auto;">
+                <h2>Join Our Journey</h2>
+            </div>
+
+            <div style="display: flex;flex-direction:column; max-width: 900px; justify-content: center; height: 100%;">
+                <h3>Become Part of Our Crafted World</h3>
+                <p>
+                    Join us on this extraordinary journey. Whether you’re an artisan with a story to tell, a 
+                    customer with a love for the unique, or someone who believes in the power of craft, there’s a 
+                    place for you at KhumaloCraft Emporium. Together, let’s continue to weave a world rich in culture 
+                    and creativity.
                 </p>
             </div>
         </div>
