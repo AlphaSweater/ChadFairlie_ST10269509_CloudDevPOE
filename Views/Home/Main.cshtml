@@ -4,19 +4,20 @@
 
 <head>
     <style>
+        .content {
+            padding-top: 20px;
+            display: flex; /* Make this a flex container */
+            justify-content: center; /* Center children horizontally */
+            height: 100vh; /* Take up full viewport height */
+            text-align: center;
+        }
        
         .gridContainer {
             display: grid;
             grid-template-columns: repeat(4, 280px);
-            
             grid-template-rows: repeat(6, 280px); 
             grid-gap: 10px; 
-            
-            padding-top: 15px;
-            padding-left: 40px;
-            padding-right: 40px;
             box-sizing: border-box; /* Include padding and border in element's total width and height */
-            
         }
 
         .box {
@@ -41,7 +42,7 @@
 </head>
 
 
-<main class="content" style="text-align: center;">
+<main class="content">
     <div>
         <div class="gridContainer" id="gridContainer1">
             <div class="box" id="box1">

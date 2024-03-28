@@ -1,155 +1,4 @@
-﻿@*
-@{
-    ViewData["Title"] = "Home Page";
-}
-
-<head>
-    <style>
-
-        .logo {
-            width: 450px;
-            height: auto;
-        }
-
-        .slideshow {
-            width: 100%;
-            height: 250px;
-            overflow: hidden;
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-top: 5px; 
-            margin-bottom: 10px; 
-       
-        }
-
-            .slideshow img {
-                max-width: 100%;
-                max-height: 250px;
-                position: absolute;
-                opacity: 0;
-                transition: opacity 2s;
-                border-radius: 15px; /* Round the edges */
-            }
-
-                .slideshow img.active {
-                    opacity: 1;
-                }
-
-        .content {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            padding-top: 15px;
-            padding-left: 40px;
-            padding-right: 40px;
-            padding-bottom: 15px;
-            box-sizing: border-box; /* Include padding and border in element's total width and height */
-            width: 100%;
-            text-align: center;
-            gap: 10px;
-        }
-
-        .rowContent {
-            display: flex;
-            flex-direction: row;
-            width: 100%;
-            gap: 10px;
-        }
-
-        .box {
-            height: auto;
-            border-radius: 25px;
-            padding: 15px;
-        }
-
-        .rowContent, .boxContent {
-            box-sizing: border-box;
-        }
-
-        #box1 {
-            background-color: #a5d8ff; 
-        }
-
-        #box2 {
-            background-color: #eebefa;
-            flex-grow: 1;
-            text-align: centre;
-        }
-
-        #box3 {
-            background-color: #ffec99;
-
-        }
-
-        .hero{
-            color: #0d181c;
-            
-            font-family: 'Segoe Print'; 
-        }
-        p {
-            font-family: 'Segoe UI';
-            font-size: 18px;
-            padding-top: 20px;
-            margin-left: 30px;
-            margin-right: 30px;
-        }
-    </style>
-</head>
-
- <main class="content">
-
-    <div id="row1" class="rowContent">
-        <div id="box1" class="box">
-            <h1 class="hero" style="font-size: 50px;font-weight: bold">Welcome to</h1>
-            <img class="logo" src="~/images/logo_1.png" alt="KhumaloCraft Emporium logo">
-        </div>
-
-        <div id="box2" class="box">
-            <h2 class="hero">Discover the Artistry</h2>
-            <div style="height: 5px"></div>
-            <div class="slideshow">
-                <img src="@Url.Content("https://cdn.shopify.com/s/files/1/0836/2769/files/hands-clay-pottery_600x600.jpg?v=1671439611")" class="active">
-                <img src="@Url.Content("https://www.jackspaint.co.za/images/blog/Woodwork.jpg")">
-                <img src="@Url.Content("https://www.thesprucecrafts.com/thmb/TJt0u47H9d6wdajgPvRzW_Ne3sA=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-922707682-5b90467bc9e77c0025931eef.jpg")">
-                <!-- Add more images as needed -->
-            </div>
-            <p style="text-align: justify">
-                Explore our handcrafted treasures, meticulously crafted 
-                by artisans from around the world. From vibrant textiles 
-                to elegant ceramics, each piece tells a story. Dive into 
-                our gallery and immerse yourself in the beauty of KhumaloCraft.
-            </p>
-        </div>
-    </div>
-
-    <div id="row2" class="rowContent">
-        <div id="box3" class="box">
-            <h1 class="hero" style="font-size: 50px;font-weight: bold">Welcome to</h1>
-            <img class="logo" src="~/images/logo_1.png" alt="KhumaloCraft Emporium logo">
-        </div>
-
-        <div id="box4" class="box">
-            <h2 class="hero">Discover the Artistry</h2>
-            <div style="height: 5px"></div>
-            <div class="slideshow">
-                <img src="@Url.Content("https://cdn.shopify.com/s/files/1/0836/2769/files/hands-clay-pottery_600x600.jpg?v=1671439611")" class="active">
-                <img src="@Url.Content("https://www.jackspaint.co.za/images/blog/Woodwork.jpg")">
-                <img src="@Url.Content("https://www.thesprucecrafts.com/thmb/TJt0u47H9d6wdajgPvRzW_Ne3sA=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-922707682-5b90467bc9e77c0025931eef.jpg")">
-                <!-- Add more images as needed -->
-            </div>
-            <p style="text-align: justify">
-                Explore our handcrafted treasures, meticulously crafted
-                by artisans from around the world. From vibrant textiles
-                to elegant ceramics, each piece tells a story. Dive into
-                our gallery and immerse yourself in the beauty of KhumaloCraft.
-            </p>
-        </div>
-    </div>
-</main> *@
-
-@{
+﻿@{
     ViewData["Title"] = "Home Page";
 }
 
@@ -168,15 +17,13 @@
         .content {
             display: flex;
             flex-direction: column;
-            
             padding-top: 15px;
             padding-left: 40px;
             padding-right: 40px;
             padding-bottom: 15px;
             box-sizing: border-box;
-            width: 100%;
             text-align: center;
-            gap: 10px;
+            gap: 30px;
         }
 
         .rowContent {
@@ -191,7 +38,6 @@
         .box {
             height: auto;
             border-radius: 25px;
-            
         }
 
         #row2 {

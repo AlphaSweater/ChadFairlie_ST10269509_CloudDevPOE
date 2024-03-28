@@ -3,100 +3,134 @@
 }
 <head>
     <style>
-
-        .logo {
-            width: 550px;
-            height: auto;
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: #333;
         }
 
-        .gridContainer {
-            display: grid;
-            grid-template-columns: repeat(4, 280px);
-            grid-template-rows: repeat(6, 280px);
-            grid-gap: 10px;
+        .logo {
+            width: auto;
+            height: 450px;
+        }
+
+        .content {
+            display: flex;
+            flex-direction: column;
             padding-top: 15px;
             padding-left: 40px;
             padding-right: 40px;
-            box-sizing: border-box; /* Include padding and border in element's total width and height */
+            padding-bottom: 15px;
+            box-sizing: border-box;
+           
+            text-align: center;
+            gap: 30px;
         }
 
-        .box {
+        .rowContent {
             display: flex;
-            flex-direction: column;
-            width: auto;
-            height: auto;
-            border-radius: 25px;
-            
-            align-items: center;
+            flex-direction: row;
+            width: 100%;
+            gap: 10px;
             justify-content: center;
         }
 
-        #box1 {
-            grid-column: span 4;
-            grid-row: span 2;
-            width: auto;
+        .box {
             height: auto;
+            border-radius: 25px;
+        }
+
+        #row2 {
+            background-color: #a5d8ff;
+            padding: 15px;
+            border-radius: 25px;
+            height: 100%
+        }
+
+        #row3 {
             background-color: #96f2d7;
+            padding: 15px;
+            border-radius: 25px;
+            height: 100%
         }
 
-        #box4 {
-            grid-column: span 2;
+        .rowContent, .boxContent {
+            box-sizing: border-box;
         }
 
+        h1, h2 {
+            font-family: 'Segoe Print';
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 50px;
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 30px;
+        }
+
+        p {
+            font-size: 18px;
+            margin-bottom: 20px;
+            text-align: justify;
+        }
+
+        .btn-primary {
+            background-color: #0d181c; /* Change the background color */
+            color: #ffffff; /* Change the text color */
+            border: none; /* Remove the border */
+            padding: 10px 20px; /* Add some padding */
+            text-align: center; /* Center the text */
+            text-decoration: none; /* Remove underline */
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            transition-duration: 0.4s; /* Add transition */
+            cursor: pointer;
+        }
+
+            .btn-primary:hover {
+                background-color: #ffffff; /* Change the background color on hover */
+                color: #0d181c; /* Change the text color on hover */
+            }
     </style>
 </head>
 
+<main class="content">
+    <div class="rowContent">
+        <div id="box1" class="box">
+            <div style="max-width: 900px;margin: 0 auto;">
+                <h1>About KhumaloCraft Emporium</h1>
+            </div>
+        </div>
+    </div>
 
-<main class="content" style="text-align: center;">
-    <div>
-        <div class="gridContainer" id="gridContainer1">
-            <div class="box" id="box1">
-                <h1>Welcome To</h1>
-                <img class="logo" src="~/images/logo_1.png" alt="KhumaloCraft Emporium logo">
+    <div id="row2" class="rowContent">
+        <div class="box" style="display:flex; flex-direction: column; padding-right: 20px;">
+            <div style="max-width: 900px;margin: 0 auto;">
+                <h2>Our Story</h2>
             </div>
 
-            <div class="box" id="box2" style="background-color: #b2f2bb">
-                2
+            <div style="display: flex;flex-direction:column; max-width: 900px; justify-content: center; height: 100%;">
+                <p>
+                    KhumaloCraft Emporium was founded by James Khumalo, a visionary entrepreneur with a passion for handcrafted products. Our mission is to connect artisans worldwide with a discerning audience, providing a platform for these talented individuals to showcase their work.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div id="row3" class="rowContent">
+        <div class="box" style="display:flex; flex-direction: column; padding-right: 20px;">
+            <div style="max-width: 900px;margin: 0 auto;">
+                <h2>Our Vision</h2>
             </div>
 
-            <div class="box" id="box3" style="background-color: #a5d8ff">
-                3
-            </div>
-
-            <div class="box" id="box4" style="background-color: #eebefa">
-                4
-            </div>
-
-            <div class="box" id="box5" style="background-color: #96f2d7">
-                5
-            </div>
-
-            <div class="box" id="box6" style="background-color: #ffec99">
-                6
-            </div>
-
-            <div class="box" id="box1">
-                1
-            </div>
-
-            <div class="box" id="box2" style="background-color: #b86f26">
-                2
-            </div>
-
-            <div class="box" id="box3" style="background-color: #00FA9A">
-                3
-            </div>
-
-            <div class="box" id="box4" style="background-color: #D40AFD">
-                4
-            </div>
-
-            <div class="box" id="box5" style="background-color: #006699">
-                5
-            </div>
-
-            <div class="box" id="box6" style="background-color: #FF4500">
-                6
+            <div style="display: flex; max-width: 900px; align-items: center;height: 100%;">
+                <p>
+                    We envision a world where artistry is valued and celebrated, where artisans can make a living from their craft, and where consumers can find unique, high-quality products that tell a story. Join us in making this vision a reality.
+                </p>
             </div>
         </div>
     </div>
