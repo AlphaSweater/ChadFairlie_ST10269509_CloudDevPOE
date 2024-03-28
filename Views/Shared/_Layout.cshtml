@@ -9,8 +9,7 @@
     <link rel="stylesheet" href="~/CloudDevPOE.styles.css" asp-append-version="true" />
 
     <link rel="stylesheet" href="~/css/navbar.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/animated.css" asp-append-version="true" />
-    @* <script src="~/js/navbar.js" defer></script> *@
+    <link rel="stylesheet" href="~/css/animated-background.css" asp-append-version="true" />
     
 
     <!-- Boxiocns CDN Link -->
@@ -58,7 +57,7 @@
     </style>
 </head>
 <body>
-    <div class="container">
+    <div id="bg-container">
         <div class="bubbles">
             @* COLUM 1 *@
             <span style="--i:16;"></span>
@@ -125,7 +124,7 @@
             <span style="--i:26;"></span>
         </div>
     </div>
-    @* <div class="main-content">
+    <div class="main-content">
         <nav class="navbar">
             <div style="width: 20px;"></div> <!-- 20px gap -->
             <a class="navbar-brand" href="@Url.Action("Index", "Home")">
@@ -159,7 +158,7 @@
             <div style="width: 30px;"></div> <!-- 30px gap -->
         </nav>
         @RenderBody()
-    </div> *@
+    </div>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
