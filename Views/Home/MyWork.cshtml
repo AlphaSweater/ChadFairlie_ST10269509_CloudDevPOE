@@ -4,74 +4,188 @@
 @{
     ViewData["Title"] = "My Work";
 }
-<style>
-    .mainPage {
-        padding-top: 50px;
-    }
+<head>
+    <link rel="stylesheet" href="~/css/base.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/flex-layout.css" asp-append-version="true" />
+    <link rel="stylesheet" type="text/css" href="~/css/prodduct-card.css" />
 
-    #section1 {
-    }
-
-    .container {
-        display: grid;
-        grid-template-columns: repeat(4, 280px); /* Define a 4-column grid, each 25% of the container width */
-
-        grid-template-rows: repeat(3, 280px); /* Define a 3-row grid, each 340px tall */
-        grid-gap: 10px; /* Add a 5px gap between grid items */
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 
+    <style>
+        #mainContentColumn {
+            padding-top: 15px;
+            padding-left: 40px;
+            padding-right: 40px;
+            padding-bottom: 15px;
+            text-align: center;
+            gap: 30px;
+        }
 
-        padding-top: 25px;
-        padding-bottom: 25px;
-        padding-left: 40px;
-        padding-right: 40px;
-        box-sizing: border-box; /* Include padding and border in element's total width and height */
-    }
+        #row1 {
+            background-color: blue;
+            
+            justify-content: space-around;
+        }
+        #row2 {
+            
+        }
 
-    .box {
-        width: auto;
-        height: auto;
-        border-radius: 5px; /* Round the edges */
-    }
-</style>
+        .box .photo {
+            height: auto;
+            max-height: 80%;
+            text-align: center;
+            float: top;
+            border-radius: 25px;
+        }
 
+        #box1 {
+            background-color: #EEBEFA;
+            width: auto;
+            height: 300px;
+        }
 
-<main class="mainPage" style="text-align: center;">
+        .click-block {
+            width: 50px;
+            height: 50px;
+            background-color: red;
+            cursor: pointer;
+        }
+    </style>
+</head>
 
-
-    <div style="width: 1230px; height: 910px; background-color: #f0f0f0;">
-
-        <div class="container" id="container1">
-            <div class="box" id="box1" style="background-color: #c41010;">
-                1
+<main>
+    <div id="mainContentColumn" class="contentColumn">
+        <div id="row1" class="rowContent">
+            <div class="click-block" id="showItemButton1">
+                <div id="productCard1" class="card" style="display: none;">
+                    <!-- Product card content goes here -->
+                    <nav>
+                        <svg class="arrow" version="1.1" viewBox="0 0 512 512" width="512px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><polygon points="352,115.4 331.3,96 160,256 331.3,416 352,396.7 201.5,256 " stroke="#727272" /></svg>
+                        Back to all Plants
+                        <svg class="heart" version="1.1" viewBox="0 0 512 512" width="512px" xml:space="preserve" stroke="#727272" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M340.8,98.4c50.7,0,91.9,41.3,91.9,92.3c0,26.2-10.9,49.8-28.3,66.6L256,407.1L105,254.6c-15.8-16.6-25.6-39.1-25.6-63.9  c0-51,41.1-92.3,91.9-92.3c38.2,0,70.9,23.4,84.8,56.8C269.8,121.9,302.6,98.4,340.8,98.4 M340.8,83C307,83,276,98.8,256,124.8  c-20-26-51-41.8-84.8-41.8C112.1,83,64,131.3,64,190.7c0,27.9,10.6,54.4,29.9,74.6L245.1,418l10.9,11l10.9-11l148.3-149.8  c21-20.3,32.8-47.9,32.8-77.5C448,131.3,399.9,83,340.8,83L340.8,83z" stroke="#727272" /></svg>
+                    </nav>
+                    <div class="photo">
+                        <img src="~/images/products/test/plant.jpg">
+                    </div>
+                    <div class="description">
+                        <h2>Classic Peace Lily</h2>
+                        <h4>Popular House Plant</h4>
+                        <h1>$18</h1>
+                        <p>Classic Peace Lily is a spathiphyllum floor plant arranged in a bamboo planter with a blue & red ribbom and butterfly pick.</p>
+                        <button>Add to Cart</button>
+                        <button>Wishlist</button>
+                    </div>
+                </div>
             </div>
-
-            <div class="box" id="box2" style="background-color: #b86f26">
-                2
+            <div class="click-block" id="showItemButton2">
+                <div id="productCard2" class="card" style="display: none;">
+                    <!-- Product card content goes here -->
+                    <nav>
+                        <svg class="arrow" version="1.1" viewBox="0 0 512 512" width="512px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><polygon points="352,115.4 331.3,96 160,256 331.3,416 352,396.7 201.5,256 " stroke="#727272" /></svg>
+                        Back to all Plants
+                        <svg class="heart" version="1.1" viewBox="0 0 512 512" width="512px" xml:space="preserve" stroke="#727272" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M340.8,98.4c50.7,0,91.9,41.3,91.9,92.3c0,26.2-10.9,49.8-28.3,66.6L256,407.1L105,254.6c-15.8-16.6-25.6-39.1-25.6-63.9  c0-51,41.1-92.3,91.9-92.3c38.2,0,70.9,23.4,84.8,56.8C269.8,121.9,302.6,98.4,340.8,98.4 M340.8,83C307,83,276,98.8,256,124.8  c-20-26-51-41.8-84.8-41.8C112.1,83,64,131.3,64,190.7c0,27.9,10.6,54.4,29.9,74.6L245.1,418l10.9,11l10.9-11l148.3-149.8  c21-20.3,32.8-47.9,32.8-77.5C448,131.3,399.9,83,340.8,83L340.8,83z" stroke="#727272" /></svg>
+                    </nav>
+                    <div class="photo">
+                        <img src="~/images/products/test/plant.jpg">
+                    </div>
+                    <div class="description">
+                        <h2>Classic Peace Lily</h2>
+                        <h4>Popular House Plant</h4>
+                        <h1>$19</h1>
+                        <p>Classic Peace Lily is a spathiphyllum floor plant arranged in a bamboo planter with a blue & red ribbom and butterfly pick.</p>
+                        <button>Add to Cart</button>
+                        <button>Wishlist</button>
+                    </div>
+                </div>
             </div>
-
-            <div class="box" id="box3" style="background-color: #00FA9A">
-                3
+            <div class="click-block" id="showItemButton3">
+                <div id="productCard3" class="card" style="display: none;">
+                    <!-- Product card content goes here -->
+                    <nav>
+                        <svg class="arrow" version="1.1" viewBox="0 0 512 512" width="512px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><polygon points="352,115.4 331.3,96 160,256 331.3,416 352,396.7 201.5,256 " stroke="#727272" /></svg>
+                        Back to all Plants
+                        <svg class="heart" version="1.1" viewBox="0 0 512 512" width="512px" xml:space="preserve" stroke="#727272" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M340.8,98.4c50.7,0,91.9,41.3,91.9,92.3c0,26.2-10.9,49.8-28.3,66.6L256,407.1L105,254.6c-15.8-16.6-25.6-39.1-25.6-63.9  c0-51,41.1-92.3,91.9-92.3c38.2,0,70.9,23.4,84.8,56.8C269.8,121.9,302.6,98.4,340.8,98.4 M340.8,83C307,83,276,98.8,256,124.8  c-20-26-51-41.8-84.8-41.8C112.1,83,64,131.3,64,190.7c0,27.9,10.6,54.4,29.9,74.6L245.1,418l10.9,11l10.9-11l148.3-149.8  c21-20.3,32.8-47.9,32.8-77.5C448,131.3,399.9,83,340.8,83L340.8,83z" stroke="#727272" /></svg>
+                    </nav>
+                    <div class="photo">
+                        <img src="~/images/products/test/plant.jpg">
+                    </div>
+                    <div class="description">
+                        <h2>Classic Peace Lily</h2>
+                        <h4>Popular House Plant</h4>
+                        <h1>$20</h1>
+                        <p>Classic Peace Lily is a spathiphyllum floor plant arranged in a bamboo planter with a blue & red ribbom and butterfly pick.</p>
+                        <button>Add to Cart</button>
+                        <button>Wishlist</button>
+                    </div>
+                </div>
             </div>
-
-            <div class="box" id="box4" style="background-color: #D40AFD">
-                4
+            <div class="click-block" id="showItemButton4">
+                <div id="productCard4" class="card" style="display: none;">
+                    <!-- Product card content goes here -->
+                    <nav>
+                        <svg class="arrow" version="1.1" viewBox="0 0 512 512" width="512px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><polygon points="352,115.4 331.3,96 160,256 331.3,416 352,396.7 201.5,256 " stroke="#727272" /></svg>
+                        Back to all Plants
+                        <svg class="heart" version="1.1" viewBox="0 0 512 512" width="512px" xml:space="preserve" stroke="#727272" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M340.8,98.4c50.7,0,91.9,41.3,91.9,92.3c0,26.2-10.9,49.8-28.3,66.6L256,407.1L105,254.6c-15.8-16.6-25.6-39.1-25.6-63.9  c0-51,41.1-92.3,91.9-92.3c38.2,0,70.9,23.4,84.8,56.8C269.8,121.9,302.6,98.4,340.8,98.4 M340.8,83C307,83,276,98.8,256,124.8  c-20-26-51-41.8-84.8-41.8C112.1,83,64,131.3,64,190.7c0,27.9,10.6,54.4,29.9,74.6L245.1,418l10.9,11l10.9-11l148.3-149.8  c21-20.3,32.8-47.9,32.8-77.5C448,131.3,399.9,83,340.8,83L340.8,83z" stroke="#727272" /></svg>
+                    </nav>
+                    <div class="photo">
+                        <img src="~/images/products/test/plant.jpg">
+                    </div>
+                    <div class="description">
+                        <h2>Classic Peace Lily</h2>
+                        <h4>Popular House Plant</h4>
+                        <h1>$21</h1>
+                        <p>Classic Peace Lily is a spathiphyllum floor plant arranged in a bamboo planter with a blue & red ribbom and butterfly pick.</p>
+                        <button>Add to Cart</button>
+                        <button>Wishlist</button>
+                    </div>
+                </div>
             </div>
-
-            <div class="box" id="box5" style="background-color: #006699">
-                5
+            <div class="click-block" id="showItemButton5">
+                <div id="productCard5" class="card" style="display: none;">
+                    <!-- Product card content goes here -->
+                    <nav>
+                        <svg class="arrow" version="1.1" viewBox="0 0 512 512" width="512px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><polygon points="352,115.4 331.3,96 160,256 331.3,416 352,396.7 201.5,256 " stroke="#727272" /></svg>
+                        Back to all Plants
+                        <svg class="heart" version="1.1" viewBox="0 0 512 512" width="512px" xml:space="preserve" stroke="#727272" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M340.8,98.4c50.7,0,91.9,41.3,91.9,92.3c0,26.2-10.9,49.8-28.3,66.6L256,407.1L105,254.6c-15.8-16.6-25.6-39.1-25.6-63.9  c0-51,41.1-92.3,91.9-92.3c38.2,0,70.9,23.4,84.8,56.8C269.8,121.9,302.6,98.4,340.8,98.4 M340.8,83C307,83,276,98.8,256,124.8  c-20-26-51-41.8-84.8-41.8C112.1,83,64,131.3,64,190.7c0,27.9,10.6,54.4,29.9,74.6L245.1,418l10.9,11l10.9-11l148.3-149.8  c21-20.3,32.8-47.9,32.8-77.5C448,131.3,399.9,83,340.8,83L340.8,83z" stroke="#727272" /></svg>
+                    </nav>
+                    <div class="photo">
+                        <img src="~/images/products/test/plant.jpg">
+                    </div>
+                    <div class="description">
+                        <h2>Classic Peace Lily</h2>
+                        <h4>Popular House Plant</h4>
+                        <h1>$22</h1>
+                        <p>Classic Peace Lily is a spathiphyllum floor plant arranged in a bamboo planter with a blue & red ribbom and butterfly pick.</p>
+                        <button>Add to Cart</button>
+                        <button>Wishlist</button>
+                    </div>
+                </div>
             </div>
+        </div>
 
-            <div class="box" id="box6" style="background-color: #FF4500">
-                6
+        <div id="row2" class="rowContent">
+            <div id="box1" class="box">
+                <img class="photo" src="~/images/products/test/plant.jpg">
+
+                @* <img class="photo" src="~/images/team/team4.png"> *@
             </div>
         </div>
     </div>
-
-
-
-
-
-
-
+    
 </main>
+@section Scripts {
+    <script>
+        $('.click-block').click(function (event) {
+            event.stopPropagation(); // Prevent the click from bubbling up to the document
+            var cardId = 'productCard' + this.id.replace('showItemButton', '');
+            $('#' + cardId).show(); // Show the card instead of toggling it
+        });
+
+        $(document).click(function (event) {
+            if (!$(event.target).closest('.card').length) {
+                $('.card').hide();
+            }
+        });
+    </script>
+}
