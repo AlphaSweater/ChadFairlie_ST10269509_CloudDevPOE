@@ -20,9 +20,13 @@
     border-radius: 25px;
     height: 100%;
     margin-bottom: 40px;
+    box-sizing: border-box;
 }
 
 .box {
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
     height: auto;
     border-radius: 25px;
     box-sizing: border-box;
