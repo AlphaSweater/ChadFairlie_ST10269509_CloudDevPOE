@@ -21,7 +21,7 @@
     },
     "resourceName": {
       "type": "string",
-      "defaultValue": "KhumaloCraftArtisans",
+      "defaultValue": "ST10269509",
       "metadata": {
         "description": "Name of the main resource to be created by this template."
       }
