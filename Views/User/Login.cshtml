@@ -1,0 +1,25 @@
+﻿@model CloudDevPOE.Models.tbl_users
+@{
+    ViewData["Title"] = "Login";
+}
+
+<h1>Login</h1>
+<p>Please enter your credentials to login.</p>
+
+<body>
+
+    <form action="Login" method="post" id="loginForm">
+        <p>Login</p>
+        <input type="email" id="Email" name="Email" placeholder="example@gmail.com" required>
+        <input type="password" id="Password" name="Password" placeholder="Password" required>
+
+        <button type="submit">Submit</button>
+
+        @if (!String.IsNullOrEmpty(ViewBag.ErrorMessage))
+        {
+            <p class="text-danger">@ViewBag.ErrorMessage</p>
+        }
+    </form>
+
+</body>
+

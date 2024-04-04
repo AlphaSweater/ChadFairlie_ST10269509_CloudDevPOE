@@ -26,5 +26,29 @@ namespace CloudDevPOE.Controllers
             }
             return View(user);
         }
+
+        // GET: Account/Login
+        [HttpGet]
+        public ActionResult Login()
+        {
+            ViewBag.IsValidUser = true;
+            return View();
+        }
+
+        // POST: Account/Login
+        [HttpPost]
+        public IActionResult Login(tbl_users user)
+        {
+            tbl_users userRepo = new tbl_users();
+            bool isValidUser = userRepo.Validate_User(user);
+            if (isValidUser)
+            {
+                return RedirectToAction("Index", "Home");
+            } else
+            {
+                ViewBag.ErrorMessage = "Incorrect email or password.";
+            }
+            return View(user);
+        }
     }
 }
