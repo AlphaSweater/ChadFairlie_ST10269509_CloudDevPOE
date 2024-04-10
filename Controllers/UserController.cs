@@ -14,7 +14,7 @@ namespace CloudDevPOE.Controllers
 
         // POST: Account/SignUp
         [HttpPost]
-        public IActionResult SignUp(tbl_users user)
+        public IActionResult SignUp(Tbl_Users user)
         {
             if (ModelState.IsValid)
             {
@@ -37,9 +37,9 @@ namespace CloudDevPOE.Controllers
 
         // POST: Account/Login
         [HttpPost]
-        public IActionResult Login(tbl_users user)
+        public IActionResult Login(Tbl_Users user)
         {
-            tbl_users userRepo = new tbl_users();
+            Tbl_Users userRepo = new Tbl_Users();
             bool isValidUser = userRepo.Validate_User(user);
             if (isValidUser)
             {
