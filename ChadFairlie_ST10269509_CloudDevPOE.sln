@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.34607.79
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CloudDevPOE", "CloudDevPOE\CloudDevPOE.csproj", "{7CEC6433-8E43-4FC8-961F-EE0262E98038}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CloudDevPOE.Tests", "CloudDevPOE.Tests\CloudDevPOE.Tests.csproj", "{3AF55A3C-A340-4388-9580-490643300B42}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7CEC6433-8E43-4FC8-961F-EE0262E98038}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7CEC6433-8E43-4FC8-961F-EE0262E98038}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7CEC6433-8E43-4FC8-961F-EE0262E98038}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7CEC6433-8E43-4FC8-961F-EE0262E98038}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3AF55A3C-A340-4388-9580-490643300B42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3AF55A3C-A340-4388-9580-490643300B42}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3AF55A3C-A340-4388-9580-490643300B42}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3AF55A3C-A340-4388-9580-490643300B42}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2E06060C-6E8E-4592-979C-D3F1F8C5BF30}
+	EndGlobalSection
+EndGlobal
