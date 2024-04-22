@@ -1,3 +1,8 @@
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+
 namespace CloudDevPOE
 {
     public class Program
@@ -8,6 +13,17 @@ namespace CloudDevPOE
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+
+            // Add session services.
+            builder.Services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(30);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
+
+            // Add IHttpContextAccessor to the DI container.
+            builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             var app = builder.Build();
 
@@ -21,6 +37,9 @@ namespace CloudDevPOE
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+
+            // Use session middleware.
+            app.UseSession();
 
             app.UseRouting();
 

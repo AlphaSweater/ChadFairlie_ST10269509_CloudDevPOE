@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using CloudDevPOE.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace CloudDevPOE.Controllers
 {
@@ -37,18 +38,26 @@ namespace CloudDevPOE.Controllers
 
         // POST: Account/Login
         [HttpPost]
-        public IActionResult Login(Tbl_Users user)
+        public IActionResult Login(Tbl_Users user, [FromServices] IHttpContextAccessor httpContextAccessor)
         {
-            Tbl_Users userRepo = new Tbl_Users();
-            bool isValidUser = userRepo.Validate_User(user);
+            bool isValidUser = user.Validate_User(user, httpContextAccessor.HttpContext);
             if (isValidUser)
             {
                 return RedirectToAction("Index", "Home");
-            } else
+            }
+            else
             {
                 ViewBag.ErrorMessage = "Incorrect email or password.";
             }
             return View(user);
+        }
+
+        // GET: Account/Logout
+        [HttpGet]
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear();
+            return RedirectToAction("Login", "User");
         }
     }
 }

@@ -1,5 +1,8 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+@{
     ViewData["Title"] = "Home Page";
+    int? userId = HttpContextAccessor.HttpContext.Session.GetInt32("UserId");
 }
 
 <head>
@@ -76,6 +79,19 @@
 </head>
 
 <main id="mainContentColumn" class="contentColumn">
+
+    @if (userId != null)
+    {
+        <p>User ID: @userId</p>
+    }
+    else
+    {
+        <p>User ID: Not logged in</p>
+    }
+
+    <a href="@Url.Action("Logout", "User")">Logout</a>
+
+
     <div class="rowContent">
         <div id="box1" class="box">
             <div style="max-width: 900px;margin: 0 auto;">

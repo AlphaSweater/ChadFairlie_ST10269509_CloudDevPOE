@@ -12,6 +12,8 @@ namespace CloudDevPOE.Models
 
         public static SqlConnection con = new SqlConnection(conString);
 
+        public int UserID { get; private set; }
+
         [Required(ErrorMessage = "Name is required.")]
         [StringLength(50, ErrorMessage = "Name cannot be longer than 50 characters.")]
         public string? Name { get; set; }
@@ -59,28 +61,30 @@ namespace CloudDevPOE.Models
             }
         }
 
-        public bool Validate_User(Tbl_Users m)
+        public bool Validate_User(Tbl_Users m, HttpContext httpContext)
         {
             try
             {
-                string sql = "SELECT password_hash FROM tbl_users WHERE email = @UserEmail";
+                string sql = "SELECT user_id, password_hash FROM tbl_users WHERE email = @UserEmail";
                 SqlCommand cmd = new SqlCommand(sql, con);
                 cmd.Parameters.AddWithValue("@UserEmail", m.Email);
 
                 con.Open();
-                string storedPasswordHash = cmd.ExecuteScalar() as string;
-                con.Close();
-
-                if (storedPasswordHash != null)
+                SqlDataReader reader = cmd.ExecuteReader();
+                if (reader.Read())
                 {
                     var passwordHasher = new PasswordHasher<IdentityUser>();
-                    var result = passwordHasher.VerifyHashedPassword(user: null, hashedPassword: storedPasswordHash, providedPassword: m.Password);
-                    return result == PasswordVerificationResult.Success;
+                    var result = passwordHasher.VerifyHashedPassword(user: null, hashedPassword: reader["password_hash"] as string, providedPassword: m.Password);
+                    if (result == PasswordVerificationResult.Success)
+                    {
+                        m.UserID = int.Parse(reader["user_id"].ToString());
+                        httpContext.Session.SetInt32("UserId", m.UserID);
+                        con.Close();
+                        return true;
+                    }
                 }
-                else
-                {
-                    return false;
-                }
+                con.Close();
+                return false;
             }
             catch (Exception ex)
             {
