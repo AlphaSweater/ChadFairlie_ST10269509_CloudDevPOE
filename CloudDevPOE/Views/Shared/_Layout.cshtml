@@ -140,8 +140,7 @@
                 <button class="nav-link" onclick="location.href='@Url.Action("AboutUs", "Home")'">About Us</button>
                 <button class="nav-link" onclick="location.href='@Url.Action("ContactUs", "Home")'">Contact Us</button>
                 <button class="nav-link" onclick="location.href='@Url.Action("MyWork", "Products")'">My Work</button>
-                <button class="nav-link" onclick="location.href='@Url.Action("SignUp", "User")'">Sign Up</button>
-                <button class="nav-link" onclick="location.href='@Url.Action("Login", "User")'">Login</button>
+                <button class="nav-link" onclick="location.href='@Url.Action("AddProduct", "Products")'">Add Product</button>
             </span>
 
             <div style="width: 40px;"></div> <!-- 40px gap -->
@@ -153,6 +152,8 @@
                 </svg>
                 <input placeholder="Search" type="search" class="input">
             </div>
+            <button class="nav-link" onclick="location.href='@Url.Action("SignUp", "User")'">Sign Up</button>
+            <button class="nav-link" onclick="location.href='@Url.Action("Login", "User")'">Login</button>
 
             <div style="width: 10px;"></div> <!-- 10px gap -->
             <i class='bx bx-cog'></i> <!-- Settings icon -->
