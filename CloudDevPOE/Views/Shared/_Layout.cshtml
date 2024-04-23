@@ -4,15 +4,18 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - CloudDevPOE</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/CloudDevPOE.styles.css" asp-append-version="true" />
 
     <link rel="stylesheet" href="~/css/base.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/navbar.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/animated-background.css" asp-append-version="true" />
-    
-    
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
 
     <!-- Boxiocns CDN Link -->
     <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
@@ -20,6 +23,17 @@
         @@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
         * {
+            --main-colour1: #EEBEFA;
+            --main-colour2: #96F2D7;
+            --main-colour3: #A5D8FF;
+            --main-colour4: #FDB686;
+            --main-colour5: #FFEC99;
+            --main-colour6: #FF9999;
+
+            --font-color: #333333;
+            --font-color-sub: #666666;
+            --background-color: #f0f0f0;
+            
             margin: 0;
             padding: 0;
             box-sizing: border-box;
@@ -141,6 +155,7 @@
                 <button class="nav-link" onclick="location.href='@Url.Action("ContactUs", "Home")'">Contact Us</button>
                 <button class="nav-link" onclick="location.href='@Url.Action("MyWork", "Products")'">My Work</button>
                 <button class="nav-link" onclick="location.href='@Url.Action("AddProduct", "Products")'">Add Product</button>
+                <button onclick="showLoginModal()">Log In</button>
             </span>
 
             <div style="width: 40px;"></div> <!-- 40px gap -->
@@ -152,8 +167,6 @@
                 </svg>
                 <input placeholder="Search" type="search" class="input">
             </div>
-            <button class="nav-link" onclick="location.href='@Url.Action("SignUp", "User")'">Sign Up</button>
-            <button class="nav-link" onclick="location.href='@Url.Action("Login", "User")'">Login</button>
 
             <div style="width: 10px;"></div> <!-- 10px gap -->
             <i class='bx bx-cog'></i> <!-- Settings icon -->
@@ -163,11 +176,10 @@
             <i class='bx bx-cart'></i> <!-- Cart icon -->
             <div style="width: 30px;"></div> <!-- 30px gap -->
         </nav>
+        @await Html.PartialAsync("_LoginForm")
         @RenderBody()
     </div>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+
     <script>
         var mainContent = document.querySelector('.main-content');
         var scrollSpeed = 0.9; // Adjust this value to change the scroll speed
