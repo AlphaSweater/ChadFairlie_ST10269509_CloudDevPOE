@@ -1,5 +1,6 @@
 ﻿// Ignore Spelling: Tbl
 
+using CloudDevPOE.Services;
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
@@ -38,6 +39,12 @@ namespace CloudDevPOE.Models
         //--------------------------------------------------------------------------------------------------------------------------//
         public bool ProductAvailability { get; set; }
 
+        //--------------------------------------------------------------------------------------------------------------------------//
+        public string ProductImageURL { get; set; }
+
+        //--------------------------------------------------------------------------------------------------------------------------//
+        public IFormFile ProductImage { get; set; }
+
         //<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
         public virtual int ExecuteNonQuery(SqlCommand cmd)
         {
@@ -54,7 +61,7 @@ namespace CloudDevPOE.Models
         }
 
         //<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
-        public int Insert_Product(Tbl_Products m, int userID)
+        public int Insert_Product(Tbl_Products m, int userID, ImageService imageService)
         {
             try
             {
@@ -68,7 +75,23 @@ namespace CloudDevPOE.Models
                 cmd.Parameters.AddWithValue("@ProductQuantity", m.ProductQuantity);
                 cmd.Parameters.AddWithValue("@ProductAvailability", m.ProductAvailability);
 
-                return ExecuteNonQuery(cmd);
+                int result = ExecuteNonQuery(cmd);
+                int result2 = 0;
+
+                if (result == 1)
+                {
+                    // Upload the image and set the ProductImageURL
+                    m.ProductImageURL = imageService.UploadImageAsync(m.ProductImage).Result;
+
+                    sql = "INSERT INTO tbl_product_images (product_id, image_url) VALUES (@ProductID, @ProductImageURL)";
+                    cmd = new SqlCommand(sql, con);
+                    cmd.Parameters.AddWithValue("@ProductID", m.ProductID);
+                    cmd.Parameters.AddWithValue("@ProductImageURL", m.ProductImageURL);
+
+                    result2 = ExecuteNonQuery(cmd);
+                }
+
+                return result2;
             }
             catch (Exception ex)
             {
