@@ -1,19 +1,11 @@
 ﻿using CloudDevPOE.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
-using CloudDevPOE.Services;
 
 namespace CloudDevPOE.Controllers
 {
     public class ProductsController : Controller
     {
-        private readonly ImageService _imageService;
-
-        public ProductsController(ImageService imageService)
-        {
-            _imageService = imageService;
-        }
-
         public IActionResult MyWork()
         {
             return View();
@@ -40,7 +32,7 @@ namespace CloudDevPOE.Controllers
                     return RedirectToAction("Login", "User");
                 }
 
-                int rowsAffected = product.Insert_Product(product, userID.Value, _imageService);
+                int rowsAffected = product.Insert_Product(product, userID.Value);
                 if (rowsAffected > 0)
                 {
                     return RedirectToAction("Index", "Home");

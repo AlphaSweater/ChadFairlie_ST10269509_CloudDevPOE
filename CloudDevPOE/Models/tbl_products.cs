@@ -1,6 +1,5 @@
 ﻿// Ignore Spelling: Tbl
 
-using CloudDevPOE.Services;
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
@@ -61,7 +60,7 @@ namespace CloudDevPOE.Models
         }
 
         //<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
-        public int Insert_Product(Tbl_Products m, int userID, ImageService imageService)
+        public int Insert_Product(Tbl_Products m, int userID)
         {
             try
             {
@@ -81,7 +80,6 @@ namespace CloudDevPOE.Models
                 if (result == 1)
                 {
                     // Upload the image and set the ProductImageURL
-                    m.ProductImageURL = imageService.UploadImageAsync(m.ProductImage).Result;
 
                     sql = "INSERT INTO tbl_product_images (product_id, image_url) VALUES (@ProductID, @ProductImageURL)";
                     cmd = new SqlCommand(sql, con);

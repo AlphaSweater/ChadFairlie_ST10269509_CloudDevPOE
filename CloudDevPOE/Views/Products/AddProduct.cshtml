@@ -17,37 +17,9 @@
         <input type="hidden" name="ProductAvailability" value="false" />
         <input type="checkbox" id="ProductAvailability" name="ProductAvailability" value="true" />Available
 
-        <div id="drop-zone">
-            <p>Drag and drop your image here, or click to select file</p>
-            <input type="file" id="ProductImage" name="ProductImage" accept="image/*" />
-        </div>
-
         <button type="submit">Submit</button>
     </form>
 </body>
 
 @section Scripts {
-    <script>
-        var dropZone = document.getElementById('drop-zone');
-        var fileInput = document.getElementById('ProductImage');
-
-        dropZone.addEventListener('click', function () {
-            fileInput.click();
-        });
-
-        dropZone.addEventListener('dragover', function (e) {
-            e.preventDefault();
-            this.classList.add('dragging');
-        });
-
-        dropZone.addEventListener('dragleave', function () {
-            this.classList.remove('dragging');
-        });
-
-        dropZone.addEventListener('drop', function (e) {
-            e.preventDefault();
-            this.classList.remove('dragging');
-            fileInput.files = e.dataTransfer.files;
-        });
-    </script>
 }
