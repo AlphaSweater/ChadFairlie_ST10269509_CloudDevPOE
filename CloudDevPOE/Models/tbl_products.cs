@@ -1,5 +1,6 @@
 ﻿// Ignore Spelling: Tbl
 
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
@@ -39,10 +40,10 @@ namespace CloudDevPOE.Models
         public bool ProductAvailability { get; set; }
 
         //--------------------------------------------------------------------------------------------------------------------------//
-        public string ProductImageURL { get; set; }
+        public string? ProductImageURL { get; set; }
 
         //--------------------------------------------------------------------------------------------------------------------------//
-        public IFormFile ProductImage { get; set; }
+        public List<IFormFile>? ProductImages { get; set; }
 
         //<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
         public virtual int ExecuteNonQuery(SqlCommand cmd)
@@ -60,42 +61,72 @@ namespace CloudDevPOE.Models
         }
 
         //<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
-        public int Insert_Product(Tbl_Products m, int userID)
+        public int Insert_Product(Tbl_Products m, int userID, IWebHostEnvironment webHostEnvironment)
         {
+            SqlTransaction transaction = null;
             try
             {
-                string sql = "INSERT INTO tbl_products (user_id, name, category, description, price, quantity, availability) VALUES (@UserID, @ProductName, @ProductCategory, @ProductDescription, @ProductPrice, @ProductQuantity, @ProductAvailability)";
-                SqlCommand cmd = new SqlCommand(sql, con);
+                con.Open();
+                transaction = con.BeginTransaction(); // Start the transaction
+
+                string sql = "INSERT INTO tbl_products (user_id, name, category, description, price, quantity, availability) OUTPUT INSERTED.product_id VALUES (@UserID, @ProductName, @ProductCategory, @ProductDescription, @ProductPrice, @ProductQuantity, @ProductAvailability)";
+                SqlCommand cmd = new SqlCommand(sql, con, transaction); // Associate the command with the transaction
                 cmd.Parameters.AddWithValue("@UserID", userID);
                 cmd.Parameters.AddWithValue("@ProductName", m.ProductName);
                 cmd.Parameters.AddWithValue("@ProductCategory", m.ProductCategory);
                 cmd.Parameters.AddWithValue("@ProductDescription", m.ProductDescription);
                 cmd.Parameters.AddWithValue("@ProductPrice", m.ProductPrice);
                 cmd.Parameters.AddWithValue("@ProductQuantity", m.ProductQuantity);
+                m.ProductAvailability = m.ProductQuantity > 0;
                 cmd.Parameters.AddWithValue("@ProductAvailability", m.ProductAvailability);
 
-                int result = ExecuteNonQuery(cmd);
-                int result2 = 0;
+                // Execute the command and retrieve the new ProductID
+                m.ProductID = (int)cmd.ExecuteScalar();
 
-                if (result == 1)
+                foreach (var file in m.ProductImages)
                 {
-                    // Upload the image and set the ProductImageURL
+                    // Extract the file extension
+                    var fileExtension = Path.GetExtension(file.FileName);
+                    // Generate a unique filename by appending a GUID
+                    var fileName = $"{Guid.NewGuid()}{fileExtension}";
+                    // Create a directory path that includes the product category
+                    var categoryPath = Path.Combine(webHostEnvironment.WebRootPath, "images", m.ProductCategory);
+                    // Ensure the directory exists
+                    Directory.CreateDirectory(categoryPath);
+                    // Combine the category path with the unique file name to get the full path
+                    var filePath = Path.Combine(categoryPath, fileName);
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        file.CopyTo(fileStream);
+                    }
 
+                    // Insert image URL into database, adjusting the path to include the product category
                     sql = "INSERT INTO tbl_product_images (product_id, image_url) VALUES (@ProductID, @ProductImageURL)";
-                    cmd = new SqlCommand(sql, con);
+                    cmd = new SqlCommand(sql, con, transaction);
                     cmd.Parameters.AddWithValue("@ProductID", m.ProductID);
-                    cmd.Parameters.AddWithValue("@ProductImageURL", m.ProductImageURL);
+                    // Adjust the URL to include the product category and the unique file name
+                    cmd.Parameters.AddWithValue("@ProductImageURL", $"/images/{m.ProductCategory}/{fileName}");
 
-                    result2 = ExecuteNonQuery(cmd);
+                    cmd.ExecuteNonQuery();
                 }
 
-                return result2;
+                transaction.Commit(); // Commit the transaction if all commands were successful
+                return 1;
             }
             catch (Exception ex)
             {
+                if (transaction != null)
+                {
+                    transaction.Rollback(); // Roll back the transaction in case of an error
+                }
                 // Log the exception or handle it appropriately
                 // For now, rethrow the exception
-                throw ex;
+                throw;
+            }
+            finally
+            {
+                if (con.State == ConnectionState.Open)
+                    con.Close();
             }
         }
 

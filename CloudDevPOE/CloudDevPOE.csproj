@@ -18,4 +18,8 @@
     <_ContentIncludedByDefault Remove="Views\Products\AddProduct.cshtml" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\images\products\categories\" />
+  </ItemGroup>
+
 </Project>

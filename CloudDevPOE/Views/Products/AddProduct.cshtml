@@ -8,16 +8,21 @@
 
 <body>
     <form action="AddProduct" method="post" enctype="multipart/form-data">
-        <p>Add Product</p>
-        <input type="text" id="ProductName" name="ProductName" placeholder="Product Name" required>
-        <input type="text" id="ProductCategory" name="ProductCategory" placeholder="Product Category" required>
-        <textarea id="ProductDescription" name="ProductDescription" placeholder="Product Description" required></textarea>
-        <input type="number" id="ProductPrice" name="ProductPrice" placeholder="Product Price" required>
-        <input type="number" id="ProductQuantity" name="ProductQuantity" placeholder="Product Quantity" required>
-        <input type="hidden" name="ProductAvailability" value="false" />
-        <input type="checkbox" id="ProductAvailability" name="ProductAvailability" value="true" />Available
+        <div style="display: flex; flex-direction: column">
+            <p>Add Product</p>
+            <input type="text" id="ProductName" name="ProductName" placeholder="Product Name" required>
+            <input type="text" id="ProductCategory" name="ProductCategory" placeholder="Product Category" required>
+            <textarea id="ProductDescription" name="ProductDescription" placeholder="Product Description" required></textarea>
+            <input type="number" id="ProductPrice" name="ProductPrice" placeholder="Product Price" required>
+            <input type="number" id="ProductQuantity" name="ProductQuantity" placeholder="Product Quantity" required>
+            <div class="row">
+                <input type="file" id="ProductImages" name="ProductImages" multiple>
 
-        <button type="submit">Submit</button>
+            </div>
+
+            <button type="submit">Submit</button>
+        </div>
+        
     </form>
 </body>
 
