@@ -2,6 +2,21 @@
 @{
     ViewData["Title"] = "Add Product";
 }
+<head>
+    <style>
+        #imagePreviewContainer {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px; /* Adjust based on your design */
+        }
+
+            #imagePreviewContainer img {
+                width: 100px; /* Adjust based on your design */
+                height: 100px; /* Adjust based on your design */
+                object-fit: cover;
+            }
+    </style>
+</head>
 
 <h1>Add Product</h1>
 <p>Please fill in the details of the product you want to add.</p>
@@ -15,16 +30,37 @@
             <textarea id="ProductDescription" name="ProductDescription" placeholder="Product Description" required></textarea>
             <input type="number" id="ProductPrice" name="ProductPrice" placeholder="Product Price" required>
             <input type="number" id="ProductQuantity" name="ProductQuantity" placeholder="Product Quantity" required>
-            <div class="row">
-                <input type="file" id="ProductImages" name="ProductImages" multiple>
-
+            <div class="image-upload-container">
+                <input type="file" id="imageInput" name="ProductImagesModel.ProductImages" multiple accept="image/*">
+                <div id="imagePreviewContainer"></div>
             </div>
-
             <button type="submit">Submit</button>
         </div>
-        
     </form>
 </body>
 
 @section Scripts {
+    <script>
+        document.getElementById('imageInput').addEventListener('change', function () {
+            updateImagePreviews(this.files); // Pass the newly selected files directly
+        });
+
+        function updateImagePreviews(files) {
+            const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+            imagePreviewContainer.innerHTML = ''; // Clear existing previews
+
+            // Iterate over the files to create and append img elements for previews
+            for (let file of files) {
+                if (!file.type.startsWith('image/')) { continue; } // Skip non-image files
+
+                const img = document.createElement('img');
+                img.src = URL.createObjectURL(file);
+                img.onload = function () {
+                    URL.revokeObjectURL(img.src); // Clean up memory after loading the image
+                };
+
+                imagePreviewContainer.appendChild(img);
+            }
+        }
+    </script>
 }
