@@ -94,7 +94,7 @@
 
             const formData = new FormData(this);
             accumulatedFiles.forEach((file, index) => {
-                formData.append(`ProductImages`, file); // Append each file to formData
+                formData.append(`ProductImagesModel.ProductImages`, file); // Append each file to formData
             });
 
             fetch(this.action, {
@@ -105,6 +105,9 @@
                     if (response.ok) {
                         // If the response status code is 200-299, it was successful
                         console.log('Success');
+
+                        // Redirect to the MyWork view
+                        window.location.href = '/Products/MyWork';
                     } else {
                         // If the server response was not ok, handle the error
                         console.error('Server responded with an error status');

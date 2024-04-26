@@ -56,13 +56,9 @@ namespace CloudDevPOE.Controllers
             // Pass the webHostEnvironment to the Insert_Product method
             int rowsAffected = product.Insert_Product(product, userID.Value, _webHostEnvironment);
 
-            // Debugging: Check if ProductImages contains any files
-            Console.WriteLine($"Received {product.ProductImagesModel.ProductImages.Count} images.");
-            Console.WriteLine($"Form files count: {Request.Form.Files.Count}");
-
             if (rowsAffected > 0)
             {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("MyWork", "Products");
             }
             return View();
         }

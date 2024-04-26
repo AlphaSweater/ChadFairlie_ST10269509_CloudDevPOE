@@ -45,25 +45,7 @@ namespace CloudDevPOE.Models
         public bool ProductAvailability { get; set; }
 
         //--------------------------------------------------------------------------------------------------------------------------//
-        public List<IFormFile> ProductImages { get; set; } = new List<IFormFile>();
-
-        //--------------------------------------------------------------------------------------------------------------------------//
-        public Tbl_Product_Images? ProductImagesModel { get; set; } = new Tbl_Product_Images();
-
-        //<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
-        public virtual int ExecuteNonQuery(SqlCommand cmd)
-        {
-            try
-            {
-                con.Open();
-                return cmd.ExecuteNonQuery();
-            }
-            finally
-            {
-                if (con.State == ConnectionState.Open)
-                    con.Close();
-            }
-        }
+        public Tbl_Product_Images ProductImagesModel { get; set; } = new Tbl_Product_Images();
 
         //<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
         public int Insert_Product(Tbl_Products m, int userID, IWebHostEnvironment webHostEnvironment)
@@ -92,7 +74,10 @@ namespace CloudDevPOE.Models
                         m.ProductImagesModel.ProductID = m.ProductID; // Set the ProductID for image records
                         m.ProductImagesModel.ProductCategory = m.ProductCategory; // Set the ProductCategory for image records
 
-                        m.ProductImagesModel.Insert_Images(ProductImages, con, transaction, webHostEnvironment);
+                        // Save images to the file system and get their paths
+                        List<string> savedImagePaths = m.ProductImagesModel.SaveImagesToFileSystem(webHostEnvironment);
+
+                        m.ProductImagesModel.Insert_Images(con, transaction, savedImagePaths);
 
                         transaction.Commit(); // Commit the transaction if all commands were successful
                         return 1;
