@@ -11,9 +11,12 @@ namespace CloudDevPOE.Models
     public class Tbl_Products
     {
         //<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
-        public static string conString = "Server=tcp:st10269509-server.database.windows.net,1433;Initial Catalog=ST10269509-DB;Persist Security Info=False;User ID=AlphaSweater;Password=N@l@2004;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+        private readonly string _conString;
 
-        public static SqlConnection con = new SqlConnection(conString);
+        public Tbl_Products(IConfiguration configuration)
+        {
+            _conString = configuration.GetConnectionString("DefaultConnection");
+        }
 
         //--------------------------------------------------------------------------------------------------------------------------//
         public int ProductID { get; set; }
@@ -50,7 +53,7 @@ namespace CloudDevPOE.Models
         //<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
         public int Insert_Product(Tbl_Products m, int userID, IWebHostEnvironment webHostEnvironment)
         {
-            using (var con = new SqlConnection(conString))
+            using (var con = new SqlConnection(_conString))
             {
                 con.Open();
                 using (var transaction = con.BeginTransaction())
