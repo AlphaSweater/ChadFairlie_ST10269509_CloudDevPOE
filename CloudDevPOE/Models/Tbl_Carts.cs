@@ -15,7 +15,8 @@ namespace CloudDevPOE.Models
 		public bool IsActive { get; set; }
 
 		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
-		public void Add_Item_ToCart(int userId, int productId, int quantity, string connectionString)
+		// TODO: Implement method to find an active cart for a user
+		public int Get_Active_Cart(int userId, string connectionString)
 		{
 			using (var con = new SqlConnection(connectionString))
 			{
@@ -25,7 +26,7 @@ namespace CloudDevPOE.Models
 				using (SqlCommand cartCheckCmd = new SqlCommand(cartCheckSql, con))
 				{
 					cartCheckCmd.Parameters.AddWithValue("@UserID", userId);
-					var cartId = (int?)cartCheckCmd.ExecuteScalar();
+					int? cartId = (int)cartCheckCmd.ExecuteScalar();
 
 					if (!cartId.HasValue)
 					{
@@ -35,20 +36,24 @@ namespace CloudDevPOE.Models
 						{
 							createCartCmd.Parameters.AddWithValue("@UserID", userId);
 							cartId = (int)createCartCmd.ExecuteScalar();
+							return (int)cartId;
 						}
 					}
-
-					// Add the product to the cart
-					string addItemSql = "INSERT INTO Tbl_Cart_Items (CartID, ProductID, Quantity) VALUES (@CartID, @ProductID, @Quantity)";
-					using (SqlCommand addItemCmd = new SqlCommand(addItemSql, con))
-					{
-						addItemCmd.Parameters.AddWithValue("@CartID", cartId.Value);
-						addItemCmd.Parameters.AddWithValue("@ProductID", productId);
-						addItemCmd.Parameters.AddWithValue("@Quantity", quantity);
-						addItemCmd.ExecuteNonQuery();
-					}
+					return (int)cartId;
 				}
 			}
 		}
+
+		// TODO: Implement Checkout Cart Method
+		public void CheckoutCart(int cartId, string connectionString)
+		{
+			// Logic to mark the cart as inactive
+		}
+
+		// TODO: Implement Get Cart Items Method
+		//public CartDetails GetActiveCartDetails(int userId, string connectionString)
+		//{
+		//	// Logic to retrieve active cart details, including items and total value
+		//}
 	}
 }

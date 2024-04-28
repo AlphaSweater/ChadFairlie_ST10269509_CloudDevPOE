@@ -19,6 +19,9 @@ namespace CloudDevPOE.Models
 		public int Quantity { get; set; }
 
 		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
+
+
+
 		public void Add_Item_To_Cart(int cartId, int productId, int quantity, string connectionString)
 		{
 			using (var con = new SqlConnection(connectionString))
@@ -34,5 +37,18 @@ namespace CloudDevPOE.Models
 				}
 			}
 		}
+
+		// TODO: Implement Remove Item From Cart Method
+		public void RemoveItemFromCart(int cartItemId, string connectionString)
+		{
+			// Logic to remove an item from the cart
+		}
+
+		// TODO: Implement Update Item Quantity Method
+		public void UpdateItemQuantity(int cartItemId, int quantity, string connectionString)
+		{
+			// Logic to update the quantity of an existing item in the cart
+		}
+
 	}
 }
