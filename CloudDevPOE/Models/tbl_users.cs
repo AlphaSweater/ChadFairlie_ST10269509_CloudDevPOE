@@ -10,14 +10,6 @@ namespace CloudDevPOE.Models
 	public class Tbl_Users
 	{
 		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
-		private readonly string _conString;
-
-		public Tbl_Users(IConfiguration configuration)
-		{
-			_conString = configuration.GetConnectionString("DefaultConnection");
-		}
-
-		//--------------------------------------------------------------------------------------------------------------------------//
 		public int UserID { get; private set; }
 
 		//--------------------------------------------------------------------------------------------------------------------------//
@@ -44,9 +36,9 @@ namespace CloudDevPOE.Models
 		public string? Password { get; set; }
 
 		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
-		public int Insert_User(Tbl_Users m)
+		public int Insert_User(Tbl_Users m, string connectionString)
 		{
-			using (var con = new SqlConnection(_conString))
+			using (var con = new SqlConnection(connectionString))
 			{
 				con.Open();
 				using (var transaction = con.BeginTransaction())
@@ -85,9 +77,9 @@ namespace CloudDevPOE.Models
 		}
 
 		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
-		public int? Validate_User(Tbl_Users m)
+		public int? Validate_User(Tbl_Users m, string connectionString)
 		{
-			using (var con = new SqlConnection(_conString))
+			using (var con = new SqlConnection(connectionString))
 			{
 				con.Open();
 				string sql = "SELECT user_id, password_hash FROM tbl_users WHERE email = @UserEmail";
@@ -110,6 +102,5 @@ namespace CloudDevPOE.Models
 				}
 			}
 		}
-
 	}
 }

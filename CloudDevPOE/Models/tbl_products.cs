@@ -11,14 +11,6 @@ namespace CloudDevPOE.Models
     public class Tbl_Products
     {
         //<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
-        private readonly string _conString;
-
-        public Tbl_Products(IConfiguration configuration)
-        {
-            _conString = configuration.GetConnectionString("DefaultConnection");
-        }
-
-        //--------------------------------------------------------------------------------------------------------------------------//
         public int ProductID { get; set; }
 
         //--------------------------------------------------------------------------------------------------------------------------//
@@ -51,9 +43,9 @@ namespace CloudDevPOE.Models
         public Tbl_Product_Images ProductImagesModel { get; set; } = new Tbl_Product_Images();
 
         //<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
-        public int Insert_Product(Tbl_Products m, int userID, IWebHostEnvironment webHostEnvironment)
+        public int Insert_Product(Tbl_Products m, int userID, IWebHostEnvironment webHostEnvironment, string connectionString)
         {
-            using (var con = new SqlConnection(_conString))
+            using (var con = new SqlConnection(connectionString))
             {
                 con.Open();
                 using (var transaction = con.BeginTransaction())
