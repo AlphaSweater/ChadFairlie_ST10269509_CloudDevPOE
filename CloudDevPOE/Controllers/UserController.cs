@@ -9,9 +9,11 @@ namespace CloudDevPOE.Controllers
 {
 	public class UserController : Controller
 	{
+		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
 		private readonly IHttpContextAccessor _httpContextAccessor;
 		private readonly IConfiguration _configuration;
 
+		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
 		// Constructor to inject IHttpContextAccessor and IConfiguration
 		public UserController(IHttpContextAccessor httpContextAccessor, IConfiguration configuration)
 		{
@@ -19,13 +21,14 @@ namespace CloudDevPOE.Controllers
 			_configuration = configuration;
 		}
 
+		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
 		[HttpGet]
 		public ActionResult SignUp()
 		{
 			return View();
 		}
 
-		// POST: Account/SignUp
+		//--------------------------------------------------------------------------------------------------------------------------//
 		[HttpPost]
 		public IActionResult SignUp(Tbl_Users user)
 		{
@@ -43,7 +46,7 @@ namespace CloudDevPOE.Controllers
 			return View(user);
 		}
 
-		// GET: Account/Login
+		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
 		[HttpGet]
 		public ActionResult Login()
 		{
@@ -51,14 +54,14 @@ namespace CloudDevPOE.Controllers
 			return View();
 		}
 
-		// POST: Account/Login
+		//--------------------------------------------------------------------------------------------------------------------------//
 		[HttpPost]
 		public IActionResult Login(Tbl_Users user)
 		{
 			var connectionString = _configuration.GetConnectionString("DefaultConnection");
 
 			// Pass the connection string to Validate_User
-			int? userId = user.Validate_User(user, connectionString);
+			int? userId = user.ValidateUser(user, connectionString);
 			if (userId.HasValue)
 			{
 				_httpContextAccessor.HttpContext.Session.SetInt32("UserId", userId.Value);
@@ -71,12 +74,13 @@ namespace CloudDevPOE.Controllers
 			}
 		}
 
-		// GET: Account/Logout
+		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
 		[HttpGet]
 		public IActionResult Logout()
 		{
 			_httpContextAccessor.HttpContext.Session.Clear();
 			return RedirectToAction("Login", "User");
 		}
+		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
 	}
 }

@@ -12,10 +12,12 @@ namespace CloudDevPOE.Controllers
 {
 	public class ProductsController : Controller
 	{
+		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
 		private readonly IHttpContextAccessor _httpContextAccessor;
 		private readonly IWebHostEnvironment _webHostEnvironment;
 		private readonly IConfiguration _configuration;
 
+		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
 		// Inject IHttpContextAccessor, IWebHostEnvironment and IConfiguration into the controller's constructor
 		public ProductsController(IHttpContextAccessor httpContextAccessor, IWebHostEnvironment webHostEnvironment, IConfiguration configuration)
 		{
@@ -24,6 +26,7 @@ namespace CloudDevPOE.Controllers
 			_configuration = configuration;
 		}
 
+		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
 		[HttpGet]
 		public IActionResult MyWork()
 		{
@@ -37,12 +40,14 @@ namespace CloudDevPOE.Controllers
 			return View(productSummaries);
 		}
 
+		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
 		[HttpGet]
 		public ActionResult AddProduct()
 		{
 			return View();
 		}
 
+		//--------------------------------------------------------------------------------------------------------------------------//
 		[HttpPost]
 		public IActionResult AddProduct(Tbl_Products product)
 		{
@@ -78,6 +83,7 @@ namespace CloudDevPOE.Controllers
 			return View();
 		}
 
+		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
 		[HttpGet]
 		public IActionResult ViewProduct(int id)
 		{
@@ -93,5 +99,6 @@ namespace CloudDevPOE.Controllers
 
 			return View(productDetails);
 		}
+		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
 	}
 }
