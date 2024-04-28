@@ -19,10 +19,8 @@ namespace CloudDevPOE.Models
 		public int Quantity { get; set; }
 
 		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
-
-
-
-		public void Add_Item_To_Cart(int cartId, int productId, int quantity, string connectionString)
+		// TODO: Implement Add Item To Cart Method
+		public void AddItemToCart(int cartId, int productId, int quantity, string connectionString)
 		{
 			using (var con = new SqlConnection(connectionString))
 			{
@@ -38,17 +36,37 @@ namespace CloudDevPOE.Models
 			}
 		}
 
+		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
 		// TODO: Implement Remove Item From Cart Method
 		public void RemoveItemFromCart(int cartItemId, string connectionString)
 		{
-			// Logic to remove an item from the cart
+			using (var con = new SqlConnection(connectionString))
+			{
+				con.Open();
+				string sql = "DELETE FROM Tbl_Cart_Items WHERE CartItemID = @CartItemID";
+				using (SqlCommand cmd = new SqlCommand(sql, con))
+				{
+					cmd.Parameters.AddWithValue("@CartItemID", cartItemId);
+					cmd.ExecuteNonQuery();
+				}
+			}
 		}
 
+		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
 		// TODO: Implement Update Item Quantity Method
 		public void UpdateItemQuantity(int cartItemId, int quantity, string connectionString)
 		{
-			// Logic to update the quantity of an existing item in the cart
+			using (var con = new SqlConnection(connectionString))
+			{
+				con.Open();
+				string sql = "UPDATE Tbl_Cart_Items SET Quantity = @Quantity WHERE CartItemID = @CartItemID";
+				using (SqlCommand cmd = new SqlCommand(sql, con))
+				{
+					cmd.Parameters.AddWithValue("@CartItemID", cartItemId);
+					cmd.Parameters.AddWithValue("@Quantity", quantity);
+					cmd.ExecuteNonQuery();
+				}
+			}
 		}
-
 	}
 }

@@ -91,9 +91,9 @@ namespace CloudDevPOE.Models
 		}
 
 		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
-		public List<ProductSummary> ListProducts(string connectionString)
+		public List<ProductSummaryViewModel> ListProducts(string connectionString)
 		{
-			List<ProductSummary> productSummaries = new List<ProductSummary>();
+			List<ProductSummaryViewModel> productSummaries = new List<ProductSummaryViewModel>();
 
 			using (var con = new SqlConnection(connectionString))
 			{
@@ -122,7 +122,7 @@ namespace CloudDevPOE.Models
 					{
 						while (reader.Read())
 						{
-							productSummaries.Add(new ProductSummary
+							productSummaries.Add(new ProductSummaryViewModel
 							{
 								ProductID = (int)reader["product_id"],
 								ProductName = reader["name"].ToString(),
@@ -138,9 +138,9 @@ namespace CloudDevPOE.Models
 		}
 
 		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
-		public ProductDetails ViewProduct(int productID, string connectionString)
+		public ProductDetailsViewModel ViewProduct(int productID, string connectionString)
 		{
-			ProductDetails productDetails = null;
+			ProductDetailsViewModel productDetails = null;
 
 			using (var con = new SqlConnection(connectionString))
 			{
@@ -154,7 +154,7 @@ namespace CloudDevPOE.Models
 					{
 						if (reader.Read())
 						{
-							productDetails = new ProductDetails
+							productDetails = new ProductDetailsViewModel
 							{
 								ProductID = productID,
 								UserID = (int)reader["user_id"],

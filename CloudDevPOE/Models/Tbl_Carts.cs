@@ -12,10 +12,12 @@ namespace CloudDevPOE.Models
 		public int UserID { get; set; }
 
 		//--------------------------------------------------------------------------------------------------------------------------//
+		public decimal TotalValue { get; set; }
+
+		//--------------------------------------------------------------------------------------------------------------------------//
 		public bool IsActive { get; set; }
 
 		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
-		// TODO: Implement method to find an active cart for a user
 		public int GetActiveCart(int userId, string connectionString)
 		{
 			using (var con = new SqlConnection(connectionString))
@@ -43,12 +45,21 @@ namespace CloudDevPOE.Models
 				}
 			}
 		}
-
-		// TODO: Implement Checkout Cart Method
+		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
 		public void CheckoutCart(int cartId, string connectionString)
 		{
-			// Logic to mark the cart as inactive
+			using (var con = new SqlConnection(connectionString))
+			{
+				con.Open();
+				string sql = "UPDATE Tbl_Carts SET IsActive = 0 WHERE CartID = @CartID";
+				using (SqlCommand cmd = new SqlCommand(sql, con))
+				{
+					cmd.Parameters.AddWithValue("@CartID", cartId);
+					cmd.ExecuteNonQuery();
+				}
+			}
 		}
+		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
 
 		// TODO: Implement Get Cart Items Method
 		//public CartDetails GetActiveCartDetails(int userId, string connectionString)

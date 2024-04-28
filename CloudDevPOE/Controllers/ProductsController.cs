@@ -31,7 +31,7 @@ namespace CloudDevPOE.Controllers
 			Tbl_Products productsModel = new Tbl_Products();
 
 			// Fetch the list of product summaries
-			List<ProductSummary> productSummaries = productsModel.ListProducts(connectionString);
+			List<ProductSummaryViewModel> productSummaries = productsModel.ListProducts(connectionString);
 
 			// Pass the list to the MyWork view
 			return View(productSummaries);
@@ -84,7 +84,7 @@ namespace CloudDevPOE.Controllers
 			var connectionString = _configuration.GetConnectionString("DefaultConnection");
 			Tbl_Products productsModel = new Tbl_Products();
 
-			ProductDetails productDetails = productsModel.ViewProduct(id, connectionString);
+			ProductDetailsViewModel productDetails = productsModel.ViewProduct(id, connectionString);
 
 			if (productDetails == null)
 			{
