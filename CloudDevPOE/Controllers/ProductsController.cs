@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using CloudDevPOE.ViewModels;
+using System.Data.SqlClient;
 
 namespace CloudDevPOE.Controllers
 {
@@ -22,9 +24,17 @@ namespace CloudDevPOE.Controllers
 			_configuration = configuration;
 		}
 
+		[HttpGet]
 		public IActionResult MyWork()
 		{
-			return View();
+			var connectionString = _configuration.GetConnectionString("DefaultConnection");
+			Tbl_Products productsModel = new Tbl_Products();
+
+			// Fetch the list of product summaries
+			List<ProductSummary> productSummaries = productsModel.ListProducts(connectionString);
+
+			// Pass the list to the MyWork view
+			return View(productSummaries);
 		}
 
 		// GET:
@@ -61,13 +71,30 @@ namespace CloudDevPOE.Controllers
 			var connectionString = _configuration.GetConnectionString("DefaultConnection");
 
 			// Pass the webHostEnvironment and connectionString to the Insert_Product method
-			int rowsAffected = product.Insert_Product(product, userID.Value, _webHostEnvironment, connectionString);
+			int rowsAffected = product.InsertProduct(product, userID.Value, _webHostEnvironment, connectionString);
 
 			if (rowsAffected > 0)
 			{
 				return RedirectToAction("MyWork", "Products");
 			}
 			return View();
+		}
+
+		// GET: View product
+		[HttpGet]
+		public IActionResult ViewProduct(int id)
+		{
+			var connectionString = _configuration.GetConnectionString("DefaultConnection");
+			Tbl_Products productsModel = new Tbl_Products();
+
+			ProductDetails productDetails = productsModel.ViewProduct(id, connectionString);
+
+			if (productDetails == null)
+			{
+				return NotFound();
+			}
+
+			return View(productDetails);
 		}
 	}
 }

@@ -1,5 +1,6 @@
 ﻿// Ignore Spelling: Tbl
 
+using CloudDevPOE.ViewModels;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
@@ -43,7 +44,7 @@ namespace CloudDevPOE.Models
 		public Tbl_Product_Images ProductImagesModel { get; set; } = new Tbl_Product_Images();
 
 		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
-		public int Insert_Product(Tbl_Products m, int userID, IWebHostEnvironment webHostEnvironment, string connectionString)
+		public int InsertProduct(Tbl_Products m, int userID, IWebHostEnvironment webHostEnvironment, string connectionString)
 		{
 			using (var con = new SqlConnection(connectionString))
 			{
@@ -88,9 +89,105 @@ namespace CloudDevPOE.Models
 							con.Close();
 					}
 				}
-
-				//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
 			}
+		}
+
+		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
+		public List<ProductSummary> ListProducts(string connectionString)
+		{
+			List<ProductSummary> productSummaries = new List<ProductSummary>();
+
+			using (var con = new SqlConnection(connectionString))
+			{
+				con.Open();
+				string productSql =
+				@"	SELECT
+						tp.product_id,
+						tp.name,
+						tp.price,
+						tp.availability,
+						tpi.image_url
+					FROM
+						((tbl_products tp
+					INNER JOIN
+						(
+						SELECT MIN(image_id) AS image_id, product_id
+						FROM tbl_product_images
+						GROUP BY product_id
+						) AS first_image ON tp.product_id = first_image.product_id)
+					INNER JOIN
+						tbl_product_images tpi ON first_image.image_id = tpi.image_id)";
+
+				using (var productCmd = new SqlCommand(productSql, con))
+				{
+					using (var reader = productCmd.ExecuteReader())
+					{
+						while (reader.Read())
+						{
+							productSummaries.Add(new ProductSummary
+							{
+								ProductID = (int)reader["product_id"],
+								ProductName = reader["name"].ToString(),
+								ProductPrice = (decimal)reader["price"],
+								ProductAvailability = (bool)reader["availability"],
+								ProductMainImageUrl = reader["image_url"].ToString()
+							});
+						}
+					}
+				}
+			}
+			return productSummaries;
+		}
+
+		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
+		public ProductDetails ViewProduct(int productID, string connectionString)
+		{
+			ProductDetails productDetails = null;
+
+			using (var con = new SqlConnection(connectionString))
+			{
+				con.Open();
+				// Fetch the product details
+				string productSql = "SELECT * FROM tbl_products WHERE product_id = @ProductID";
+				using (var productCmd = new SqlCommand(productSql, con))
+				{
+					productCmd.Parameters.AddWithValue("@ProductID", productID);
+					using (var reader = productCmd.ExecuteReader())
+					{
+						if (reader.Read())
+						{
+							productDetails = new ProductDetails
+							{
+								ProductID = productID,
+								UserID = (int)reader["user_id"],
+								ProductName = reader["name"].ToString(),
+								ProductCategory = reader["category"].ToString(),
+								ProductDescription = reader["description"].ToString(),
+								ProductPrice = (decimal)reader["price"],
+								ImageUrls = new List<string>() // Initialize the list to be filled
+							};
+						}
+					}
+				}
+
+				// Assuming the product was found, fetch its images
+				if (productDetails != null)
+				{
+					string imagesSql = "SELECT image_url FROM tbl_product_images WHERE product_id = @ProductID";
+					using (var imagesCmd = new SqlCommand(imagesSql, con))
+					{
+						imagesCmd.Parameters.AddWithValue("@ProductID", productID);
+						using (var reader = imagesCmd.ExecuteReader())
+						{
+							while (reader.Read())
+							{
+								productDetails.ImageUrls.Add(reader["image_url"].ToString());
+							}
+						}
+					}
+				}
+			}
+			return productDetails;
 		}
 	}
 }
