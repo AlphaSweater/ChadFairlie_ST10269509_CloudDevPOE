@@ -1,6 +1,6 @@
 ﻿// Ignore Spelling: Tbl
 
-using CloudDevPOE.Services;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
@@ -22,85 +22,80 @@ namespace CloudDevPOE.Models
         public int UserID { get; set; }
 
         //--------------------------------------------------------------------------------------------------------------------------//
+        [Required]
         public string ProductName { get; set; }
 
         //--------------------------------------------------------------------------------------------------------------------------//
+        [Required]
         public string ProductCategory { get; set; }
 
         //--------------------------------------------------------------------------------------------------------------------------//
+        [Required]
         public string ProductDescription { get; set; }
 
         //--------------------------------------------------------------------------------------------------------------------------//
+        [Required]
         public decimal ProductPrice { get; set; }
 
         //--------------------------------------------------------------------------------------------------------------------------//
+        [Required]
         public int ProductQuantity { get; set; }
 
         //--------------------------------------------------------------------------------------------------------------------------//
         public bool ProductAvailability { get; set; }
 
         //--------------------------------------------------------------------------------------------------------------------------//
-        public string ProductImageURL { get; set; }
-
-        //--------------------------------------------------------------------------------------------------------------------------//
-        public IFormFile ProductImage { get; set; }
+        public Tbl_Product_Images ProductImagesModel { get; set; } = new Tbl_Product_Images();
 
         //<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
-        public virtual int ExecuteNonQuery(SqlCommand cmd)
+        public int Insert_Product(Tbl_Products m, int userID, IWebHostEnvironment webHostEnvironment)
         {
-            try
+            using (var con = new SqlConnection(conString))
             {
                 con.Open();
-                return cmd.ExecuteNonQuery();
-            }
-            finally
-            {
-                if (con.State == ConnectionState.Open)
-                    con.Close();
-            }
-        }
-
-        //<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
-        public int Insert_Product(Tbl_Products m, int userID, ImageService imageService)
-        {
-            try
-            {
-                string sql = "INSERT INTO tbl_products (user_id, name, category, description, price, quantity, availability) VALUES (@UserID, @ProductName, @ProductCategory, @ProductDescription, @ProductPrice, @ProductQuantity, @ProductAvailability)";
-                SqlCommand cmd = new SqlCommand(sql, con);
-                cmd.Parameters.AddWithValue("@UserID", userID);
-                cmd.Parameters.AddWithValue("@ProductName", m.ProductName);
-                cmd.Parameters.AddWithValue("@ProductCategory", m.ProductCategory);
-                cmd.Parameters.AddWithValue("@ProductDescription", m.ProductDescription);
-                cmd.Parameters.AddWithValue("@ProductPrice", m.ProductPrice);
-                cmd.Parameters.AddWithValue("@ProductQuantity", m.ProductQuantity);
-                cmd.Parameters.AddWithValue("@ProductAvailability", m.ProductAvailability);
-
-                int result = ExecuteNonQuery(cmd);
-                int result2 = 0;
-
-                if (result == 1)
+                using (var transaction = con.BeginTransaction())
                 {
-                    // Upload the image and set the ProductImageURL
-                    m.ProductImageURL = imageService.UploadImageAsync(m.ProductImage).Result;
+                    try
+                    {
+                        string sql = "INSERT INTO tbl_products (user_id, name, category, description, price, quantity, availability) OUTPUT INSERTED.product_id VALUES (@UserID, @ProductName, @ProductCategory, @ProductDescription, @ProductPrice, @ProductQuantity, @ProductAvailability)";
+                        SqlCommand cmd = new SqlCommand(sql, con, transaction); // Associate the command with the transaction
+                        cmd.Parameters.AddWithValue("@UserID", userID);
+                        cmd.Parameters.AddWithValue("@ProductName", m.ProductName);
+                        cmd.Parameters.AddWithValue("@ProductCategory", m.ProductCategory);
+                        cmd.Parameters.AddWithValue("@ProductDescription", m.ProductDescription);
+                        cmd.Parameters.AddWithValue("@ProductPrice", m.ProductPrice);
+                        cmd.Parameters.AddWithValue("@ProductQuantity", m.ProductQuantity);
+                        m.ProductAvailability = m.ProductQuantity > 0;
+                        cmd.Parameters.AddWithValue("@ProductAvailability", m.ProductAvailability);
 
-                    sql = "INSERT INTO tbl_product_images (product_id, image_url) VALUES (@ProductID, @ProductImageURL)";
-                    cmd = new SqlCommand(sql, con);
-                    cmd.Parameters.AddWithValue("@ProductID", m.ProductID);
-                    cmd.Parameters.AddWithValue("@ProductImageURL", m.ProductImageURL);
+                        // Execute the command and retrieve the new ProductID
+                        m.ProductID = (int)cmd.ExecuteScalar();
 
-                    result2 = ExecuteNonQuery(cmd);
+                        m.ProductImagesModel.ProductID = m.ProductID; // Set the ProductID for image records
+                        m.ProductImagesModel.ProductCategory = m.ProductCategory; // Set the ProductCategory for image records
+
+                        // Save images to the file system and get their paths
+                        List<string> savedImagePaths = m.ProductImagesModel.SaveImagesToFileSystem(webHostEnvironment);
+
+                        m.ProductImagesModel.Insert_Images(con, transaction, savedImagePaths);
+
+                        transaction.Commit(); // Commit the transaction if all commands were successful
+                        return 1;
+                    }
+                    catch (Exception)
+                    {
+                        transaction.Rollback();
+                        throw;
+                    }
+                    finally
+                    {
+                        if (con.State == ConnectionState.Open)
+                            con.Close();
+                    }
                 }
 
-                return result2;
-            }
-            catch (Exception ex)
-            {
-                // Log the exception or handle it appropriately
-                // For now, rethrow the exception
-                throw ex;
+                //<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
             }
         }
-
-        //<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
     }
 }

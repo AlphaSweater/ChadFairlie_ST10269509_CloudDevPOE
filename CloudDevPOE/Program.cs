@@ -1,5 +1,4 @@
 using CloudDevPOE.Models;
-using CloudDevPOE.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,12 +14,6 @@ namespace CloudDevPOE
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-
-            // Add Cloudinary settings
-            builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("Cloudinary"));
-
-            // Add ImageService
-            builder.Services.AddScoped<ImageService>();
 
             // Add session services.
             builder.Services.AddSession(options =>

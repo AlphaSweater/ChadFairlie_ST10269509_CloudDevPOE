@@ -2,52 +2,120 @@
 @{
     ViewData["Title"] = "Add Product";
 }
+<head>
+    <style>
+        :root {
+            --item-size: 104px; /* Width/Height of each item */
+            --items-per-row: 3; /* Default number of items per row */
+            --margin: 2px; /* Margin around each item */
+            --container-padding: 5px; /* Padding inside the container */
+            --total-margin: calc(var(--margin) * 2); /* Total margin for an item */
+            --container-width: calc((var(--item-size) + var(--total-margin)) * var(--items-per-row) + (var(--container-padding) * 2)); /* Calculate container width */
+        }
+
+        .image-upload-container {
+            display: flex;
+            flex-wrap: wrap;
+            padding: var(--container-padding);
+            width: var(--container-width);
+        }
+
+        .image-box, .image-upload-box {
+            width: var(--item-size);
+            height: var(--item-size);
+            margin: var(--margin);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid #ccc;
+            cursor: pointer;
+        }
+
+            .image-box img {
+                max-width: 100%;
+                max-height: 100%;
+            }
+    </style>
+</head>
+
 
 <h1>Add Product</h1>
 <p>Please fill in the details of the product you want to add.</p>
 
 <body>
-    <form action="AddProduct" method="post" enctype="multipart/form-data">
-        <p>Add Product</p>
-        <input type="text" id="ProductName" name="ProductName" placeholder="Product Name" required>
-        <input type="text" id="ProductCategory" name="ProductCategory" placeholder="Product Category" required>
-        <textarea id="ProductDescription" name="ProductDescription" placeholder="Product Description" required></textarea>
-        <input type="number" id="ProductPrice" name="ProductPrice" placeholder="Product Price" required>
-        <input type="number" id="ProductQuantity" name="ProductQuantity" placeholder="Product Quantity" required>
-        <input type="hidden" name="ProductAvailability" value="false" />
-        <input type="checkbox" id="ProductAvailability" name="ProductAvailability" value="true" />Available
+    <form id="product_form" action="AddProduct" method="post" enctype="multipart/form-data">
+        <div style="display: flex; flex-direction: column">
+            <p>Add Product</p>
+            <input type="text" id="ProductName" name="ProductName" placeholder="Product Name" required>
+            <input type="text" id="ProductCategory" name="ProductCategory" placeholder="Product Category" required>
+            <textarea id="ProductDescription" name="ProductDescription" placeholder="Product Description" required></textarea>
+            <input type="number" id="ProductPrice" name="ProductPrice" placeholder="Product Price" required>
+            <input type="number" id="ProductQuantity" name="ProductQuantity" placeholder="Product Quantity" required>
+            <div id="image-upload-container" class="image-upload-container">
+                <input type="file" id="image-upload" class="image-upload" accept="image/*" style="display:none;" onchange="handleImageUpload(event)" />
+                <div id="add-image-box" class="image-box" onclick="document.getElementById('image-upload').click();">+</div>
+            </div>
 
-        <div id="drop-zone">
-            <p>Drag and drop your image here, or click to select file</p>
-            <input type="file" id="ProductImage" name="ProductImage" accept="image/*" />
+            <button type="submit">Submit</button>
         </div>
-
-        <button type="submit">Submit</button>
     </form>
 </body>
 
 @section Scripts {
     <script>
-        var dropZone = document.getElementById('drop-zone');
-        var fileInput = document.getElementById('ProductImage');
+        let accumulatedFiles = [];
 
-        dropZone.addEventListener('click', function () {
-            fileInput.click();
-        });
+        function handleImageUpload(event) {
+            const files = event.target.files;
+            if (files.length > 0) {
+                Array.from(files).forEach(file => {
+                    accumulatedFiles.push(file); // Add file to the accumulatedFiles array
 
-        dropZone.addEventListener('dragover', function (e) {
-            e.preventDefault();
-            this.classList.add('dragging');
-        });
+                    // Log each file name as it's added
+                    console.log(`File added: ${file.name}`);
 
-        dropZone.addEventListener('dragleave', function () {
-            this.classList.remove('dragging');
-        });
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        const newImageBox = document.createElement('div');
+                        newImageBox.classList.add('image-box');
+                        newImageBox.innerHTML = `<img src="${e.target.result}" alt="uploaded image"/>`;
+                        const container = document.getElementById('image-upload-container');
+                        container.insertBefore(newImageBox, document.getElementById('add-image-box'));
+                    };
+                    reader.readAsDataURL(file);
+                });
+            }
+        }
 
-        dropZone.addEventListener('drop', function (e) {
-            e.preventDefault();
-            this.classList.remove('dragging');
-            fileInput.files = e.dataTransfer.files;
+        document.getElementById('product_form').addEventListener('submit', function (event) {
+            event.preventDefault(); // Prevent the default form submission
+
+            console.log(accumulatedFiles);
+
+            const formData = new FormData(this);
+            accumulatedFiles.forEach((file, index) => {
+                formData.append(`ProductImagesModel.ProductImages`, file); // Append each file to formData
+            });
+
+            fetch(this.action, {
+                method: 'POST',
+                body: formData,
+            })
+                .then(response => {
+                    if (response.ok) {
+                        // If the response status code is 200-299, it was successful
+                        console.log('Success');
+
+                        // Redirect to the MyWork view
+                        window.location.href = '/Products/MyWork';
+                    } else {
+                        // If the server response was not ok, handle the error
+                        console.error('Server responded with an error status');
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
         });
     </script>
 }
