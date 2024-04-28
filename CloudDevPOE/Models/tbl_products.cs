@@ -1,8 +1,6 @@
 ﻿// Ignore Spelling: Tbl
 
 using CloudDevPOE.ViewModels;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Data.SqlClient;
