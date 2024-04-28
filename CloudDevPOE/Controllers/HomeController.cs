@@ -23,11 +23,6 @@ namespace CloudDevPOE.Controllers
             return View();
         }
 
-        public IActionResult MyWork()
-        {
-            return View();
-        }
-
         public IActionResult ContactUs()
         {
             return View();
