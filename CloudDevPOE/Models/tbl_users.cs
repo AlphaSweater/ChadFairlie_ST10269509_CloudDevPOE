@@ -36,7 +36,7 @@ namespace CloudDevPOE.Models
 		public string? Password { get; set; }
 
 		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
-		public int Insert_User(Tbl_Users m, string connectionString)
+		public int InsertUser(Tbl_Users m, string connectionString)
 		{
 			using (var con = new SqlConnection(connectionString))
 			{
@@ -77,7 +77,7 @@ namespace CloudDevPOE.Models
 		}
 
 		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
-		public int? Validate_User(Tbl_Users m, string connectionString)
+		public int? ValidateUser(Tbl_Users m, string connectionString)
 		{
 			using (var con = new SqlConnection(connectionString))
 			{

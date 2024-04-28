@@ -73,7 +73,7 @@ namespace CloudDevPOE.Models
 						// Save images to the file system and get their paths
 						List<string> savedImagePaths = m.ProductImagesModel.SaveImagesToFileSystem(webHostEnvironment);
 
-						m.ProductImagesModel.Insert_Images(con, transaction, savedImagePaths);
+						m.ProductImagesModel.InsertImages(con, transaction, savedImagePaths);
 
 						transaction.Commit(); // Commit the transaction if all commands were successful
 						return 1;

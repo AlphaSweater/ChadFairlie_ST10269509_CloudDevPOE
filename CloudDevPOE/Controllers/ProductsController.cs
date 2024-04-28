@@ -16,7 +16,7 @@ namespace CloudDevPOE.Controllers
 		private readonly IWebHostEnvironment _webHostEnvironment;
 		private readonly IConfiguration _configuration;
 
-		// Inject IWebHostEnvironment into the controller's constructor
+		// Inject IHttpContextAccessor, IWebHostEnvironment and IConfiguration into the controller's constructor
 		public ProductsController(IHttpContextAccessor httpContextAccessor, IWebHostEnvironment webHostEnvironment, IConfiguration configuration)
 		{
 			_httpContextAccessor = httpContextAccessor;
@@ -37,14 +37,12 @@ namespace CloudDevPOE.Controllers
 			return View(productSummaries);
 		}
 
-		// GET:
 		[HttpGet]
 		public ActionResult AddProduct()
 		{
 			return View();
 		}
 
-		// POST: Add product
 		[HttpPost]
 		public IActionResult AddProduct(Tbl_Products product)
 		{
@@ -80,7 +78,6 @@ namespace CloudDevPOE.Controllers
 			return View();
 		}
 
-		// GET: View product
 		[HttpGet]
 		public IActionResult ViewProduct(int id)
 		{

@@ -16,7 +16,7 @@ namespace CloudDevPOE.Models
 
 		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
 		// TODO: Implement method to find an active cart for a user
-		public int Get_Active_Cart(int userId, string connectionString)
+		public int GetActiveCart(int userId, string connectionString)
 		{
 			using (var con = new SqlConnection(connectionString))
 			{

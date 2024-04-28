@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿// Ignore Spelling: Accessor
+
+using Microsoft.AspNetCore.Mvc;
 using CloudDevPOE.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -10,14 +12,13 @@ namespace CloudDevPOE.Controllers
 		private readonly IHttpContextAccessor _httpContextAccessor;
 		private readonly IConfiguration _configuration;
 
-		// Constructor to inject IConfiguration
+		// Constructor to inject IHttpContextAccessor and IConfiguration
 		public UserController(IHttpContextAccessor httpContextAccessor, IConfiguration configuration)
 		{
 			_httpContextAccessor = httpContextAccessor;
 			_configuration = configuration;
 		}
 
-		// GET: Account/SignUp
 		[HttpGet]
 		public ActionResult SignUp()
 		{
@@ -33,7 +34,7 @@ namespace CloudDevPOE.Controllers
 				var connectionString = _configuration.GetConnectionString("DefaultConnection");
 
 				// Pass the connection string to Insert_User
-				int rowsAffected = user.Insert_User(user, connectionString);
+				int rowsAffected = user.InsertUser(user, connectionString);
 				if (rowsAffected > 0)
 				{
 					return RedirectToAction("Index", "Home");
