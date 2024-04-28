@@ -1,63 +1,82 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿// Ignore Spelling: Accessor
+
+using Microsoft.AspNetCore.Mvc;
 using CloudDevPOE.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 
 namespace CloudDevPOE.Controllers
 {
-    public class UserController : Controller
-    {
-        // GET: Account/SignUp
-        [HttpGet]
-        public ActionResult SignUp()
-        {
-            return View();
-        }
+	public class UserController : Controller
+	{
+		private readonly IHttpContextAccessor _httpContextAccessor;
+		private readonly IConfiguration _configuration;
 
-        // POST: Account/SignUp
-        [HttpPost]
-        public IActionResult SignUp(Tbl_Users user)
-        {
-            if (ModelState.IsValid)
-            {
-                int rowsAffected = user.Insert_User(user);
-                if (rowsAffected > 0)
-                {
-                    return RedirectToAction("Index", "Home");
-                }
-            }
-            return View(user);
-        }
+		// Constructor to inject IHttpContextAccessor and IConfiguration
+		public UserController(IHttpContextAccessor httpContextAccessor, IConfiguration configuration)
+		{
+			_httpContextAccessor = httpContextAccessor;
+			_configuration = configuration;
+		}
 
-        // GET: Account/Login
-        [HttpGet]
-        public ActionResult Login()
-        {
-            ViewBag.IsValidUser = true;
-            return View();
-        }
+		[HttpGet]
+		public ActionResult SignUp()
+		{
+			return View();
+		}
 
-        // POST: Account/Login
-        [HttpPost]
-        public IActionResult Login(Tbl_Users user, [FromServices] IHttpContextAccessor httpContextAccessor)
-        {
-            bool isValidUser = user.Validate_User(user, httpContextAccessor.HttpContext);
-            if (isValidUser)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-            else
-            {
-                ViewBag.ErrorMessage = "Incorrect email or password.";
-            }
-            return View(user);
-        }
+		// POST: Account/SignUp
+		[HttpPost]
+		public IActionResult SignUp(Tbl_Users user)
+		{
+			if (ModelState.IsValid)
+			{
+				var connectionString = _configuration.GetConnectionString("DefaultConnection");
 
-        // GET: Account/Logout
-        [HttpGet]
-        public IActionResult Logout()
-        {
-            HttpContext.Session.Clear();
-            return RedirectToAction("Login", "User");
-        }
-    }
+				// Pass the connection string to Insert_User
+				int rowsAffected = user.InsertUser(user, connectionString);
+				if (rowsAffected > 0)
+				{
+					return RedirectToAction("Index", "Home");
+				}
+			}
+			return View(user);
+		}
+
+		// GET: Account/Login
+		[HttpGet]
+		public ActionResult Login()
+		{
+			ViewBag.IsValidUser = true;
+			return View();
+		}
+
+		// POST: Account/Login
+		[HttpPost]
+		public IActionResult Login(Tbl_Users user)
+		{
+			var connectionString = _configuration.GetConnectionString("DefaultConnection");
+
+			// Pass the connection string to Validate_User
+			int? userId = user.Validate_User(user, connectionString);
+			if (userId.HasValue)
+			{
+				_httpContextAccessor.HttpContext.Session.SetInt32("UserId", userId.Value);
+				return RedirectToAction("Index", "Home");
+			}
+			else
+			{
+				ViewBag.ErrorMessage = "Incorrect email or password.";
+				return View(user);
+			}
+		}
+
+		// GET: Account/Logout
+		[HttpGet]
+		public IActionResult Logout()
+		{
+			_httpContextAccessor.HttpContext.Session.Clear();
+			return RedirectToAction("Login", "User");
+		}
+	}
 }
