@@ -104,20 +104,42 @@ namespace CloudDevPOE.Models
 		}
 
 		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
-		// TODO: Implement Checkout Cart Method by calling getCartDetails and setting total_value to its proper value and add a transaction
-		public void CheckoutCart(int cartId, string connectionString)
+		public void CheckoutCart(int userId, string connectionString, string paymentMethod)
 		{
+			CartViewModel cartDetails = GetCartDetails(userId, connectionString);
+
 			using (var con = new SqlConnection(connectionString))
 			{
 				con.Open();
-				string sql = "UPDATE Tbl_Carts SET IsActive = 0 WHERE CartID = @CartID";
-				using (SqlCommand cmd = new SqlCommand(sql, con))
+				using (var transaction = con.BeginTransaction())
 				{
-					cmd.Parameters.AddWithValue("@CartID", cartId);
-					cmd.ExecuteNonQuery();
+					try
+					{
+						// Deactivate the cart
+						string deactivateCartSql = "UPDATE Tbl_Carts SET IsActive = 0 WHERE CartID = @CartID";
+						using (SqlCommand cmd = new SqlCommand(deactivateCartSql, con, transaction))
+						{
+							cmd.Parameters.AddWithValue("@CartID", cartDetails.CartID);
+							cmd.ExecuteNonQuery();
+						}
+
+						// Record the transaction using the RecordTransaction method
+						Tbl_Transactions transactionModel = new Tbl_Transactions();
+						transactionModel.RecordTransaction(userId, cartDetails, paymentMethod, con, transaction);
+
+						// Commit the transaction
+						transaction.Commit();
+					}
+					catch
+					{
+						// Rollback the transaction in case of an error
+						transaction.Rollback();
+						throw;
+					}
 				}
 			}
 		}
+
 		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
 	}
 }
