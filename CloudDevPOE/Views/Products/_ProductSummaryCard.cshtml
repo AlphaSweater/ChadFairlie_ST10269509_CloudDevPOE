@@ -1,0 +1,12 @@
+﻿@model CloudDevPOE.ViewModels.ProductSummaryViewModel
+
+@{
+}
+
+<div class="product-summary-card">
+    <img src="@Model.ProductMainImageUrl" alt="@Model.ProductName" style="width: 100px; height: 100px;" />
+    <h3>@Model.ProductName</h3>
+    <p>Price: @Model.ProductPrice.ToString("C")</p>
+    <p>Available: @(Model.ProductAvailability ? "Yes" : "No")</p>
+</div>
+
