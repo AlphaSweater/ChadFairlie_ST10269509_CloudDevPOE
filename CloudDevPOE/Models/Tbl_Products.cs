@@ -102,6 +102,7 @@ namespace CloudDevPOE.Models
 				@"	SELECT
 						tp.product_id,
 						tp.name,
+						tp.description,
 						tp.price,
 						tp.availability,
 						tpi.image_url
@@ -126,6 +127,7 @@ namespace CloudDevPOE.Models
 							{
 								ProductID = (int)reader["product_id"],
 								ProductName = reader["name"].ToString(),
+								ProductDescription = reader["description"].ToString(),
 								ProductPrice = (decimal)reader["price"],
 								ProductAvailability = (bool)reader["availability"],
 								ProductMainImageUrl = reader["image_url"].ToString()

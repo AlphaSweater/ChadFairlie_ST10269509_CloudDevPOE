@@ -14,6 +14,7 @@ namespace CloudDevPOE.Controllers
 	{
 		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
 		private readonly IHttpContextAccessor _httpContextAccessor;
+
 		private readonly IWebHostEnvironment _webHostEnvironment;
 		private readonly IConfiguration _configuration;
 
@@ -99,6 +100,7 @@ namespace CloudDevPOE.Controllers
 
 			return View(productDetails);
 		}
+
 		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
 	}
 }

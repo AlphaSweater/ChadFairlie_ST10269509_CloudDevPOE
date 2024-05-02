@@ -210,10 +210,13 @@
 </head>
 
 <main>
-	@foreach (var productSummary in Model)
-	{
-		@Html.Partial("_ProductSummaryCard", productSummary)
-	}
+	<div style="display: flex; flex-direction: row; flex-wrap: wrap; padding: 10px">
+		@foreach (var productSummary in Model)
+		{
+			@Html.Partial("_ProductSummaryCard", productSummary)
+		}
+	</div>
+	
 
     <div id="mainContentColumn" class="contentColumn">
         <div id="section1" class="swiperSection contentColumn">
