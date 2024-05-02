@@ -1,7 +1,5 @@
 ﻿@model CloudDevPOE.ViewModels.ProductSummaryViewModel
 
-@{
-}
 <head>
 	<style>
 		.psc-card {
@@ -14,8 +12,9 @@
 			display: flex;
 			flex-direction: column;
 			justify-content: space-between;
-			transition: box-shadow 0.3s ease-in-out;
-			margin: 1em;
+			transition: box-shadow 0.3s ease, background-color 0.3s ease;
+			margin: 0.5em;
+			cursor: pointer;
 		}
 
 			.psc-card:hover {
@@ -72,7 +71,6 @@
 			font-size: 1em;
 			line-height: 1.5;
 		}
-
 	</style>
 </head>
 
