@@ -4,136 +4,99 @@
 <head>
     <link rel="stylesheet" href="~/css/base.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/flex-layout.css" asp-append-version="true" />
-    <style>
-        #mainContentColumn {
-            padding-top: 15px;
-            padding-left: 40px;
-            padding-right: 40px;
-            padding-bottom: 15px;
-            text-align: center;
-            gap: 30px;
-        }
+	<style>
+		#mainContentColumn {
+			padding-top: 15px;
+			padding-left: 40px;
+			padding-right: 40px;
+			padding-bottom: 15px;
+			text-align: center;
+			gap: 30px;
+		}
 
-        .column {
-            float: left;
-            width: 33.3%;
-            margin-bottom: 16px;
-            padding: 0 8px;
-        }
+		.column {
+			float: left;
+			width: 33.3%;
+			margin-bottom: 16px;
+			padding: 0 8px;
+		}
 
-        .card {
-            border: 1px solid #ddd;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
-            height: 100%;
-        }
+		.card {
+			border: 1px solid #ddd;
+			box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+			height: 100%;
+		}
 
-        .container {
-            display: grid;
-            grid-template-rows: auto 1fr auto;
-            height: 100%;
-            padding: 0 16px;
-        }
+		.container {
+			display: grid;
+			grid-template-rows: auto 1fr auto;
+			height: 100%;
+			padding: 0 16px;
+		}
 
-            .container::after, .row::after {
-                content: "";
-                clear: both;
-                display: table;
-            }
+			.container::after, .row::after {
+				content: "";
+				clear: both;
+				display: table;
+			}
 
-        .title {
-            color: grey;
-        }
+		.title {
+			color: grey;
+		}
 
-        .email-label {
-            color: grey;
-        }
+		.email-label {
+			color: grey;
+		}
 
-        .button {
-            border: none;
-            outline: 0;
-            display: inline-block;
-            padding: 8px;
-            color: white;
-            background-color: #333;
-            text-align: center;
-            cursor: pointer;
-            width: 100%;
-        }
+		.button {
+			border: none;
+			outline: 0;
+			display: inline-block;
+			padding: 8px;
+			color: white;
+			background-color: var(--color-dark);
+			text-align: center;
+			cursor: pointer;
+			width: 100%;
+		}
 
-            .button:hover {
-                background-color: #555;
-            }
+			.button:hover {
+				background-color: #555;
+			}
 
-        #rowMission {
-            background-color: #a5d8ff;
-        }
+		#rowMission {
+			background-color: var(--color-light-blue);
+		}
 
-        #rowVision {
-            background-color: #96f2d7;
-        }
+		#rowVision {
+			background-color: var(--color-light-green);
+		}
 
-        #rowValues {
-            background-color: #EEBEFA;
-        }
+		#rowValues {
+			background-color: var(--color-light-purple);
+		}
 
-        #rowStory {
-            background-color: #FF9999;
-        }
+		#rowStory {
+			background-color: var(--color-light-red);
+		}
 
-        #rowImpact {
-            background-color: #ffec99;
-        }
+		#rowImpact {
+			background-color: var(--color-light-yellow);
+		}
 
-        #rowPromise {
-            background-color: #85EA92;
-        }
+		#rowPromise {
+			background-color: var(--color-light-lime);
+		}
 
-        #rowJoinJourney {
-            background-color: #FDB686;
-        }
+		#rowJoinJourney {
+			background-color: var(--color-light-orange);
+		}
 
-        p{
-            text-align:left;
-        }
+		p {
+			text-align: left;
+		}
 
-        /* Define font family */
-        body {
-            font-family: Arial, sans-serif;
-        }
-
-        /* Define font sizes */
-        h1 {
-            font-size: 2.5em;
-        }
-
-        h2 {
-            font-size: 2em;
-        }
-
-        h3 {
-            font-size: 1.75em;
-        }
-
-        p, .email-label {
-            font-size: 1em;
-        }
-
-        /* Define font weights */
-        h1, h2, h3 {
-            font-weight: 700;
-        }
-
-        p, .email-label {
-            font-weight: 400;
-        }
-
-        /* Improve readability */
-        p, .email-label {
-            line-height: 1.5;
-            letter-spacing: 0.5px;
-        }
-
-    </style>
+	</style>
 </head>
 
 <main id="mainContentColumn" class="contentColumn">

@@ -5,17 +5,14 @@
 }
 <head>
     <link rel="stylesheet" href="~/css/base.css" asp-append-version="true" />
-    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
     
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
 
-
-    <style>
+	<style>
 		/* This class is for the section that contains all products of a specific category */
 		.category-section {
 			box-shadow: 0px 10px 30px -5px rgba(0, 0, 0, 0.1);
-			background-color: #ffec99;
+			background-color: var(--color-light-yellow);
 			padding: 15px;
 			border-radius: 25px;
 			position: relative;
@@ -27,19 +24,17 @@
 		/* This class is for the title of each category */
 		.category-title {
 			text-transform: uppercase;
-/* 			font-family: "Raleway"; */
 			word-wrap: break-word;
 			float: left;
-/* 			font-size: 1.53846rem; */
-			color: #4d4d4f;
+			color: var(--color-dark);
 			display: inline-block;
-			font-weight: bold;
+			font-weight: var(--font-weight-bold);
 			cursor: pointer;
 			text-decoration: none;
 		}
 
 			.category-title:hover {
-				color: #4d4d4f;
+				color: var(--color-dark);
 				text-decoration: underline;
 			}
 
@@ -49,7 +44,8 @@
 			flex-direction: row;
 			flex-wrap: wrap;
 		}
-    </style>
+	</style>
+
 </head>
 
 <main style="padding: 15px 40px">

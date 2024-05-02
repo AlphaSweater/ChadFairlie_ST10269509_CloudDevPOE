@@ -21,12 +21,12 @@
 	--font-primary: 'Poppins', sans-serif;
 	--font-secondary: 'Segoe Print';
 	--font-size-base: 1em;
-	--font-size-h1: 4.210rem; /* 67.36px */
-	--font-size-h2: 3.158rem; /* 50.56px */
-	--font-size-h3: 2.369rem; /* 37.92px */
-	--font-size-h4: 1.777rem; /* 28.48px */
-	--font-size-h5: 1.333rem; /* 21.28px */
-	--font-size-small: 0.750rem; /* 12px */
+	--font-size-h1: 3.052rem; /* 48.83px */
+	--font-size-h2: 2.441rem; /* 39.06px */
+	--font-size-h3: 1.953rem; /* 31.25px */
+	--font-size-h4: 1.563rem; /* 25px */
+	--font-size-h5: 1.25rem; /* 20px */
+	--font-size-small: 0.8rem; /* 12.8px */
 	--font-weight-normal: 400;
 	--font-weight-bold: 700;
 	--line-height-base: 1.5;
