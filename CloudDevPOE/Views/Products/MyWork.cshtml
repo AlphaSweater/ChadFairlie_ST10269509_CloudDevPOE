@@ -2,6 +2,16 @@
 
 @{
     ViewData["Title"] = "My Work";
+	var colorVariables = new string[]
+	{
+		"--color-light-blue",
+		"--color-light-green",
+		"--color-light-purple",
+		"--color-light-red",
+		"--color-light-yellow",
+		"--color-light-lime",
+		"--color-light-orange"
+	};
 }
 <head>
     <link rel="stylesheet" href="~/css/base.css" asp-append-version="true" />
@@ -12,13 +22,13 @@
 		/* This class is for the section that contains all products of a specific category */
 		.category-section {
 			box-shadow: 0px 10px 30px -5px rgba(0, 0, 0, 0.1);
-			background-color: var(--color-light-yellow);
 			padding: 15px;
 			border-radius: 25px;
 			position: relative;
 			display: flex;
 			flex-direction: column;
-			margin-bottom: 30px;
+
+			margin-bottom: 70px;
 		}
 
 		/* This class is for the title of each category */
@@ -43,6 +53,7 @@
 			display: flex;
 			flex-direction: row;
 			flex-wrap: wrap;
+			justify-content: flex-start;
 		}
 	</style>
 
@@ -50,9 +61,13 @@
 
 <main style="padding: 15px 40px">
 	@* Group products by category *@
+	@{
+		int i = 0;
+	}
 	@foreach (var categoryGroup in Model.GroupBy(product => product.ProductCategory))
 	{
-		<section class="category-section">
+		var colorVariable = colorVariables[i % colorVariables.Length];
+		<section class="category-section" style="background-color: var(@colorVariable);">
 			<h4 class="category-title">@categoryGroup.Key</h4>
 			<div class="product-container">
 				@foreach (var product in categoryGroup)
@@ -61,6 +76,7 @@
 				}
 			</div>
 		</section>
+		i++;
 	}
 </main>
 

@@ -35,6 +35,7 @@
 
 * {
 	box-sizing: border-box;
+	font-family: var(--font-primary);
 }
 
 body {
