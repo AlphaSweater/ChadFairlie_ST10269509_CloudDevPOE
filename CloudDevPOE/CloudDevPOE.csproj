@@ -16,10 +16,15 @@
 
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Views\Products\AddProduct.cshtml" />
+    <_ContentIncludedByDefault Remove="Views\Products\ViewProduct.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="wwwroot\images\products\categories\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\Products\ViewProduct.cshtml" />
   </ItemGroup>
 
 </Project>
