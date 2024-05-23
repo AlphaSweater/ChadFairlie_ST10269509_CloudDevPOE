@@ -5,9 +5,6 @@
 }
 
 <head>
-@* 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-	<link rel="stylesheet" href="~/css/base.css" asp-append-version="true" /> *@
-
 	<style>
 		.product-details {
 			display: flex;
@@ -20,11 +17,20 @@
 		.product-info {
 			flex: 1;
 		}
+
+		.back-link {
+			color: darkgray;
+			text-decoration: none;
+		}
+
+		.back-link::before {
+			content: "← ";
+		}
 	</style>
 </head>
 
 <div class="wt-pb-xs-4">
-	<a href="@Url.Action("MyWork", "Products")" class="wt-arrow-link wt-arrow-link--back wt-text-gray wt-text-caption">Back to search results</a>
+	<a href="@Url.Action("MyWork", "Products")" class="back-link">Back to Products page</a>
 </div>
 
 <main>
