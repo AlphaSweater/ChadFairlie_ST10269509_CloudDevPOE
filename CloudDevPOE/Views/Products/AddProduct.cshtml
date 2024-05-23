@@ -6,21 +6,36 @@
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
 	<style>
 		:root {
-			--item-size: 104px; /* Width/Height of each item */
-			--items-per-row: 3; /* Default number of items per row */
-			--margin: 2px; /* Margin around each item */
-			--container-padding: 5px; /* Padding inside the container */
-			--total-margin: calc(var(--margin) * 2); /* Total margin for an item */
-			--container-width: calc((var(--item-size) + var(--total-margin)) * var(--items-per-row) + (var(--container-padding) * 2)); /* Calculate container width */
+			--item-size: 104px;
+			--items-per-row: 3;
+			--margin: 2px;
+			--container-padding: 5px;
+			--total-margin: calc(var(--margin) * 2);
+			--container-width: calc((var(--item-size) + var(--total-margin)) * var(--items-per-row) + (var(--container-padding) * 2));
 		}
 
-		#crop-modal {
-			height: 60vh;
+		#crop-modal .modal-dialog {
+			max-width: 90vw;
+			max-height: 90vh;
+		}
+
+		#crop-modal .modal-body {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			height: 70vh;
 		}
 
 		#crop-image {
-			height: 50%; /* Adjust this value as needed */
+			max-width: 100%;
+			max-height: 100%;
 			width: auto;
+			height: auto;
+		}
+
+		.form-container {
+			display: flex;
+			flex-direction: column;
 		}
 
 		.image-upload-container {
@@ -30,7 +45,7 @@
 			width: var(--container-width);
 		}
 
-		.image-box, .image-upload-box {
+		.image-box, .upload-box {
 			width: var(--item-size);
 			height: var(--item-size);
 			margin: var(--margin);
@@ -48,39 +63,37 @@
 	</style>
 </head>
 
-<h1>Add Product</h1>
-<p>Please fill in the details of the product you want to add.</p>
-
 <body>
-	<form id="product_form" action="AddProduct" method="post" enctype="multipart/form-data">
-		<div style="display: flex; flex-direction: column">
-			<p>Add Product</p>
-			<input type="text" id="ProductName" name="ProductName" placeholder="Product Name" required>
-			<input type="text" id="ProductCategory" name="ProductCategory" placeholder="Product Category" required>
-			<textarea id="ProductDescription" name="ProductDescription" placeholder="Product Description" required></textarea>
-			<input type="number" id="ProductPrice" name="ProductPrice" placeholder="Product Price" required>
-			<input type="number" id="ProductQuantity" name="ProductQuantity" placeholder="Product Quantity" required>
+	<h1>Add Product</h1>
+	<p>Please fill in the details of the product you want to add.</p>
+
+	<form id="product-form" action="AddProduct" method="post" enctype="multipart/form-data">
+		<div class="form-container">
+			<input type="text" id="product-name" name="ProductName" placeholder="Product Name" required>
+			<input type="text" id="product-category" name="ProductCategory" placeholder="Product Category" required>
+			<textarea id="product-description" name="ProductDescription" placeholder="Product Description" required></textarea>
+			<input type="number" id="product-price" name="ProductPrice" placeholder="Product Price" required>
+			<input type="number" id="product-quantity" name="ProductQuantity" placeholder="Product Quantity" required>
+
 			<div id="image-upload-container" class="image-upload-container">
-				<input type="file" id="image-upload" class="image-upload" accept="image/*" style="display:none;" onchange="handleImageUpload(event)" />
-				<div id="add-image-box" class="image-box" onclick="document.getElementById('image-upload').click();">+</div>
+				<input type="file" id="image-upload-input" class="image-upload-input" accept="image/*" style="display:none;" onchange="handleImageUpload(event)" />
+				<div id="add-image-box" class="upload-box" onclick="document.getElementById('image-upload-input').click();">+</div>
 			</div>
 
 			<button type="submit">Submit</button>
 		</div>
 	</form>
 
-	<!-- The modal for the image cropping interface -->
-	<div class="modal fade" id="crop-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		<div class="modal-dialog">
+	<!-- Image cropping modal -->
+	<div class="modal fade" id="crop-modal" tabindex="-1" role="dialog" aria-labelledby="cropModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg">
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-					<h4 class="modal-title" id="myModalLabel">Edit Photo</h4>
+					<h4 class="modal-title" id="cropModalLabel">Edit Photo</h4>
 				</div>
 				<div class="modal-body">
-					<div class="modal-body">
-						<img id="crop-image" src="" alt="Image for cropping" />
-					</div>
+					<img id="crop-image" src="" alt="Image for cropping" />
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -89,103 +102,94 @@
 			</div>
 		</div>
 	</div>
-</body>
 
-@section Scripts {
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
-	<script>
-		let accumulatedFiles = [];
-		let cropper = null;
-		let currentFile = null;
+	@section Scripts {
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+		<script>
+			let accumulatedFiles = [];
+			let cropper = null;
+			let currentFile = null;
 
-		function handleCropButton() {
-			// Get the cropped image data
-			const croppedImageData = cropper.getCroppedCanvas().toDataURL();
+			function handleImageUpload(event) {
+				const files = event.target.files;
+				if (files.length > 0) {
+					currentFile = files[0];
+					const reader = new FileReader();
+					reader.onload = function (e) {
+						const image = document.getElementById('crop-image');
+						image.src = e.target.result;
+						$('#crop-modal').modal('show');
 
-			// Convert the data URL to a Blob
-			const byteString = atob(croppedImageData.split(',')[1]);
-			const mimeString = croppedImageData.split(',')[0].split(':')[1].split(';')[0];
-			const ab = new ArrayBuffer(byteString.length);
-			const ia = new Uint8Array(ab);
-			for (let i = 0; i < byteString.length; i++) {
-				ia[i] = byteString.charCodeAt(i);
+						if (cropper !== null) {
+							cropper.destroy();
+						}
+
+						setTimeout(() => {
+							cropper = new Cropper(image, {
+								aspectRatio: 16 / 9,
+								viewMode: 2,
+								dragMode: 'move',
+								autoCropArea: 1,
+								cropBoxResizable: false,
+								zoomable: true,
+							});
+						}, 200);
+
+						document.getElementById('crop-button').removeEventListener('click', handleCropButton);
+						document.getElementById('crop-button').addEventListener('click', handleCropButton);
+					};
+					reader.readAsDataURL(currentFile);
+				}
 			}
-			const blob = new Blob([ab], { type: mimeString });
 
-			// Create a new File object
-			const file = new File([blob], currentFile.name, { type: mimeString, lastModified: Date.now() });
+			function handleCropButton() {
+				const croppedImageData = cropper.getCroppedCanvas().toDataURL();
 
-			// Add the File object to the product's list of photos
-			accumulatedFiles.push(file);
+				const byteString = atob(croppedImageData.split(',')[1]);
+				const mimeString = croppedImageData.split(',')[0].split(':')[1].split(';')[0];
+				const ab = new ArrayBuffer(byteString.length);
+				const ia = new Uint8Array(ab);
+				for (let i = 0; i < byteString.length; i++) {
+					ia[i] = byteString.charCodeAt(i);
+				}
+				const blob = new Blob([ab], { type: mimeString });
 
-			// Add the cropped image to the page
-			const newImageBox = document.createElement('div');
-			newImageBox.classList.add('image-box');
-			newImageBox.innerHTML = `<img src="${croppedImageData}" alt="Cropped Image"/>`;
-			const container = document.getElementById('image-upload-container');
-			container.insertBefore(newImageBox, document.getElementById('add-image-box'));
+				const file = new File([blob], currentFile.name, { type: mimeString, lastModified: Date.now() });
 
-			// Hide the modal
-			$('#crop-modal').modal('hide');
-		}
+				accumulatedFiles.push(file);
 
-		function handleImageUpload(event) {
-			const files = event.target.files;
-			if (files.length > 0) {
-				currentFile = files[0]; // Only handle the first file
-				const reader = new FileReader();
-				reader.onload = function (e) {
-					// Show the modal and the selected image
-					const image = document.getElementById('crop-image');
-					image.src = e.target.result;
-					$('#crop-modal').modal('show');
+				const newImageBox = document.createElement('div');
+				newImageBox.classList.add('image-box');
+				newImageBox.innerHTML = `<img src="${croppedImageData}" alt="Cropped Image"/>`;
+				const container = document.getElementById('image-upload-container');
+				container.insertBefore(newImageBox, document.getElementById('add-image-box'));
 
-					// Initialize Cropper.js on the image
-					if (cropper !== null) {
-						cropper.destroy();
-					}
-					cropper = new Cropper(image, {
-						aspectRatio: 16 / 9, // Set the aspect ratio for cropping
-					});
-
-					// Remove old event listeners and add new ones for the 'crop' button
-					const cropButton = document.getElementById('crop-button');
-					cropButton.removeEventListener('click', handleCropButton);
-					cropButton.addEventListener('click', handleCropButton);
-				};
-				reader.readAsDataURL(currentFile);
+				$('#crop-modal').modal('hide');
 			}
-		}
 
-		document.getElementById('product_form').addEventListener('submit', function (event) {
-			event.preventDefault(); // Prevent the default form submission
+			document.getElementById('product-form').addEventListener('submit', function (event) {
+				event.preventDefault();
 
-			console.log(accumulatedFiles);
-
-			const formData = new FormData(this);
-			accumulatedFiles.forEach((file, index) => {
-				formData.append(`ProductImagesModel.ProductImages`, file); // Append each file to formData
-			});
-
-			fetch(this.action, {
-				method: 'POST',
-				body: formData,
-			})
-				.then(response => {
-					if (response.ok) {
-						// If the response status code is 200-299, it was successful
-						console.log('Success');
-
-						// Redirect to the MyWork view
-						window.location.href = '/Products/MyWork';
-					} else {
-						// If the server response was not ok, handle the error
-						console.error('Server responded with an error status');
-					}
-				})
-				.catch((error) => {
-					console.error('Error:', error);
+				const formData = new FormData(this);
+				accumulatedFiles.forEach((file) => {
+					formData.append('ProductImagesModel.ProductImages', file);
 				});
-		});
-	</script>
-}
+
+				fetch(this.action, {
+					method: 'POST',
+					body: formData,
+				})
+					.then(response => {
+						if (response.ok) {
+							window.location.href = '/Products/MyWork';
+						} else {
+							console.error('Server responded with an error status');
+						}
+					})
+					.catch((error) => {
+						console.error('Error:', error);
+					});
+			});
+		</script>
+	}
+</body>
