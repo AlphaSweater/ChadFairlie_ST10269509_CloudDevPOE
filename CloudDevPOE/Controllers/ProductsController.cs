@@ -97,7 +97,6 @@ namespace CloudDevPOE.Controllers
 			{
 				return NotFound();
 			}
-
 			return View(productDetails);
 		}
 

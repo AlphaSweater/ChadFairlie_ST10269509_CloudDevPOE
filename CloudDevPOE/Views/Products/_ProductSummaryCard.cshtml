@@ -1,7 +1,5 @@
 ﻿@model CloudDevPOE.ViewModels.ProductSummaryViewModel
 
-@{
-}
 <head>
 	<style>
 		.psc-card {
@@ -14,8 +12,9 @@
 			display: flex;
 			flex-direction: column;
 			justify-content: space-between;
-			transition: box-shadow 0.3s ease-in-out;
-			margin: 1em;
+			transition: box-shadow 0.3s ease, background-color 0.3s ease;
+			margin: 0.5em;
+			cursor: pointer;
 		}
 
 			.psc-card:hover {
@@ -72,17 +71,18 @@
 			font-size: 1em;
 			line-height: 1.5;
 		}
-
 	</style>
 </head>
 
-<div class="psc-card">
-	<div class="psc-card-img"><img src="@Model.ProductMainImageUrl" alt="@Model.ProductName" /></div>
-	<div class="psc-card-info">
-		<div class="psc-text-title">@Model.ProductName</div>
-		<div class="psc-text-body">@Model.ProductDescription</div>
+<a href="@Url.Action("ViewProduct", "Products", new { id = Model.ProductID })" style="text-decoration: none; color: inherit;">
+	<div class="psc-card">
+		<div class="psc-card-img"><img src="@Model.ProductMainImageUrl" alt="@Model.ProductName" /></div>
+		<div class="psc-card-info">
+			<div class="psc-text-title">@Model.ProductName</div>
+			<div class="psc-text-body">@Model.ProductDescription</div>
+		</div>
+		<div class="psc-card-footer">
+			<span class="psc-text-cost">@Model.ProductPrice.ToString("C", new System.Globalization.CultureInfo("en-ZA"))</span>
+		</div>
 	</div>
-	<div class="psc-card-footer">
-		<span class="psc-text-cost">@Model.ProductPrice.ToString("C", new System.Globalization.CultureInfo("en-ZA"))</span>
-	</div>
-</div>
+</a>

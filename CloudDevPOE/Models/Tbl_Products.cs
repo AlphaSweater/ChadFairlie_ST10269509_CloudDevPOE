@@ -99,23 +99,24 @@ namespace CloudDevPOE.Models
 			{
 				con.Open();
 				string productSql =
-				@"	SELECT
-						tp.product_id,
-						tp.name,
-						tp.description,
-						tp.price,
-						tp.availability,
-						tpi.image_url
-					FROM
-						((tbl_products tp
-					INNER JOIN
-						(
-						SELECT MIN(image_id) AS image_id, product_id
-						FROM tbl_product_images
-						GROUP BY product_id
-						) AS first_image ON tp.product_id = first_image.product_id)
-					INNER JOIN
-						tbl_product_images tpi ON first_image.image_id = tpi.image_id)";
+				@"  SELECT
+                        tp.product_id,
+                        tp.name,
+                        tp.category,
+                        tp.description,
+                        tp.price,
+                        tp.availability,
+                        tpi.image_url
+                    FROM
+                        ((tbl_products tp
+                    INNER JOIN
+                        (
+                        SELECT MIN(image_id) AS image_id, product_id
+                        FROM tbl_product_images
+                        GROUP BY product_id
+                        ) AS first_image ON tp.product_id = first_image.product_id)
+                    INNER JOIN
+                        tbl_product_images tpi ON first_image.image_id = tpi.image_id)";
 
 				using (var productCmd = new SqlCommand(productSql, con))
 				{
@@ -127,6 +128,7 @@ namespace CloudDevPOE.Models
 							{
 								ProductID = (int)reader["product_id"],
 								ProductName = reader["name"].ToString(),
+								ProductCategory = reader["category"].ToString(),  // Add the category to the view model
 								ProductDescription = reader["description"].ToString(),
 								ProductPrice = (decimal)reader["price"],
 								ProductAvailability = (bool)reader["availability"],

@@ -1,3 +1,5 @@
+// Ignore Spelling: Accessor
+
 using CloudDevPOE.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -7,12 +9,14 @@ namespace CloudDevPOE.Controllers
     public class HomeController : Controller
     {
 		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
+		private readonly IHttpContextAccessor _httpContextAccessor;
 		private readonly ILogger<HomeController> _logger;
 
 		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
-		public HomeController(ILogger<HomeController> logger)
+		public HomeController(IHttpContextAccessor httpContextAccessor, ILogger<HomeController> logger)
         {
-            _logger = logger;
+			_httpContextAccessor = httpContextAccessor;
+			_logger = logger;
         }
 
 		//--------------------------------------------------------------------------------------------------------------------------//

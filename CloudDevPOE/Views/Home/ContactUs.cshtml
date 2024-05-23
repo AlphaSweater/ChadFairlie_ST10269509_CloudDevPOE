@@ -3,90 +3,65 @@
 }
 
 <head>
-    <link rel="stylesheet" href="~/css/base.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/flex-layout.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/contact-form.css" asp-append-version="true" />
+	<link rel="stylesheet" href="~/css/base.css" asp-append-version="true" />
+	<link rel="stylesheet" href="~/css/flex-layout.css" asp-append-version="true" />
+	<link rel="stylesheet" href="~/css/contact-form.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-        }
 
-        h1, h2 {
-            color: #222222;
-        }
+	<style>
+		.contact-info a {
+			color: blue;
+			cursor: pointer;
+		}
 
-        h1 {
-            font-size: 2.5em;
-        }
+		#mainContentColumn {
+			padding-top: 15px;
+			padding-left: 40px;
+			padding-right: 40px;
+			padding-bottom: 15px;
+			text-align: center;
+			gap: 30px;
+		}
 
-        h2 {
-            font-size: 2em;
-        }
+		.rowContent {
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: space-between;
+		}
 
-        p {
-            font-size: 1.1em;
-            color: #292929;
-        }
+		.contact-info {
+			flex: 0 0 48%;
+			margin-bottom: 20px;
+			padding: 15px;
+			border-radius: 25px;
+			box-shadow: 0px 10px 30px -5px rgba(0, 0, 0, 0.1);
+		}
 
-        .contact-info a {
-            color: #0044CC;
-        }
+		.general-inquiries {
+			background-color: var(--color-light-purple);
+		}
 
-            .contact-info a:hover {
-                color: #87CEEB
-            }
+		.customer-support {
+			background-color: var(--color-light-green);
+		}
 
-        #mainContentColumn {
-            padding-top: 15px;
-            padding-left: 40px;
-            padding-right: 40px;
-            padding-bottom: 15px;
-            text-align: center;
-            gap: 30px;
-        }
+		.careers {
+			background-color: var(--color-light-orange);
+		}
 
-        .rowContent {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-        }
+		.social-media {
+			background-color: var(--color-light-yellow);
+		}
 
-        .contact-info {
-            flex: 0 0 48%;
-            margin-bottom: 20px;
-            padding: 15px;
-            border-radius: 25px;
-            box-shadow: 0px 10px 30px -5px rgba(0, 0, 0, 0.1);
-        }
+		.visit-us {
+			background-color: var(--color-light-lime);
+		}
 
-        .general-inquiries {
-            background-color: #EEBEFA;
-        }
-
-        .customer-support {
-            background-color: #96f2d7;
-        }
-
-        .careers {
-            
-            background-color: #FDB686;
-        }
-
-        .social-media {
-            background-color: #ffec99;
-        }
-
-        .visit-us {
-            background-color: #85EA92;
-        }
-
-        .send-message {
-            flex: 0 0 100%;
-            background-color: #FF9999;
-        }
-    </style>
+		.send-message {
+			flex: 0 0 100%;
+			background-color: var(--color-light-red);
+		}
+	</style>
 </head>
 
 <main id="mainContentColumn" class="contentColumn">
