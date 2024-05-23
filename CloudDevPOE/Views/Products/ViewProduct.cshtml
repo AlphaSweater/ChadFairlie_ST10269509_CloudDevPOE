@@ -6,17 +6,44 @@
 
 <head>
 	<style>
+		.product-page {
+			display: flex;
+			flex-direction: column;
+			margin: 15px 0px 0px 0px;
+			padding: 10px;
+			background-color: darkred;
+		}
+
 		.product-details {
 			display: flex;
 		}
 
-		.image-slider {
-			flex: 1;
+		#product-carousel {
+			flex-basis: 55%;
+
 		}
 
-		.product-info {
-			flex: 1;
+		.carousel-inner {
+			position: relative;
+			width: 100%;
+			padding-bottom: 80%; /* This controls the aspect ratio */
+			overflow: hidden;
 		}
+
+		.carousel-item {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+		}
+
+			.carousel-item img {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+				border-radius: 25px;
+			}
 
 		.back-link {
 			color: darkgray;
@@ -29,32 +56,32 @@
 	</style>
 </head>
 
-<div class="wt-pb-xs-4">
-	<a href="@Url.Action("MyWork", "Products")" class="back-link">Back to Products page</a>
-</div>
+<main class="product-page">
+	<div class="back-link-container">
+		<a href="@Url.Action("MyWork", "Products")" class="back-link">Back to Products Page</a>
+	</div>
 
-<main>
 	<div class="product-details">
-		<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+		<div id="product-carousel" class="carousel slide" data-ride="carousel">
 			<ol class="carousel-indicators">
 				@for (var i = 0; i < Model.ImageUrls.Count; i++)
 				{
-					<li data-target="#carouselExampleIndicators" data-slide-to="@i" class="@(i == 0 ? "active" : "")"></li>
+					<li data-target="#product-carousel" data-slide-to="@i" class="@(i == 0 ? "active" : "")"></li>
 				}
 			</ol>
 			<div class="carousel-inner">
 				@for (var i = 0; i < Model.ImageUrls.Count; i++)
 				{
 					<div class="carousel-item @(i == 0 ? "active" : "")">
-						<img class="d-block w-100" src="@Model.ImageUrls[i]" alt="Product Image">
+						<img class="" src="@Model.ImageUrls[i]" alt="Product Image">
 					</div>
 				}
 			</div>
-			<a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+			<a class="carousel-control-prev" href="#product-carousel" role="button" data-slide="prev">
 				<span class="carousel-control-prev-icon" aria-hidden="true"></span>
 				<span class="sr-only">Previous</span>
 			</a>
-			<a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+			<a class="carousel-control-next" href="#product-carousel" role="button" data-slide="next">
 				<span class="carousel-control-next-icon" aria-hidden="true"></span>
 				<span class="sr-only">Next</span>
 			</a>
@@ -70,8 +97,7 @@
 </main>
 
 @section Scripts {
-@* 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script> *@
 }
+
 
 
