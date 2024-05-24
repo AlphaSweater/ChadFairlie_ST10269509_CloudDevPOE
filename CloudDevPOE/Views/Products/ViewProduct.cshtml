@@ -18,13 +18,14 @@
 
 		.product-details {
 			display: flex;
-			gap: 20px;
+			gap: 5vw;
 		}
 
 		.product-carousel-container {
-			flex: 0 0 65%;
+			/* flex: 0 0 65%; */
 			display: flex;
-			gap: 10px;
+			gap: 15px;
+			align-items: center;
 		}
 
 		.product-thumbnails {
@@ -42,7 +43,7 @@
 			}
 
 				.product-thumbnails img.active {
-					border-color: #007bff;
+					border-color: var(@Model.HighlightColor);
 				}
 
 		.main-image {
@@ -62,7 +63,7 @@
 		.carousel-control {
 			width: 30px;
 			height: 30px;
-			background-color: #007bff;
+			background-color: var(@Model.HighlightColor);
 			border-radius: 50%;
 			border: none;
 			display: flex;
@@ -73,7 +74,7 @@
 		}
 
 		.back-link {
-			color: #007bff;
+			color: var(@Model.HighlightColor);
 			text-decoration: none;
 			margin-bottom: 20px;
 		}
@@ -112,8 +113,8 @@
 			}
 
 		.btn-primary {
-			background-color: #007bff;
-			border-color: #007bff;
+			background-color: var(@Model.HighlightColor);
+			border-color: var(@Model.HighlightColor);
 		}
 	</style>
 </head>
@@ -130,24 +131,24 @@
 				}
 			</div>
 			<div>
-				<button class="carousel-control" id="prev-image" onclick="prevImage()">&#9664;</button>
+			<button class="carousel-control" id="prev-image" onclick="prevImage()">&#9664;</button>
 			</div>
 			<div class="main-image-container">
 				<img id="main-image" src="@Model.ImageUrls[0]" class="main-image" alt="Product Image">
 			</div>
 			<div>
-				<button class="carousel-control" id="next-image" onclick="nextImage()">&#9654;</button>
-			</div>
+			<button class="carousel-control" id="next-image" onclick="nextImage()">&#9654;</button>
+		</div>
 		</div>
 
 		<div class="product-info">
-			<h2>@Model.ProductName</h2>
+			<h1>@Model.ProductName</h1>
 			<p><strong>Category:</strong> @Model.ProductCategory</p>
-			<p>@Model.ProductDescription</p>
-			<p><strong>Price:</strong> @Model.ProductPrice.ToString("C")</p>
+			<p><strong>Description:</strong> @Model.ProductDescription</p>
+			<p><strong>Price:</strong> @Model.ProductPrice.ToString("C", new System.Globalization.CultureInfo("en-ZA"))</p>
 
 			<div class="quantity-spinner">
-				<label for="quantity">Quantity:</label>
+				<label for="quantity"><strong>Quantity:</strong></label>
 				<input type="number" id="quantity" name="quantity" min="1" value="1">
 			</div>
 

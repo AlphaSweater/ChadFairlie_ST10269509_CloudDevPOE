@@ -82,7 +82,7 @@ namespace CloudDevPOE.Controllers
 
 		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
 		[HttpGet]
-		public IActionResult ViewProduct(int id)
+		public IActionResult ViewProduct(int id, string color)
 		{
 			var connectionString = _configuration.GetConnectionString("DefaultConnection");
 			Tbl_Products productsModel = new Tbl_Products();
@@ -93,6 +93,8 @@ namespace CloudDevPOE.Controllers
 			{
 				return NotFound();
 			}
+
+			productDetails.HighlightColor = color;
 			return View(productDetails);
 		}
 

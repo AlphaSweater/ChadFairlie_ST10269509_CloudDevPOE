@@ -70,6 +70,7 @@
 			<div class="product-container">
 				@foreach (var product in categoryGroup)
 				{
+					product.HighlightColor = colorVariable;
 					@Html.Partial("_ProductSummaryCard", product)
 				}
 			</div>

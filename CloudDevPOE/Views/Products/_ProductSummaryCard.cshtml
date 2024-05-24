@@ -74,7 +74,7 @@
 	</style>
 </head>
 
-<a href="@Url.Action("ViewProduct", "Products", new { id = Model.ProductID })" style="text-decoration: none; color: inherit;">
+<a href="@Url.Action("ViewProduct", "Products", new { id = Model.ProductID, color = Model.HighlightColor })" style="text-decoration: none; color: inherit;">
 	<div class="psc-card">
 		<div class="psc-card-img"><img src="@Model.ProductMainImageUrl" alt="@Model.ProductName" /></div>
 		<div class="psc-card-info">
