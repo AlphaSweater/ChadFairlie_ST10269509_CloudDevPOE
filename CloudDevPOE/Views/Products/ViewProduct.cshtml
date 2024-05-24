@@ -126,7 +126,7 @@
 			<div class="product-thumbnails">
 				@for (var i = 0; i < Model.ImageUrls.Count; i++)
 				{
-					<img src="@Model.ImageUrls[i]" class="@(i == 0 ? "active" : "")" alt="Thumbnail" onclick="changeMainImage(@i)">
+					<img src="@Model.ImageUrls[i]" class="@(i == 0 ? "active" : "")" alt="Thumbnail" onclick="changeMainImage(this)">
 				}
 			</div>
 			<div>
@@ -159,16 +159,18 @@
 @section Scripts {
 	<script>
 		var imageUrlsJson = '@Html.Raw(imageUrlsJson)';
-		const images = JSON.parse(imageUrlsJson);
+		var images = JSON.parse(imageUrlsJson);
 		let currentIndex = 0;
 
-		function changeMainImage(index) {
+		function changeMainImage(img) {
+			var index = Array.from(document.querySelectorAll('.product-thumbnails img')).indexOf(img);
 			currentIndex = index;
 			document.getElementById('main-image').src = images[index];
 			document.querySelectorAll('.product-thumbnails img').forEach((img, i) => {
 				img.classList.toggle('active', i === index);
 			});
 		}
+
 
 		function prevImage() {
 			currentIndex = (currentIndex - 1 + images.length) % images.length;
