@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Data.SqlClient;
-using Microsoft.Extensions.Configuration;
+﻿using System.Data.SqlClient;
 
 namespace CloudDevPOE.Models
 {

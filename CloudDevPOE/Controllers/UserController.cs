@@ -1,9 +1,7 @@
 ﻿// Ignore Spelling: Accessor
 
-using Microsoft.AspNetCore.Mvc;
 using CloudDevPOE.Models;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CloudDevPOE.Controllers
 {
@@ -11,6 +9,7 @@ namespace CloudDevPOE.Controllers
 	{
 		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
 		private readonly IHttpContextAccessor _httpContextAccessor;
+
 		private readonly IConfiguration _configuration;
 
 		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
@@ -81,6 +80,7 @@ namespace CloudDevPOE.Controllers
 			_httpContextAccessor.HttpContext.Session.Clear();
 			return RedirectToAction("Login", "User");
 		}
+
 		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
 	}
 }

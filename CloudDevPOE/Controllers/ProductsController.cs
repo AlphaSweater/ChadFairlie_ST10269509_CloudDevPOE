@@ -1,12 +1,8 @@
 ﻿// Ignore Spelling: Accessor
 
 using CloudDevPOE.Models;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using CloudDevPOE.ViewModels;
-using System.Data.SqlClient;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CloudDevPOE.Controllers
 {

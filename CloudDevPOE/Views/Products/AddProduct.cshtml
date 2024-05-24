@@ -6,7 +6,7 @@
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
 	<style>
 		:root {
-			--item-size: 104px;
+			--item-size: 150px;
 			--items-per-row: 3;
 			--margin: 2px;
 			--container-padding: 5px;
@@ -47,13 +47,14 @@
 
 		.image-box, .upload-box {
 			width: var(--item-size);
-			height: var(--item-size);
+			min-height: var(--item-size);
+			height: auto;
 			margin: var(--margin);
 			display: flex;
 			justify-content: center;
 			align-items: center;
 			border: 1px solid #ccc;
-			cursor: pointer;
+			cursor: pointer !important;
 		}
 
 			.image-box img {
@@ -126,11 +127,12 @@
 
 						setTimeout(() => {
 							cropper = new Cropper(image, {
-								aspectRatio: 16 / 9,
+								aspectRatio: 4 / 5,
 								viewMode: 2,
 								dragMode: 'move',
 								autoCropArea: 1,
-								cropBoxResizable: false,
+								cropBoxResizable: true,
+								resize: true,
 								zoomable: true,
 							});
 						}, 200);

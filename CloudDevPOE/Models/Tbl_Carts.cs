@@ -1,5 +1,4 @@
 ﻿using CloudDevPOE.ViewModels;
-using System.ComponentModel.DataAnnotations;
 using System.Data.SqlClient;
 
 namespace CloudDevPOE.Models

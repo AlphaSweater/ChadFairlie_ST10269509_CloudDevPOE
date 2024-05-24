@@ -24,7 +24,7 @@ namespace CloudDevPOE.Models
 		public string PaymentMethod { get; set; }
 
 		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
-		public void RecordTransaction(int userId,CartViewModel cartDetails, string paymentMethod, SqlConnection con, SqlTransaction transaction)
+		public void RecordTransaction(int userId, CartViewModel cartDetails, string paymentMethod, SqlConnection con, SqlTransaction transaction)
 		{
 			string sql = @"INSERT INTO tbl_transactions (user_id, cart_id, total_value, transaction_date, payment_method)
                    VALUES (@UserId, @CartId, @TotalValue, @TransactionDate, @PaymentMethod)";

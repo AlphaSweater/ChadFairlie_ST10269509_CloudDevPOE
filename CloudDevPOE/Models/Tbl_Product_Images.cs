@@ -1,9 +1,6 @@
 ﻿// Ignore Spelling: Tbl
 
-using Microsoft.AspNetCore.Mvc;
-using System.Data.Common;
 using System.Data.SqlClient;
-using System.Transactions;
 
 namespace CloudDevPOE.Models
 {
@@ -31,7 +28,7 @@ namespace CloudDevPOE.Models
 			if (ProductImages == null || ProductImages.Count == 0)
 			{
 				// No images were uploaded, use the default image
-				string defaultImagePath = "/images/Default/Default.jpg";
+				string defaultImagePath = "/images/Default/DefaultIcon.jpg";
 				savedFilePaths.Add(defaultImagePath);
 				return savedFilePaths;
 			}

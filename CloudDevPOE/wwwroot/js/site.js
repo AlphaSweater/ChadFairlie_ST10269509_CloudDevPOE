@@ -1,10 +1,9 @@
-﻿
-// Show login modal
+﻿// Show login modal
 function showLoginModal() {
-    $('#loginModal').modal('show');
+	$('#loginModal').modal('show');
 }
 
 // Show sign up modal
 function showSignUpModal() {
-    $('#signUpModal').modal('show');
+	$('#signUpModal').modal('show');
 }
