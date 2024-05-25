@@ -24,7 +24,7 @@ namespace CloudDevPOE.Models
 			{
 				con.Open();
 				// Check if the user already has an active cart
-				string cartCheckSql = "SELECT CartID FROM Tbl_Carts WHERE UserID = @UserID AND IsActive = 1";
+				string cartCheckSql = "SELECT cart_id FROM tbl_carts WHERE user_id = @UserID AND is_active = 1";
 				using (SqlCommand cartCheckCmd = new SqlCommand(cartCheckSql, con))
 				{
 					cartCheckCmd.Parameters.AddWithValue("@UserID", userId);
@@ -44,6 +44,26 @@ namespace CloudDevPOE.Models
 					return (int)cartId;
 				}
 			}
+		}
+
+		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
+		public int GetCartItemCount(int userId, string connectionString)
+		{
+			int cartId = GetActiveCart(userId, connectionString);
+			if (cartId > 0)
+			{
+				using (var con = new SqlConnection(connectionString))
+				{
+					con.Open();
+					string itemCountSql = "SELECT COUNT(*) FROM tbl_cart_items WHERE cart_id = @CartID";
+					using (SqlCommand itemCountCmd = new SqlCommand(itemCountSql, con))
+					{
+						itemCountCmd.Parameters.AddWithValue("@CartID", cartId);
+						return (int)itemCountCmd.ExecuteScalar();
+					}
+				}
+			}
+			return 0;
 		}
 
 		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//

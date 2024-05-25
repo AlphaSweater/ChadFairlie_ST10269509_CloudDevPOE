@@ -6,6 +6,15 @@
 	width: 100%;
 	border-radius: 10px;
 	z-index: 1000;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 0 20px; /* Adjust the padding as needed */
+}
+
+.nav-left, .nav-right {
+	display: flex;
+	align-items: center;
 }
 
 nav {
@@ -17,6 +26,7 @@ nav {
 	nav .link, nav .dropdown, nav .group {
 		margin-right: 10px; /* Adjust as needed */
 	}
+
 /* ===== SEARCH BAR ===== */
 .group {
 	display: flex;
@@ -24,6 +34,7 @@ nav {
 	align-items: center;
 	position: relative;
 	max-width: 190px;
+	margin-right: 15px; /* Gap control */
 }
 
 .input {
@@ -62,7 +73,7 @@ nav {
 /* ===== NAV BUTTONS ===== */
 .nav-buttons {
 	display: flex;
-	gap: 15px;
+	gap: 15px; /* Gap control */
 	align-items: center;
 	justify-content: flex-start;
 }
@@ -76,8 +87,8 @@ nav {
 }
 
 .nav-link {
-	width: 93px;
-	height: 36px;
+	min-width: 93px;
+	/*	height: 36px;*/
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -90,77 +101,113 @@ nav {
 	font-size: inherit;
 	cursor: pointer;
 	padding: 0;
+	text-align: center;
+	padding: 2px 0;
 }
 
-/* ===== NAV DROPDOWN MENUS ===== */
-.header {
-	background-color: #F3F3F3;
+/* ===== ICONS AND BADGE ===== */
+.bx-icon {
+	font-size: 24px;
+	cursor: pointer;
+	margin-right: 15px; /* Gap control */
+	margin-left: 15px; /* Gap control */
+	position: relative;
+}
+
+.cart-badge {
+	position: absolute;
+	top: -8px;
+	right: -10px;
+	background: red;
+	color: white;
+	border-radius: 50%;
+	padding: 2px 6px;
+	font-size: 12px;
+}
+
+/* ===== USER ACCOUNT DROPDOWN MENU ===== */
+.user-dropdown {
+	position: relative;
+}
+
+.user-dropdown-menu {
+	position: absolute;
+	top: calc(100% + 10px);
+	right: 0;
+	background-color: white;
+	padding: 10px;
+	border-radius: 8px;
+	box-shadow: 0 0 0 4px rgb(234 76 137 / 10%);
+	border: 2px solid rgba(234,76,137,0.4);
+	opacity: 0;
+	pointer-events: none;
+	transform: translateY(-10px);
+	transition: opacity 0.3s ease, transform 0.3s ease;
+	z-index: 1001; /* Ensure the dropdown is above other content */
+}
+
+	.user-dropdown:hover .user-dropdown-menu,
+	.user-dropdown-menu:hover {
+		opacity: 1;
+		pointer-events: auto;
+		transform: translateY(0);
+	}
+
+	.user-dropdown-menu a {
+		display: block;
+		text-decoration: none;
+		color: #777;
+		padding: 8px 10px;
+		border-radius: 4px;
+		transition: background 0.3s ease;
+	}
+
+		.user-dropdown-menu a:hover {
+			background-color: #f3f3f4;
+			color: black;
+		}
+
+/* Welcome message */
+.welcome-message {
+	margin-right: 10px;
+	font-size: 14px;
+	color: #777;
+}
+
+/* Color change for account icon */
+.bx-user.bx-icon {
+	color: #777;
+	transition: color 0.3s ease;
+}
+
+	.bx-user.bx-icon:hover {
+		color: rgba(234,76,137,1);
+	}
+
+/* Reused styles for nav buttons */
+.nav-link:hover, .user-dropdown-menu {
+	outline: none;
+	border-color: rgba(234,76,137,0.4);
+	background-color: #fff;
+	box-shadow: 0 0 0 4px rgb(234 76 137 / 10%);
+	color: #777;
+}
+
+.nav-link {
+	min-width: 93px;
+	/*	height: 36px;*/
 	display: flex;
-	align-items: baseline;
-	padding: .5rem;
-	gap: 1rem;
-}
-
-.link {
+	align-items: center;
+	justify-content: center;
+	border: 2px solid transparent;
+	border-radius: 8px;
 	background: none;
-	border: none;
 	text-decoration: none;
 	color: #777;
 	font-family: inherit;
 	font-size: inherit;
 	cursor: pointer;
 	padding: 0;
+	text-align: center;
+	padding: 2px 0;
 }
-
-	.dropdown.active > .link,
-	.link:hover {
-		color: black;
-	}
-
-.dropdown {
-	position: relative;
-}
-
-.dropdown-hover-area {
-	position: absolute;
-	width: 100%;
-	height: 100%;
-	top: 0;
-	left: 0;
-}
-
-.dropdown-menu {
-	position: absolute;
-	left: 0;
-	top: calc(100% + .25rem);
-	background-color: white;
-	padding: .75rem;
-	border-radius: .25rem;
-	box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .1);
-	opacity: 0;
-	pointer-events: none;
-	transform: translateY(-10px);
-	transition: opacity 550ms ease-in-out, transform 150ms ease-in-out;
-	display: none; /* Hide by default */
-}
-
-.dropdown:hover .dropdown-menu {
-	display: block; /* Show on hover */
-	opacity: 1;
-	transform: translateY(0);
-	pointer-events: auto;
-}
-
-.information-grid {
-	display: grid;
-	grid-template-columns: repeat(2, max-content);
-	gap: 2rem;
-}
-
-.dropdown-links {
-	display: flex;
-	flex-direction: column;
-	gap: .25rem;
-}
-
-/* ===== TITLE ===== */

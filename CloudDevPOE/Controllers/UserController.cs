@@ -1,6 +1,7 @@
 ﻿// Ignore Spelling: Accessor
 
 using CloudDevPOE.Models;
+using CloudDevPOE.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CloudDevPOE.Controllers
@@ -64,12 +65,11 @@ namespace CloudDevPOE.Controllers
 			if (userId.HasValue)
 			{
 				_httpContextAccessor.HttpContext.Session.SetInt32("UserId", userId.Value);
-				return RedirectToAction("Index", "Home");
+				return Json(new { success = true });
 			}
 			else
 			{
-				ViewBag.ErrorMessage = "Incorrect email or password.";
-				return View(user);
+				return Json(new { success = false, message = "Incorrect email or password." });
 			}
 		}
 
@@ -78,7 +78,26 @@ namespace CloudDevPOE.Controllers
 		public IActionResult Logout()
 		{
 			_httpContextAccessor.HttpContext.Session.Clear();
-			return RedirectToAction("Login", "User");
+			return RedirectToAction("Index", "Home");
+		}
+
+		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
+		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
+		private void SetUserDetails()
+		{
+			// Safely get the user ID from the session
+			int? userID = _httpContextAccessor.HttpContext?.Session.GetInt32("UserId");
+			if (userID.HasValue)
+			{
+				var connectionString = _configuration.GetConnectionString("DefaultConnection");
+				Tbl_Users userModel = new Tbl_Users();
+
+				// Fetch the user details
+				UserViewModel userDetails = userModel.GetUserDetails(userID.Value, connectionString);
+
+				// Set the ViewData property
+				ViewData["UserDetails"] = userDetails;
+			}
 		}
 
 		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//

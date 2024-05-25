@@ -1,5 +1,6 @@
 ﻿// Ignore Spelling: Tbl
 
+using CloudDevPOE.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
@@ -101,6 +102,32 @@ namespace CloudDevPOE.Models
 					}
 				}
 			}
+		}
+
+		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
+		public UserViewModel GetUserDetails(int userID, string connectionString)
+		{
+			UserViewModel user = new UserViewModel();
+			using (var con = new SqlConnection(connectionString))
+			{
+				con.Open();
+				string sql = "SELECT name, surname, email FROM tbl_users WHERE user_id = @UserID";
+				using (SqlCommand cmd = new SqlCommand(sql, con))
+				{
+					cmd.Parameters.AddWithValue("@UserID", userID);
+					using (SqlDataReader reader = cmd.ExecuteReader())
+					{
+						if (reader.Read())
+						{
+							user.Name = reader["name"].ToString();
+							user.Surname = reader["surname"].ToString();
+							user.Email = reader["email"].ToString();
+						}
+					}
+				}
+			}
+			user.CartSize = new Tbl_Carts().GetCartItemCount(userID, connectionString);
+			return user;
 		}
 	}
 }

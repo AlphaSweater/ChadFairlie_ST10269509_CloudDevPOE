@@ -12,6 +12,7 @@ namespace CloudDevPOE.Controllers
 		private readonly IHttpContextAccessor _httpContextAccessor;
 
 		private readonly IWebHostEnvironment _webHostEnvironment;
+
 		private readonly IConfiguration _configuration;
 
 		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
@@ -27,6 +28,7 @@ namespace CloudDevPOE.Controllers
 		[HttpGet]
 		public IActionResult MyWork()
 		{
+			SetUserDetails();
 			var connectionString = _configuration.GetConnectionString("DefaultConnection");
 			Tbl_Products productsModel = new Tbl_Products();
 
@@ -41,6 +43,7 @@ namespace CloudDevPOE.Controllers
 		[HttpGet]
 		public ActionResult AddProduct()
 		{
+			SetUserDetails();
 			return View();
 		}
 
@@ -84,6 +87,7 @@ namespace CloudDevPOE.Controllers
 		[HttpGet]
 		public IActionResult ViewProduct(int id, string color)
 		{
+			SetUserDetails();
 			var connectionString = _configuration.GetConnectionString("DefaultConnection");
 			Tbl_Products productsModel = new Tbl_Products();
 
@@ -96,6 +100,48 @@ namespace CloudDevPOE.Controllers
 
 			productDetails.HighlightColor = color;
 			return View(productDetails);
+		}
+
+		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
+		[HttpPost]
+		public IActionResult AddToCart(int productId, int quantity)
+		{
+			// Safely get the user ID from the session
+			int? userID = _httpContextAccessor.HttpContext?.Session.GetInt32("UserId");
+			if (!userID.HasValue)
+			{
+				// The user is not logged in, return a JSON result
+				return Json(new { success = false, message = "User is not logged in" });
+			}
+
+			var connectionString = _configuration.GetConnectionString("DefaultConnection");
+
+			Tbl_Carts cartsModel = new Tbl_Carts();
+			int cartId = cartsModel.GetActiveCart(userID.Value, connectionString);
+
+			Tbl_Cart_Items cartItemsModel = new Tbl_Cart_Items();
+			cartItemsModel.AddItemToCart(cartId, productId, quantity, connectionString);
+
+			return Json(new { success = true, message = "Product added to cart" });
+		}
+
+		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
+		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
+		private void SetUserDetails()
+		{
+			// Safely get the user ID from the session
+			int? userID = _httpContextAccessor.HttpContext?.Session.GetInt32("UserId");
+			if (userID.HasValue)
+			{
+				var connectionString = _configuration.GetConnectionString("DefaultConnection");
+				Tbl_Users userModel = new Tbl_Users();
+
+				// Fetch the user details
+				UserViewModel userDetails = userModel.GetUserDetails(userID.Value, connectionString);
+
+				// Set the ViewData property
+				ViewData["UserDetails"] = userDetails;
+			}
 		}
 
 		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//

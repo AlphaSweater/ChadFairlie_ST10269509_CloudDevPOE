@@ -23,7 +23,7 @@ namespace CloudDevPOE.Models
 			using (var con = new SqlConnection(connectionString))
 			{
 				con.Open();
-				string sql = "INSERT INTO Tbl_Cart_Items (CartID, ProductID, Quantity) VALUES (@CartID, @ProductID, @Quantity)";
+				string sql = "INSERT INTO tbl_cart_items (cart_id, product_id, quantity) VALUES (@CartID, @ProductID, @Quantity)";
 				using (SqlCommand cmd = new SqlCommand(sql, con))
 				{
 					cmd.Parameters.AddWithValue("@CartID", cartId);

@@ -1,4 +1,5 @@
-﻿@model CloudDevPOE.ViewModels.ProductDetailsViewModel
+﻿@using System.Reflection.Metadata
+@model CloudDevPOE.ViewModels.ProductDetailsViewModel
 @{
 	ViewData["Title"] = Model.ProductName;
 	var imageUrlsJson = System.Text.Json.JsonSerializer.Serialize(Model.ImageUrls);
@@ -179,7 +180,7 @@
 
 		<div class="product-info">
 			<h1>@Model.ProductName</h1>
-			<p class="attribute"><strong>Seller Name:</strong> @Model.UserID</p>
+			<p class="attribute"><strong>Seller Name:</strong> @Model.SellerName</p>
 			<p class="attribute"><strong>Category:</strong> @Model.ProductCategory</p>
 			<p class="attribute"><strong>Description:</strong> @Model.ProductDescription</p>
 			<p class="attribute"><strong>Price:</strong> @Model.ProductPrice.ToString("C", new System.Globalization.CultureInfo("en-ZA"))</p>
@@ -190,15 +191,19 @@
 				<input type="number" id="quantity" name="quantity" min="1" max="@Model.AvailableQuantity" value="1">
 			</div>
 
-			<button type="button" class="button btn-primary">
-				<span class="button__text">Add Item To Cart</span>
-				<span class="button__icon">
-					<svg xmlns="http://www.w3.org/2000/svg" width="24" viewBox="0 0 24 24" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" stroke="currentColor" height="24" fill="none" class="svg">
-						<line y2="19" y1="5" x2="12" x1="12"></line>
-						<line y2="12" y1="12" x2="19" x1="5"></line>
-					</svg>
-				</span>
-			</button>
+			<form id="addToCartForm" method="post" action="@Url.Action("AddToCart", "Products")">
+				<input type="hidden" name="productId" value="@Model.ProductID" />
+				<input type="hidden" id="quantityInput" name="quantity" />
+				<button type="submit" class="button btn-primary">
+					<span class="button__text">Add Item To Cart</span>
+					<span class="button__icon">
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" viewBox="0 0 24 24" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" stroke="currentColor" height="24" fill="none" class="svg">
+							<line y2="19" y1="5" x2="12" x1="12"></line>
+							<line y2="12" y1="12" x2="19" x1="5"></line>
+						</svg>
+					</span>
+				</button>
+			</form>
 		</div>
 	</div>
 </main>
@@ -232,6 +237,37 @@
 
 		document.querySelectorAll('.product-thumbnails img').forEach((img) => {
 			img.addEventListener('click', () => changeMainImage(img));
+		});
+
+		document.getElementById('addToCartForm').addEventListener('submit', function () {
+			var spinnerValue = document.getElementById('quantity').value;
+			document.getElementById('quantityInput').value = spinnerValue;
+		});
+
+		$("#addToCartForm").submit(function (event) {
+			event.preventDefault(); // Prevent the form from submitting normally
+
+			var productId = $('input[name="productId"]').val();
+			var quantity = $("#quantity").val();
+
+			$.ajax({
+				url: "/Products/AddToCart",
+				type: "POST",
+				data: { productId: productId, quantity: quantity },
+				success: function (data) {
+					if (!data.success) {
+						// The user is not logged in, open the login modal
+						showLoginModalAndSubmitForm();
+					} else {
+						// The product was added to the cart, redirect to the MyWork page
+						window.location.href = "/Products/MyWork";
+					}
+				},
+				error: function (jqXHR, textStatus, errorThrown) {
+					console.log(textStatus, errorThrown);
+				}
+			});
+
 		});
 	</script>
 }

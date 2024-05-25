@@ -150,7 +150,10 @@ namespace CloudDevPOE.Models
 			{
 				con.Open();
 				// Fetch the product details
-				string productSql = "SELECT * FROM tbl_products WHERE product_id = @ProductID";
+				string productSql = @"SELECT tblp.*, tblu.name AS seller_name
+                              FROM tbl_products tblp
+                              INNER JOIN tbl_users tblu ON tblp.user_id = tblu.user_id
+                              WHERE tblp.product_id = @ProductID";
 				using (var productCmd = new SqlCommand(productSql, con))
 				{
 					productCmd.Parameters.AddWithValue("@ProductID", productID);
@@ -161,7 +164,8 @@ namespace CloudDevPOE.Models
 							productDetails = new ProductDetailsViewModel
 							{
 								ProductID = productID,
-								UserID = (int)reader["user_id"],
+								SellerUserID = (int)reader["user_id"],
+								SellerName = reader["seller_name"].ToString(),
 								ProductName = reader["name"].ToString(),
 								ProductCategory = reader["category"].ToString(),
 								ProductDescription = reader["description"].ToString(),
