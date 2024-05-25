@@ -1,10 +1,10 @@
 ﻿:root {
 	--button-width: 250px;
 	--button-height: 40px;
-	--icon-width: calc(var(--button-height) - 1px); 
-	--icon-transform-x: calc(var(--button-width) - var(--icon-width) - 1px);
+	--icon-width: calc(var(--button-height) - 1px);
+	--icon-transform-x: calc(var(--button-width) - var(--icon-width) - 25px);
 	--icon-hover-width: calc(var(--button-width) - 2px);
-	--svg-width: calc(var(--icon-width) / 2); 
+	--svg-width: calc(var(--icon-width) / 2);
 	--border-width: 1px;
 }
 

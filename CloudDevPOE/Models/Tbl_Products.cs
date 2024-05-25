@@ -165,6 +165,7 @@ namespace CloudDevPOE.Models
 								ProductName = reader["name"].ToString(),
 								ProductCategory = reader["category"].ToString(),
 								ProductDescription = reader["description"].ToString(),
+								AvailableQuantity = (int)reader["quantity"],
 								ProductPrice = (decimal)reader["price"],
 								ImageUrls = new List<string>() // Initialize the list to be filled
 							};

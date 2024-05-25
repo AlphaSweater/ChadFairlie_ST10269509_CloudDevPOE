@@ -14,13 +14,14 @@
 			padding: 20px;
 			font-family: 'Arial', sans-serif;
 			--accent-color: var(@Model.HighlightColor);
+			--dark-color: #333;
+			--light-color: #f9f9f9;
 		}
 
 		.product-details {
 			display: flex;
 			justify-content: space-between;
 			gap: 5vw;
-			margin-top: 20px;
 		}
 
 		.product-carousel-container {
@@ -41,6 +42,8 @@
 				object-fit: cover;
 				border: 2px solid transparent;
 				cursor: pointer;
+				border-radius: 5px;
+				transition: border-color 0.3s ease;
 			}
 
 				.product-thumbnails img.active {
@@ -78,36 +81,36 @@
 
 			.carousel-control:hover {
 				opacity: 1;
-			}
-
-		.back-link {
-			text-decoration: none;
-			margin-bottom: 20px;
-			color: var(--colour-dark);
-			font-weight: bold;
-		}
+			}	
 
 		.product-info {
 			flex: 0 0 35%;
 			display: flex;
 			flex-direction: column;
-			gap: 15px;
+			gap: 20px;
+			background-color: var(--light-color);
+			padding: 20px;
+			border-radius: 10px;
+			box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 		}
 
 			.product-info h1 {
 				margin: 0;
 				font-size: 32px;
-				
+				color: var(--dark-color);
+				border-bottom: 2px solid var(--accent-color);
+				padding-bottom: 10px;
 			}
 
-			.product-info p {
+			.product-info p, .attribute {
 				margin: 0;
 				font-size: 18px;
 				line-height: 1.5;
+				color: var(--dark-color);
 			}
 
-				.product-info p strong {
-					
+				.product-info p strong, .attribute {
+					color: var(--accent-color);
 				}
 
 		.quantity-spinner {
@@ -121,14 +124,35 @@
 				text-align: center;
 				padding: 5px;
 				font-size: 16px;
+				border: 2px solid var(--accent-color);
+				border-radius: 5px;
 			}
 
 		.btn-primary {
 			background-color: var(--accent-color);
 			border-color: var(--accent-color);
+			color: #fff;
+			padding: 10px 20px;
+			font-size: 16px;
+			border-radius: 5px;
+			cursor: pointer;
+			transition: background-color 0.3s ease, border-color 0.3s ease;
+		}
+
+			.btn-primary:hover {
+				background-color: darken(var(--accent-color), 10%);
+				border-color: darken(var(--accent-color), 10%);
+			}
+
+		.back-link {
+			text-decoration: none;
+			margin-bottom: 20px;
+			color: var(--dark-color);
+			font-weight: bold;
 		}
 	</style>
 </head>
+
 
 
 <main class="product-page">
@@ -155,13 +179,15 @@
 
 		<div class="product-info">
 			<h1>@Model.ProductName</h1>
-			<p><strong>Category:</strong> @Model.ProductCategory</p>
-			<p><strong>Description:</strong> @Model.ProductDescription</p>
-			<p><strong>Price:</strong> @Model.ProductPrice.ToString("C", new System.Globalization.CultureInfo("en-ZA"))</p>
+			<p class="attribute"><strong>Seller Name:</strong> @Model.UserID</p>
+			<p class="attribute"><strong>Category:</strong> @Model.ProductCategory</p>
+			<p class="attribute"><strong>Description:</strong> @Model.ProductDescription</p>
+			<p class="attribute"><strong>Price:</strong> @Model.ProductPrice.ToString("C", new System.Globalization.CultureInfo("en-ZA"))</p>
+			<p class="attribute"><strong>Stock Available:</strong> @Model.AvailableQuantity</p>
 
 			<div class="quantity-spinner">
-				<label for="quantity"><strong>Quantity:</strong></label>
-				<input type="number" id="quantity" name="quantity" min="1" value="1">
+				<label class="attribute" for="quantity"><strong>Quantity:</strong></label>
+				<input type="number" id="quantity" name="quantity" min="1" max="@Model.AvailableQuantity" value="1">
 			</div>
 
 			<button type="button" class="button btn-primary">
@@ -176,6 +202,7 @@
 		</div>
 	</div>
 </main>
+
 
 
 @section Scripts {
