@@ -5,24 +5,25 @@
 }
 
 <head>
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css">
+	<link rel="stylesheet" href="~/css/AddToCartButton.css">
+
 	<style>
 		.product-page {
 			display: flex;
 			flex-direction: column;
-			margin: 15px 0;
-			padding: 10px;
-			background-color: #f8f9fa;
+			padding: 20px;
 			font-family: 'Arial', sans-serif;
+			--accent-color: var(@Model.HighlightColor);
 		}
 
 		.product-details {
 			display: flex;
+			justify-content: space-between;
 			gap: 5vw;
+			margin-top: 20px;
 		}
 
 		.product-carousel-container {
-			/* flex: 0 0 65%; */
 			display: flex;
 			gap: 15px;
 			align-items: center;
@@ -43,7 +44,7 @@
 			}
 
 				.product-thumbnails img.active {
-					border-color: var(@Model.HighlightColor);
+					border-color: var(--accent-color);
 				}
 
 		.main-image {
@@ -61,48 +62,57 @@
 		}
 
 		.carousel-control {
-			width: 30px;
-			height: 30px;
-			background-color: var(@Model.HighlightColor);
+			width: 40px;
+			height: 40px;
+			background-color: var(--accent-color);
 			border-radius: 50%;
 			border: none;
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			opacity: 0.5;
+			opacity: 0.8;
 			cursor: pointer;
+			color: rgba(255, 255, 255, 0.8);
+			transition: opacity 0.3s ease;
 		}
+
+			.carousel-control:hover {
+				opacity: 1;
+			}
 
 		.back-link {
-			color: var(@Model.HighlightColor);
 			text-decoration: none;
 			margin-bottom: 20px;
+			color: var(--colour-dark);
+			font-weight: bold;
 		}
-
-			.back-link::before {
-				content: "← ";
-			}
 
 		.product-info {
 			flex: 0 0 35%;
 			display: flex;
 			flex-direction: column;
-			gap: 10px;
+			gap: 15px;
 		}
 
-			.product-info h2 {
+			.product-info h1 {
 				margin: 0;
-				font-size: 24px;
+				font-size: 32px;
+				
 			}
 
 			.product-info p {
 				margin: 0;
 				font-size: 18px;
+				line-height: 1.5;
 			}
+
+				.product-info p strong {
+					
+				}
 
 		.quantity-spinner {
 			display: flex;
-			gap: 5px;
+			gap: 10px;
 			align-items: center;
 		}
 
@@ -110,17 +120,19 @@
 				width: 60px;
 				text-align: center;
 				padding: 5px;
+				font-size: 16px;
 			}
 
 		.btn-primary {
-			background-color: var(@Model.HighlightColor);
-			border-color: var(@Model.HighlightColor);
+			background-color: var(--accent-color);
+			border-color: var(--accent-color);
 		}
 	</style>
 </head>
 
+
 <main class="product-page">
-	<a href="@Url.Action("MyWork", "Products")" class="back-link">Back to Products Page</a>
+	<a href="@Url.Action("MyWork", "Products")" class="back-link">← Back to Products Page</a>
 
 	<div class="product-details">
 		<div class="product-carousel-container">
@@ -131,14 +143,14 @@
 				}
 			</div>
 			<div>
-			<button class="carousel-control" id="prev-image" onclick="prevImage()">&#9664;</button>
+				<button class="carousel-control" id="prev-image" onclick="prevImage()">&#9664;</button>
 			</div>
 			<div class="main-image-container">
 				<img id="main-image" src="@Model.ImageUrls[0]" class="main-image" alt="Product Image">
 			</div>
 			<div>
-			<button class="carousel-control" id="next-image" onclick="nextImage()">&#9654;</button>
-		</div>
+				<button class="carousel-control" id="next-image" onclick="nextImage()">&#9654;</button>
+			</div>
 		</div>
 
 		<div class="product-info">
@@ -152,10 +164,19 @@
 				<input type="number" id="quantity" name="quantity" min="1" value="1">
 			</div>
 
-			<button class="btn btn-primary mt-3">Add to Cart</button>
+			<button type="button" class="button btn-primary">
+				<span class="button__text">Add Item To Cart</span>
+				<span class="button__icon">
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" viewBox="0 0 24 24" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" stroke="currentColor" height="24" fill="none" class="svg">
+						<line y2="19" y1="5" x2="12" x1="12"></line>
+						<line y2="12" y1="12" x2="19" x1="5"></line>
+					</svg>
+				</span>
+			</button>
 		</div>
 	</div>
 </main>
+
 
 @section Scripts {
 	<script>
@@ -172,19 +193,18 @@
 			});
 		}
 
-
 		function prevImage() {
 			currentIndex = (currentIndex - 1 + images.length) % images.length;
-			changeMainImage(currentIndex);
+			changeMainImage(document.querySelectorAll('.product-thumbnails img')[currentIndex]);
 		}
 
 		function nextImage() {
 			currentIndex = (currentIndex + 1) % images.length;
-			changeMainImage(currentIndex);
+			changeMainImage(document.querySelectorAll('.product-thumbnails img')[currentIndex]);
 		}
 
-		document.querySelectorAll('.product-thumbnails img').forEach((img, index) => {
-			img.addEventListener('click', () => changeMainImage(index));
+		document.querySelectorAll('.product-thumbnails img').forEach((img) => {
+			img.addEventListener('click', () => changeMainImage(img));
 		});
 	</script>
 }

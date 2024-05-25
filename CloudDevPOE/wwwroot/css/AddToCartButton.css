@@ -1,0 +1,67 @@
+﻿:root {
+	--button-width: 250px;
+	--button-height: 40px;
+	--icon-width: calc(var(--button-height) - 1px); 
+	--icon-transform-x: calc(var(--button-width) - var(--icon-width) - 1px);
+	--icon-hover-width: calc(var(--button-width) - 2px);
+	--svg-width: calc(var(--icon-width) / 2); 
+	--border-width: 1px;
+}
+
+.button {
+	position: relative;
+	width: var(--button-width);
+	height: var(--button-height);
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	border: var(--border-width) solid var(--accent-color);
+	background-color: var(--accent-color);
+}
+
+.button, .button__icon, .button__text {
+	transition: all 0.3s;
+}
+
+	.button .button__text {
+		transform: translateX(30px);
+		color: #fff;
+		font-weight: 600;
+	}
+
+	.button .button__icon {
+		position: absolute;
+		transform: translateX(var(--icon-transform-x));
+		height: 100%;
+		width: var(--icon-width);
+		background-color: var(--accent-color);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.button .svg {
+		width: var(--svg-width);
+		stroke: #fff;
+	}
+
+	.button:hover {
+		background: var(--accent-color);
+	}
+
+		.button:hover .button__text {
+			color: transparent;
+		}
+
+		.button:hover .button__icon {
+			width: var(--icon-hover-width);
+			transform: translateX(0);
+		}
+
+	.button:active .button__icon {
+		background-color: var(--accent-color);
+	}
+
+	.button:active {
+		border: var(--border-width) solid var(--accent-color);
+	}
