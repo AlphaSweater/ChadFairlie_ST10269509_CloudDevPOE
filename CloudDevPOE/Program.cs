@@ -20,6 +20,10 @@ namespace CloudDevPOE
 			// Add IHttpContextAccessor to the DI container using the built-in method.
 			builder.Services.AddHttpContextAccessor();
 
+			// Explicitly add IConfiguration to the DI container.
+			builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
+
+
 			var app = builder.Build();
 
 			// Configure the HTTP request pipeline.

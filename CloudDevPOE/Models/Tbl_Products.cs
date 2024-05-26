@@ -196,5 +196,63 @@ namespace CloudDevPOE.Models
 			}
 			return productDetails;
 		}
+
+		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
+		public List<ProductDetailsViewModel> GetListedProducts(int userID, string connectionString)
+		{
+			List<ProductDetailsViewModel> products = new List<ProductDetailsViewModel>();
+
+			using (var con = new SqlConnection(connectionString))
+			{
+				con.Open();
+				string productSql = @"SELECT tblp.*, tblu.name AS seller_name
+                      FROM tbl_products tblp
+                      INNER JOIN tbl_users tblu ON tblp.user_id = tblu.user_id
+                      WHERE tblp.user_id = @UserID";
+				using (var productCmd = new SqlCommand(productSql, con))
+				{
+					productCmd.Parameters.AddWithValue("@UserID", userID);
+					using (var reader = productCmd.ExecuteReader())
+					{
+						while (reader.Read())
+						{
+							var product = new ProductDetailsViewModel
+							{
+								ProductID = (int)reader["product_id"],
+								SellerUserID = (int)reader["user_id"],
+								SellerName = reader["seller_name"].ToString(),
+								ProductName = reader["name"].ToString(),
+								ProductCategory = reader["category"].ToString(),
+								ProductDescription = reader["description"].ToString(),
+								AvailableQuantity = (int)reader["quantity"],
+								ProductPrice = (decimal)reader["price"],
+								ImageUrls = new List<string>() // Initialize the list to be filled
+							};
+
+							products.Add(product);
+						}
+					}
+				}
+
+				// Fetch the images for each product
+				foreach (var product in products)
+				{
+					string imagesSql = "SELECT image_url FROM tbl_product_images WHERE product_id = @ProductID";
+					using (var imagesCmd = new SqlCommand(imagesSql, con))
+					{
+						imagesCmd.Parameters.AddWithValue("@ProductID", product.ProductID);
+						using (var reader = imagesCmd.ExecuteReader())
+						{
+							while (reader.Read())
+							{
+								product.ImageUrls.Add(reader["image_url"].ToString());
+							}
+						}
+					}
+				}
+			}
+
+			return products;
+		}
 	}
 }

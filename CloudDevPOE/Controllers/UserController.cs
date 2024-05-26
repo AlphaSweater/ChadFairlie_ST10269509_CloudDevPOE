@@ -2,11 +2,12 @@
 
 using CloudDevPOE.Models;
 using CloudDevPOE.ViewModels;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CloudDevPOE.Controllers
 {
-	public class UserController : Controller
+	public class UserController : BaseController
 	{
 		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
 		private readonly IHttpContextAccessor _httpContextAccessor;
@@ -15,7 +16,8 @@ namespace CloudDevPOE.Controllers
 
 		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
 		// Constructor to inject IHttpContextAccessor and IConfiguration
-		public UserController(IHttpContextAccessor httpContextAccessor, IConfiguration configuration)
+		public UserController(IHttpContextAccessor httpContextAccessor, IWebHostEnvironment webHostEnvironment, IConfiguration configuration)
+			: base(httpContextAccessor, webHostEnvironment, configuration)
 		{
 			_httpContextAccessor = httpContextAccessor;
 			_configuration = configuration;
@@ -47,14 +49,6 @@ namespace CloudDevPOE.Controllers
 		}
 
 		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
-		[HttpGet]
-		public ActionResult Login()
-		{
-			ViewBag.IsValidUser = true;
-			return View();
-		}
-
-		//--------------------------------------------------------------------------------------------------------------------------//
 		[HttpPost]
 		public IActionResult Login(Tbl_Users user)
 		{
@@ -82,22 +76,88 @@ namespace CloudDevPOE.Controllers
 		}
 
 		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
-		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
-		private void SetUserDetails()
+		public async Task<IActionResult> UserProfile()
 		{
+			// Set the user details for the view and set the ViewData property
+			ViewData["UserDetails"] = SetUserDetails();
+
+			var connectionString = _configuration.GetConnectionString("DefaultConnection");
+
 			// Safely get the user ID from the session
 			int? userID = _httpContextAccessor.HttpContext?.Session.GetInt32("UserId");
 			if (userID.HasValue)
 			{
-				var connectionString = _configuration.GetConnectionString("DefaultConnection");
-				Tbl_Users userModel = new Tbl_Users();
+				// Create the UserAccountViewModel
+				UserAccountViewModel userDetails = new UserAccountViewModel();
 
-				// Fetch the user details
-				UserViewModel userDetails = userModel.GetUserDetails(userID.Value, connectionString);
+				// Use the Tbl_Users model to get the user details
+				Tbl_Users user = new Tbl_Users();
+				userDetails = user.GetUserDetailsAsync(userID.Value, connectionString);
 
-				// Set the ViewData property
-				ViewData["UserDetails"] = userDetails;
+				return View(userDetails);
 			}
+			else
+			{
+				// TODO: FIx here
+				return RedirectToAction("Index", "Home");
+			}
+		}
+
+		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
+		public IActionResult CheckoutCart()
+		{
+			var connectionString = _configuration.GetConnectionString("DefaultConnection");
+
+			// Safely get the user ID from the session
+			int? userID = _httpContextAccessor.HttpContext?.Session.GetInt32("UserId");
+
+			// Use the Tbl_Carts model to checkout the active cart
+			Tbl_Carts carts = new Tbl_Carts();
+
+			carts.CheckoutCart(userID.Value, connectionString);
+
+			decimal newTotal = 0;
+			return RedirectToAction("UserProfile");
+		}
+
+		//--------------------------------------------------------------------------------------------------------------------------//
+		public IActionResult UpdateCartQuantity(int cartItemId, int quantity)
+		{
+			var connectionString = _configuration.GetConnectionString("DefaultConnection");
+
+			// Safely get the user ID from the session
+			int? userID = _httpContextAccessor.HttpContext?.Session.GetInt32("UserId");
+
+			Tbl_Cart_Items cartItems = new Tbl_Cart_Items();
+			Tbl_Carts carts = new Tbl_Carts();
+
+			cartItems.UpdateItemQuantity(cartItemId, quantity, connectionString);
+
+			int activeCartId = carts.GetActiveCartID(userID.Value, connectionString);
+
+			decimal newTotal = carts.GetCartTotal(activeCartId, connectionString);
+
+			return Json(new { newTotal = newTotal.ToString("C", new System.Globalization.CultureInfo("en-ZA")) });
+		}
+
+		//--------------------------------------------------------------------------------------------------------------------------//
+		public IActionResult RemoveCartItem(int cartItemId)
+		{
+			var connectionString = _configuration.GetConnectionString("DefaultConnection");
+
+			// Safely get the user ID from the session
+			int? userID = _httpContextAccessor.HttpContext?.Session.GetInt32("UserId");
+
+			Tbl_Cart_Items cartItems = new Tbl_Cart_Items();
+			Tbl_Carts carts = new Tbl_Carts();
+
+			cartItems.RemoveItemFromCart(cartItemId, connectionString);
+
+			int activeCartId = carts.GetActiveCartID(userID.Value, connectionString);
+
+			decimal newTotal = carts.GetCartTotal(activeCartId, connectionString);
+
+			return Json(new { newTotal = newTotal.ToString("C", new System.Globalization.CultureInfo("en-ZA")) });
 		}
 
 		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//

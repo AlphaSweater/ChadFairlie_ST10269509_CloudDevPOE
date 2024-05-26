@@ -105,19 +105,19 @@ namespace CloudDevPOE.Models
 		}
 
 		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
-		public UserViewModel GetUserDetails(int userID, string connectionString)
+		public async Task<UserAccountViewModel> GetUserDetailsAsync(int userID, string connectionString)
 		{
-			UserViewModel user = new UserViewModel();
+			UserAccountViewModel user = new UserAccountViewModel();
 			using (var con = new SqlConnection(connectionString))
 			{
-				con.Open();
+				await con.OpenAsync();
 				string sql = "SELECT name, surname, email FROM tbl_users WHERE user_id = @UserID";
 				using (SqlCommand cmd = new SqlCommand(sql, con))
 				{
 					cmd.Parameters.AddWithValue("@UserID", userID);
-					using (SqlDataReader reader = cmd.ExecuteReader())
+					using (SqlDataReader reader = await cmd.ExecuteReaderAsync())
 					{
-						if (reader.Read())
+						if (await reader.ReadAsync())
 						{
 							user.Name = reader["name"].ToString();
 							user.Surname = reader["surname"].ToString();
@@ -126,8 +126,44 @@ namespace CloudDevPOE.Models
 					}
 				}
 			}
-			user.CartSize = new Tbl_Carts().GetCartItemCount(userID, connectionString);
+
+			Tbl_Carts carts = new Tbl_Carts();
+			Tbl_Products products = new Tbl_Products();
+			Tbl_Transactions transactions = new Tbl_Transactions();
+			int activeCartId = await carts.GetActiveCartIDAsync(userID, connectionString);
+			user.ActiveCart = await carts.GetCartAsync(activeCartId, connectionString);
+			user.PastOrders = await transactions.GetPastOrdersAsync(userID, connectionString);
+			user.ListedProducts = await products.GetListedProductsAsync(userID, connectionString);
+
 			return user;
+		}
+
+
+		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
+		public NavbarViewModel GetNameAndCartCount(int userID, string connectionString)
+		{
+			NavbarViewModel userNavInfo = new NavbarViewModel();
+			using (var con = new SqlConnection(connectionString))
+			{
+				con.Open();
+				string sql = "SELECT name FROM tbl_users WHERE user_id = @UserID";
+				using (SqlCommand cmd = new SqlCommand(sql, con))
+				{
+					cmd.Parameters.AddWithValue("@UserID", userID);
+					using (SqlDataReader reader = cmd.ExecuteReader())
+					{
+						if (reader.Read())
+						{
+							userNavInfo.Name = reader["name"].ToString();
+						}
+					}
+				}
+
+				Tbl_Carts carts = new Tbl_Carts();
+				userNavInfo.ActiveCartSize = carts.GetActiveCartItemCount(userID, connectionString);
+			}
+
+			return userNavInfo;
 		}
 	}
 }

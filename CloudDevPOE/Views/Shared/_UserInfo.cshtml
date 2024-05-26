@@ -1,4 +1,4 @@
-﻿@model CloudDevPOE.ViewModels.UserViewModel
+﻿@model CloudDevPOE.ViewModels.NavbarViewModel
 
 @if (Model != null)
 {
@@ -6,13 +6,13 @@
 	<div class="user-dropdown">
 		<i class='bx bx-user bx-icon'></i>
 		<div class="user-dropdown-menu">
-			<a href="@Url.Action("Account", "User")">Account</a>
+			<a href="@Url.Action("UserProfile", "User")">Profile</a>
 			<a href="@Url.Action("Logout", "User")">Logout</a>
 		</div>
 	</div>
 	<div class="bx-icon" onclick="location.href='@Url.Action("Cart", "Shop")'">
 		<i class='bx bx-cart'></i>
-		<span class="cart-badge">@Model.CartSize</span>
+		<span class="cart-badge">@Model.ActiveCartSize</span>
 	</div>
 
 }
