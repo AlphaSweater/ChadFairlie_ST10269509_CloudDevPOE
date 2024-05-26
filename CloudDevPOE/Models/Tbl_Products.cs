@@ -205,10 +205,16 @@ namespace CloudDevPOE.Models
 			using (var con = new SqlConnection(connectionString))
 			{
 				await con.OpenAsync();
-				string productSql = @"SELECT tblp.*, tblu.name AS seller_name
-                  FROM tbl_products tblp
-                  INNER JOIN tbl_users tblu ON tblp.user_id = tblu.user_id
-                  WHERE tblp.user_id = @UserID";
+				string productSql = @"SELECT tblp.*, tblu.name AS seller_name, tpi.image_url AS main_image_url
+              FROM tbl_products tblp
+              INNER JOIN tbl_users tblu ON tblp.user_id = tblu.user_id
+              LEFT JOIN (
+                  SELECT MIN(image_id) AS image_id, product_id
+                  FROM tbl_product_images
+                  GROUP BY product_id
+              ) AS first_image ON tblp.product_id = first_image.product_id
+              LEFT JOIN tbl_product_images tpi ON first_image.image_id = tpi.image_id
+              WHERE tblp.user_id = @UserID";
 				using (var productCmd = new SqlCommand(productSql, con))
 				{
 					productCmd.Parameters.AddWithValue("@UserID", userID);
@@ -226,27 +232,10 @@ namespace CloudDevPOE.Models
 								ProductDescription = reader["description"].ToString(),
 								AvailableQuantity = (int)reader["quantity"],
 								ProductPrice = (decimal)reader["price"],
-								ImageUrls = new List<string>() // Initialize the list to be filled
+								ProductMainImageUrl = reader["main_image_url"] as string // Set the main image URL
 							};
 
 							products.Add(product);
-						}
-					}
-				}
-
-				// Fetch the images for each product
-				foreach (var product in products)
-				{
-					string imagesSql = "SELECT image_url FROM tbl_product_images WHERE product_id = @ProductID";
-					using (var imagesCmd = new SqlCommand(imagesSql, con))
-					{
-						imagesCmd.Parameters.AddWithValue("@ProductID", product.ProductID);
-						using (var reader = await imagesCmd.ExecuteReaderAsync())
-						{
-							while (await reader.ReadAsync())
-							{
-								product.ImageUrls.Add(reader["image_url"].ToString());
-							}
 						}
 					}
 				}

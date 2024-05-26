@@ -102,6 +102,29 @@ namespace CloudDevPOE.Controllers
 			}
 		}
 
+		//--------------------------------------------------------------------------------------------------------------------------//
+		[HttpGet]
+		public async Task<IActionResult> GetCartTotal()
+		{
+			var connectionString = _configuration.GetConnectionString("DefaultConnection");
+
+			// Safely get the user ID from the session
+			int? userID = _httpContextAccessor.HttpContext?.Session.GetInt32("UserId");
+			if (!userID.HasValue)
+			{
+				// The user is not logged in, return a JSON result
+				return Json(new { success = false, message = "User is not logged in" });
+			}
+
+			Tbl_Carts carts = new Tbl_Carts();
+			int activeCartId = await carts.GetActiveCartIDAsync(userID.Value, connectionString);
+
+			decimal newTotal = carts.GetCartTotal(activeCartId, connectionString);
+
+			return Json(new { newTotal = newTotal.ToString("C", new System.Globalization.CultureInfo("en-ZA")) });
+		}
+
+
 		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
 		public async Task<IActionResult> CheckoutCart()
 		{

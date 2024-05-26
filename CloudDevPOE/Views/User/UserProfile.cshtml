@@ -141,6 +141,7 @@
 					<table class="table table-striped">
 						<thead>
 							<tr>
+								<th>Image</th>
 								<th>Product</th>
 								<th>Quantity</th>
 								<th>Price</th>
@@ -181,6 +182,16 @@
 
 	<script>
 		$(document).ready(function () {
+			// Fetch the latest cart total from the server
+			$.ajax({
+				url: '/User/GetCartTotal',
+				type: 'GET',
+				success: function (result) {
+					// Update the cart total on the page
+					$('#cart-total-summary').text(result.newTotal);
+				}
+			});
+
 			$('.quantity-input').on('change', function () {
 				var cartItemId = $(this).data('cart-item-id');
 				var quantity = $(this).val();
@@ -206,7 +217,6 @@
 					}
 				});
 			});
-
 
 			$('.RemoveItem').on('click', function (event) {
 				event.preventDefault();

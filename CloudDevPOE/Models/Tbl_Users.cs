@@ -111,29 +111,83 @@ namespace CloudDevPOE.Models
 			using (var con = new SqlConnection(connectionString))
 			{
 				await con.OpenAsync();
-				string sql = "SELECT name, surname, email FROM tbl_users WHERE user_id = @UserID";
-				using (SqlCommand cmd = new SqlCommand(sql, con))
+				using (SqlCommand cmd = new SqlCommand("dbo.GetUserDetails", con))
 				{
+					cmd.CommandType = CommandType.StoredProcedure;
 					cmd.Parameters.AddWithValue("@UserID", userID);
 					using (SqlDataReader reader = await cmd.ExecuteReaderAsync())
 					{
+						// Read user details
 						if (await reader.ReadAsync())
 						{
 							user.Name = reader["name"].ToString();
 							user.Surname = reader["surname"].ToString();
 							user.Email = reader["email"].ToString();
 						}
+
+						// Read active cart details
+						if (await reader.NextResultAsync())
+						{
+							user.ActiveCart = new CartViewModel();
+							user.ActiveCart.Items = new List<CartItemViewModel>();
+							while (await reader.ReadAsync())
+							{
+								var item = new CartItemViewModel
+								{
+									CartItemID = reader.GetInt32(0),
+									ProductID = reader.GetInt32(1),
+									ProductName = reader.GetString(2),
+									Price = reader.GetDecimal(3),
+									Quantity = reader.GetInt32(4),
+									Value = reader.GetDecimal(5),
+									ImageUrl = reader.IsDBNull(6) ? "/images/Default/DefaultIcon.jpg" : reader.GetString(6),
+									AvailableQuantity = reader.GetInt32(7)
+								};
+								user.ActiveCart.Items.Add(item);
+							}
+						}
+
+						// Read past orders
+						if (await reader.NextResultAsync())
+						{
+							Tbl_Carts carts = new Tbl_Carts();
+							user.PastOrders = new List<PastCartViewModel>();
+							while (await reader.ReadAsync())
+							{
+								var transaction = new PastCartViewModel
+								{
+									Cart = await carts.GetCartAsync(reader.GetInt32(0), connectionString),
+									TotalValue = reader.GetDecimal(1),
+									TransactionDate = reader.GetDateTime(2)
+								};
+								user.PastOrders.Add(transaction);
+							}
+						}
+
+						// Read listed products
+						if (await reader.NextResultAsync())
+						{
+							user.ListedProducts = new List<ProductDetailsViewModel>();
+							while (await reader.ReadAsync())
+							{
+								var product = new ProductDetailsViewModel
+								{
+									ProductID = reader.GetInt32(0),
+									SellerUserID = reader.GetInt32(1),
+									ProductName = reader.GetString(2),
+									ProductCategory = reader.GetString(3),
+									ProductDescription = reader.GetString(4),
+									ProductPrice = reader.GetDecimal(5),
+									AvailableQuantity = reader.GetInt32(6),
+									SellerName = reader.GetString(8),
+									ProductMainImageUrl = reader.IsDBNull(9) ? "/images/Default/DefaultIcon.jpg" : reader.GetString(9)
+								};
+								user.ListedProducts.Add(product);
+							}
+						}
 					}
 				}
 			}
-
-			Tbl_Carts carts = new Tbl_Carts();
-			Tbl_Products products = new Tbl_Products();
-			Tbl_Transactions transactions = new Tbl_Transactions();
-			int activeCartId = await carts.GetActiveCartIDAsync(userID, connectionString);
-			user.ActiveCart = await carts.GetCartAsync(activeCartId, connectionString);
-			user.PastOrders = await transactions.GetPastOrdersAsync(userID, connectionString);
-			user.ListedProducts = await products.GetListedProductsAsync(userID, connectionString);
 
 			return user;
 		}
