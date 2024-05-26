@@ -1,10 +1,26 @@
 ﻿@model CloudDevPOE.ViewModels.NavbarViewModel
 
+<head>
+	<style>
+		.user-info {
+			display: flex;
+			align-items: center;
+		}
+
+			.user-info .welcome-message {
+				margin-right: 10px;
+			}
+
+	</style>
+</head>
+
 @if (Model != null)
 {
-	<div class="welcome-message">Welcome, @Model.Name</div>
 	<div class="user-dropdown">
-		<i class='bx bx-user bx-icon'></i>
+		<div class="user-info">
+			<div class="welcome-message">Welcome, @Model.Name</div>
+			<i class='bx bx-user bx-icon'></i>
+		</div>
 		<div class="user-dropdown-menu">
 			<a href="@Url.Action("UserProfile", "User")">Profile</a>
 			<a href="@Url.Action("Logout", "User")">Logout</a>
@@ -14,7 +30,6 @@
 		<i class='bx bx-cart'></i>
 		<span class="cart-badge">@Model.ActiveCartSize</span>
 	</div>
-
 }
 else
 {
@@ -27,8 +42,9 @@ else
 	<div class="bx-icon" onclick="showLoginModalAndSubmitForm(); return false;">
 		<i class='bx bx-cart'></i>
 	</div>
-
 }
+
+
 
 <script>
 	document.addEventListener('DOMContentLoaded', function () {
