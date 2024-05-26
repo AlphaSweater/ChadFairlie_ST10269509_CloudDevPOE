@@ -111,7 +111,7 @@ namespace CloudDevPOE.Controllers
 
 		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
 		[HttpPost]
-		public IActionResult AddToCart(int productId, int quantity)
+		public async Task<IActionResult> AddToCart(int productId, int quantity)
 		{
 			// Safely get the user ID from the session
 			int? userID = _httpContextAccessor.HttpContext?.Session.GetInt32("UserId");
@@ -124,10 +124,10 @@ namespace CloudDevPOE.Controllers
 			var connectionString = _configuration.GetConnectionString("DefaultConnection");
 
 			Tbl_Carts cartsModel = new Tbl_Carts();
-			int cartId = cartsModel.GetActiveCartID(userID.Value, connectionString);
+			int cartId = await cartsModel.GetActiveCartIDAsync(userID.Value, connectionString);
 
 			Tbl_Cart_Items cartItemsModel = new Tbl_Cart_Items();
-			cartItemsModel.AddItemToCart(cartId, productId, quantity, connectionString);
+			await cartItemsModel.AddItemToCartAsync(cartId, productId, quantity, connectionString);
 
 			return Json(new { success = true, message = "Product added to cart" });
 		}

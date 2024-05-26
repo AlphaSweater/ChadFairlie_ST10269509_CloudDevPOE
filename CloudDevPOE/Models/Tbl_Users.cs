@@ -138,7 +138,6 @@ namespace CloudDevPOE.Models
 			return user;
 		}
 
-
 		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
 		public NavbarViewModel GetNameAndCartCount(int userID, string connectionString)
 		{

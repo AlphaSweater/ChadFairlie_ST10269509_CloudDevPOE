@@ -1,4 +1,5 @@
 ﻿using CloudDevPOE.ViewModels;
+using System.Data;
 using System.Data.SqlClient;
 
 namespace CloudDevPOE.Models
@@ -18,17 +19,17 @@ namespace CloudDevPOE.Models
 		public bool IsActive { get; set; }
 
 		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
-		public int GetActiveCartID(int userId, string connectionString)
+		public async Task<int> GetActiveCartIDAsync(int userId, string connectionString)
 		{
 			using (var con = new SqlConnection(connectionString))
 			{
-				con.Open();
+				await con.OpenAsync();
 				// Check if the user already has an active cart
 				string cartCheckSql = "SELECT cart_id FROM tbl_carts WHERE user_id = @UserID AND is_active = 1";
 				using (SqlCommand cartCheckCmd = new SqlCommand(cartCheckSql, con))
 				{
 					cartCheckCmd.Parameters.AddWithValue("@UserID", userId);
-					object cartId = cartCheckCmd.ExecuteScalar();
+					object cartId = await cartCheckCmd.ExecuteScalarAsync();
 
 					if (cartId == null)
 					{
@@ -37,7 +38,7 @@ namespace CloudDevPOE.Models
 						using (SqlCommand createCartCmd = new SqlCommand(createCartSql, con))
 						{
 							createCartCmd.Parameters.AddWithValue("@UserID", userId);
-							cartId = (int)createCartCmd.ExecuteScalar();
+							cartId = await createCartCmd.ExecuteScalarAsync();
 							return (int)cartId;
 						}
 					}
@@ -47,7 +48,7 @@ namespace CloudDevPOE.Models
 		}
 
 		//--------------------------------------------------------------------------------------------------------------------------//
-		public CartViewModel GetCart(int cartId, string connectionString)
+		public async Task<CartViewModel> GetCartAsync(int cartId, string connectionString)
 		{
 			CartViewModel cartViewModel = new CartViewModel();
 
@@ -55,28 +56,28 @@ namespace CloudDevPOE.Models
 			{
 				using (var con = new SqlConnection(connectionString))
 				{
-					con.Open();
+					await con.OpenAsync();
 					cartViewModel.CartID = cartId;
 					cartViewModel.Items = new List<CartItemViewModel>();
 
 					// Fetch each item's details, image, available quantity and calculate each item's value
 					string itemsSql = @"	SELECT ci.cart_item_id, ci.product_id, p.name, p.price, ci.quantity,
-												(p.price * ci.quantity) AS Value, pi.image_url, p.quantity
-											FROM tbl_cart_items ci
-											JOIN tbl_products p ON ci.product_id = p.product_id
-											LEFT JOIN (
-												SELECT product_id, MIN(image_url) as image_url
-												FROM tbl_product_images
-												GROUP BY product_id
-											) pi ON p.product_id = pi.product_id
-											WHERE ci.cart_id = @CartID";
+                                        (p.price * ci.quantity) AS Value, pi.image_url, p.quantity
+                                    FROM tbl_cart_items ci
+                                    JOIN tbl_products p ON ci.product_id = p.product_id
+                                    LEFT JOIN (
+                                        SELECT product_id, MIN(image_url) as image_url
+                                        FROM tbl_product_images
+                                        GROUP BY product_id
+                                    ) pi ON p.product_id = pi.product_id
+                                    WHERE ci.cart_id = @CartID";
 
 					using (SqlCommand itemsCmd = new SqlCommand(itemsSql, con))
 					{
 						itemsCmd.Parameters.AddWithValue("@CartID", cartId);
-						using (var reader = itemsCmd.ExecuteReader())
+						using (var reader = await itemsCmd.ExecuteReaderAsync())
 						{
-							while (reader.Read())
+							while (await reader.ReadAsync())
 							{
 								var item = new CartItemViewModel
 								{
@@ -97,14 +98,14 @@ namespace CloudDevPOE.Models
 
 					// Calculate the total value of the cart
 					string totalValueSql = @"SELECT SUM(p.price * ci.quantity) AS TotalValue
-                FROM tbl_cart_items ci
-                JOIN tbl_products p ON ci.product_id = p.product_id
-                WHERE ci.cart_id = @CartID";
+            FROM tbl_cart_items ci
+            JOIN tbl_products p ON ci.product_id = p.product_id
+            WHERE ci.cart_id = @CartID";
 
 					using (SqlCommand totalValueCmd = new SqlCommand(totalValueSql, con))
 					{
 						totalValueCmd.Parameters.AddWithValue("@CartID", cartId);
-						object totalValueResult = totalValueCmd.ExecuteScalar();
+						object totalValueResult = await totalValueCmd.ExecuteScalarAsync();
 						cartViewModel.TotalValue = totalValueResult == DBNull.Value ? 0 : (decimal)totalValueResult;
 					}
 				}
@@ -155,41 +156,46 @@ namespace CloudDevPOE.Models
 		}
 
 		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
-		public void CheckoutCart(int userId, string connectionString)
+		public async Task CheckoutCartAsync(int userId, string connectionString)
 		{
-			int activeCartId = GetActiveCartID(userId, connectionString);
-			CartViewModel cartDetails = GetCart(activeCartId, connectionString);
+			int activeCartId = await GetActiveCartIDAsync(userId, connectionString);
+			CartViewModel cartDetails = await GetCartAsync(activeCartId, connectionString);
 
 			using (var con = new SqlConnection(connectionString))
 			{
-				con.Open();
+				await con.OpenAsync();
 				using (var transaction = con.BeginTransaction())
 				{
 					try
 					{
-						// Deactivate the cart
-						string deactivateCartSql = "UPDATE tbl_carts SET is_active = 0 WHERE cart_id = @CartID";
-						using (SqlCommand cmd = new SqlCommand(deactivateCartSql, con, transaction))
-						{
-							cmd.Parameters.AddWithValue("@CartID", cartDetails.CartID);
-							cmd.ExecuteNonQuery();
-						}
+						// Create a DataTable to hold the cart items
+						DataTable cartItemsTable = new DataTable();
+						cartItemsTable.Columns.Add("ProductID", typeof(int));
+						cartItemsTable.Columns.Add("Quantity", typeof(int));
 
-						// Reduce the quantity of each product in the cart
+						// Add the cart items to the DataTable
 						foreach (var item in cartDetails.Items)
 						{
-							string reduceQuantitySql = "UPDATE tbl_products SET quantity = quantity - @Quantity WHERE product_id = @ProductID";
-							using (SqlCommand cmd = new SqlCommand(reduceQuantitySql, con, transaction))
-							{
-								cmd.Parameters.AddWithValue("@Quantity", item.Quantity);
-								cmd.Parameters.AddWithValue("@ProductID", item.ProductID);
-								cmd.ExecuteNonQuery();
-							}
+							cartItemsTable.Rows.Add(item.ProductID, item.Quantity);
+						}
+
+						// Create a SqlParameter for the table-valued parameter
+						SqlParameter cartItemsParameter = new SqlParameter("@CartItems", SqlDbType.Structured);
+						cartItemsParameter.TypeName = "dbo.CartItemType";
+						cartItemsParameter.Value = cartItemsTable;
+
+						// Execute the stored procedure
+						using (SqlCommand cmd = new SqlCommand("dbo.CheckoutCart", con, transaction))
+						{
+							cmd.CommandType = CommandType.StoredProcedure;
+							cmd.Parameters.AddWithValue("@CartID", cartDetails.CartID);
+							cmd.Parameters.Add(cartItemsParameter);
+							await cmd.ExecuteNonQueryAsync();
 						}
 
 						// Record the transaction using the RecordTransaction method
 						Tbl_Transactions transactionModel = new Tbl_Transactions();
-						transactionModel.RecordTransaction(userId, cartDetails, con, transaction);
+						await transactionModel.RecordTransactionAsync(userId, cartDetails, con, transaction);
 
 						// Commit the transaction
 						transaction.Commit();

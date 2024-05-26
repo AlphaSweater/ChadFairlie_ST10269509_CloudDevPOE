@@ -198,23 +198,23 @@ namespace CloudDevPOE.Models
 		}
 
 		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
-		public List<ProductDetailsViewModel> GetListedProducts(int userID, string connectionString)
+		public async Task<List<ProductDetailsViewModel>> GetListedProductsAsync(int userID, string connectionString)
 		{
 			List<ProductDetailsViewModel> products = new List<ProductDetailsViewModel>();
 
 			using (var con = new SqlConnection(connectionString))
 			{
-				con.Open();
+				await con.OpenAsync();
 				string productSql = @"SELECT tblp.*, tblu.name AS seller_name
-                      FROM tbl_products tblp
-                      INNER JOIN tbl_users tblu ON tblp.user_id = tblu.user_id
-                      WHERE tblp.user_id = @UserID";
+                  FROM tbl_products tblp
+                  INNER JOIN tbl_users tblu ON tblp.user_id = tblu.user_id
+                  WHERE tblp.user_id = @UserID";
 				using (var productCmd = new SqlCommand(productSql, con))
 				{
 					productCmd.Parameters.AddWithValue("@UserID", userID);
-					using (var reader = productCmd.ExecuteReader())
+					using (var reader = await productCmd.ExecuteReaderAsync())
 					{
-						while (reader.Read())
+						while (await reader.ReadAsync())
 						{
 							var product = new ProductDetailsViewModel
 							{
@@ -241,9 +241,9 @@ namespace CloudDevPOE.Models
 					using (var imagesCmd = new SqlCommand(imagesSql, con))
 					{
 						imagesCmd.Parameters.AddWithValue("@ProductID", product.ProductID);
-						using (var reader = imagesCmd.ExecuteReader())
+						using (var reader = await imagesCmd.ExecuteReaderAsync())
 						{
-							while (reader.Read())
+							while (await reader.ReadAsync())
 							{
 								product.ImageUrls.Add(reader["image_url"].ToString());
 							}

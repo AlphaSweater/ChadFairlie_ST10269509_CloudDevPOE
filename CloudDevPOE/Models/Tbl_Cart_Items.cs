@@ -17,11 +17,11 @@ namespace CloudDevPOE.Models
 		public int Quantity { get; set; }
 
 		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
-		public void AddItemToCart(int cartId, int productId, int quantity, string connectionString)
+		public async Task AddItemToCartAsync(int cartId, int productId, int quantity, string connectionString)
 		{
 			using (var con = new SqlConnection(connectionString))
 			{
-				con.Open();
+				await con.OpenAsync();
 
 				// Check if the item already exists in the cart
 				string checkItemSql = "SELECT cart_item_id, quantity FROM tbl_cart_items WHERE cart_id = @CartID AND product_id = @ProductID";
@@ -32,9 +32,9 @@ namespace CloudDevPOE.Models
 					bool itemExists = false;
 					int cartItemId = 0;
 					int currentQuantity = 0;
-					using (var reader = checkItemCmd.ExecuteReader())
+					using (var reader = await checkItemCmd.ExecuteReaderAsync())
 					{
-						if (reader.Read())
+						if (await reader.ReadAsync())
 						{
 							// The item already exists in the cart, update the quantity
 							cartItemId = reader.GetInt32(0);
@@ -50,7 +50,7 @@ namespace CloudDevPOE.Models
 						{
 							updateQuantityCmd.Parameters.AddWithValue("@CartItemID", cartItemId);
 							updateQuantityCmd.Parameters.AddWithValue("@Quantity", currentQuantity + quantity);
-							updateQuantityCmd.ExecuteNonQuery();
+							await updateQuantityCmd.ExecuteNonQueryAsync();
 						}
 					}
 					else
@@ -62,7 +62,7 @@ namespace CloudDevPOE.Models
 							addItemCmd.Parameters.AddWithValue("@CartID", cartId);
 							addItemCmd.Parameters.AddWithValue("@ProductID", productId);
 							addItemCmd.Parameters.AddWithValue("@Quantity", quantity);
-							addItemCmd.ExecuteNonQuery();
+							await addItemCmd.ExecuteNonQueryAsync();
 						}
 					}
 				}
@@ -70,34 +70,32 @@ namespace CloudDevPOE.Models
 		}
 
 		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
-		// TODO: Implement Remove Item From Cart Method
-		public void RemoveItemFromCart(int cartItemId, string connectionString)
+		public async Task RemoveItemFromCartAsync(int cartItemId, string connectionString)
 		{
 			using (var con = new SqlConnection(connectionString))
 			{
-				con.Open();
+				await con.OpenAsync();
 				string sql = "DELETE FROM tbl_cart_items WHERE cart_item_id = @CartItemID";
 				using (SqlCommand cmd = new SqlCommand(sql, con))
 				{
 					cmd.Parameters.AddWithValue("@CartItemID", cartItemId);
-					cmd.ExecuteNonQuery();
+					await cmd.ExecuteNonQueryAsync();
 				}
 			}
 		}
 
 		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
-		// TODO: Implement Update Item Quantity Method
-		public void UpdateItemQuantity(int cartItemId, int quantity, string connectionString)
+		public async Task UpdateItemQuantityAsync(int cartItemId, int quantity, string connectionString)
 		{
 			using (var con = new SqlConnection(connectionString))
 			{
-				con.Open();
+				await con.OpenAsync();
 				string sql = "UPDATE tbl_cart_items SET quantity = @Quantity WHERE cart_item_id = @CartItemID";
 				using (SqlCommand cmd = new SqlCommand(sql, con))
 				{
 					cmd.Parameters.AddWithValue("@CartItemID", cartItemId);
 					cmd.Parameters.AddWithValue("@Quantity", quantity);
-					cmd.ExecuteNonQuery();
+					await cmd.ExecuteNonQueryAsync();
 				}
 			}
 		}

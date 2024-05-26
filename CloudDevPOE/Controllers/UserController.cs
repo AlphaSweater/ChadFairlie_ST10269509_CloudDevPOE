@@ -87,12 +87,11 @@ namespace CloudDevPOE.Controllers
 			int? userID = _httpContextAccessor.HttpContext?.Session.GetInt32("UserId");
 			if (userID.HasValue)
 			{
-				// Create the UserAccountViewModel
-				UserAccountViewModel userDetails = new UserAccountViewModel();
-
 				// Use the Tbl_Users model to get the user details
 				Tbl_Users user = new Tbl_Users();
-				userDetails = user.GetUserDetailsAsync(userID.Value, connectionString);
+
+				// Create the UserAccountViewModel
+				UserAccountViewModel userDetails = userDetails = await user.GetUserDetailsAsync(userID.Value, connectionString);
 
 				return View(userDetails);
 			}
@@ -104,36 +103,43 @@ namespace CloudDevPOE.Controllers
 		}
 
 		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
-		public IActionResult CheckoutCart()
+		public async Task<IActionResult> CheckoutCart()
 		{
 			var connectionString = _configuration.GetConnectionString("DefaultConnection");
 
 			// Safely get the user ID from the session
 			int? userID = _httpContextAccessor.HttpContext?.Session.GetInt32("UserId");
+			if (!userID.HasValue)
+			{
+				// The user is not logged in, return a JSON result
+				return Json(new { success = false, message = "User is not logged in" });
+			}
 
 			// Use the Tbl_Carts model to checkout the active cart
 			Tbl_Carts carts = new Tbl_Carts();
+			await carts.CheckoutCartAsync(userID.Value, connectionString);
 
-			carts.CheckoutCart(userID.Value, connectionString);
-
-			decimal newTotal = 0;
 			return RedirectToAction("UserProfile");
 		}
 
 		//--------------------------------------------------------------------------------------------------------------------------//
-		public IActionResult UpdateCartQuantity(int cartItemId, int quantity)
+		public async Task<IActionResult> UpdateCartQuantity(int cartItemId, int quantity)
 		{
 			var connectionString = _configuration.GetConnectionString("DefaultConnection");
 
 			// Safely get the user ID from the session
 			int? userID = _httpContextAccessor.HttpContext?.Session.GetInt32("UserId");
+			if (!userID.HasValue)
+			{
+				// The user is not logged in, return a JSON result
+				return Json(new { success = false, message = "User is not logged in" });
+			}
 
 			Tbl_Cart_Items cartItems = new Tbl_Cart_Items();
+			await cartItems.UpdateItemQuantityAsync(cartItemId, quantity, connectionString);
+
 			Tbl_Carts carts = new Tbl_Carts();
-
-			cartItems.UpdateItemQuantity(cartItemId, quantity, connectionString);
-
-			int activeCartId = carts.GetActiveCartID(userID.Value, connectionString);
+			int activeCartId = await carts.GetActiveCartIDAsync(userID.Value, connectionString);
 
 			decimal newTotal = carts.GetCartTotal(activeCartId, connectionString);
 
@@ -141,19 +147,23 @@ namespace CloudDevPOE.Controllers
 		}
 
 		//--------------------------------------------------------------------------------------------------------------------------//
-		public IActionResult RemoveCartItem(int cartItemId)
+		public async Task<IActionResult> RemoveCartItem(int cartItemId)
 		{
 			var connectionString = _configuration.GetConnectionString("DefaultConnection");
 
 			// Safely get the user ID from the session
 			int? userID = _httpContextAccessor.HttpContext?.Session.GetInt32("UserId");
+			if (!userID.HasValue)
+			{
+				// The user is not logged in, return a JSON result
+				return Json(new { success = false, message = "User is not logged in" });
+			}
 
 			Tbl_Cart_Items cartItems = new Tbl_Cart_Items();
+			await cartItems.RemoveItemFromCartAsync(cartItemId, connectionString);
+
 			Tbl_Carts carts = new Tbl_Carts();
-
-			cartItems.RemoveItemFromCart(cartItemId, connectionString);
-
-			int activeCartId = carts.GetActiveCartID(userID.Value, connectionString);
+			int activeCartId = await carts.GetActiveCartIDAsync(userID.Value, connectionString);
 
 			decimal newTotal = carts.GetCartTotal(activeCartId, connectionString);
 
