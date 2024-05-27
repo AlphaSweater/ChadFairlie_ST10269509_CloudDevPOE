@@ -124,7 +124,6 @@ namespace CloudDevPOE.Controllers
 			return Json(new { newTotal = newTotal.ToString("C", new System.Globalization.CultureInfo("en-ZA")) });
 		}
 
-
 		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
 		public async Task<IActionResult> CheckoutCart()
 		{
@@ -192,6 +191,36 @@ namespace CloudDevPOE.Controllers
 
 			return Json(new { newTotal = newTotal.ToString("C", new System.Globalization.CultureInfo("en-ZA")) });
 		}
+
+		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
+		[HttpPost]
+		public async Task<IActionResult> UpdateStock(int productId, int quantityToAdd)
+		{
+			var connectionString = _configuration.GetConnectionString("DefaultConnection");
+
+			// Get the product model
+			Tbl_Products products = new Tbl_Products();
+
+			if (productId == null)
+			{
+				// The product does not exist, return a JSON result
+				return Json(new { success = false, message = "Product does not exist" });
+			}
+
+			// Add the specified quantity to the existing quantity of the product in the database
+			await products.AddQuantityAsync(productId, quantityToAdd, connectionString);
+
+			return Json(new { success = true, message = "Stock updated successfully" });
+		}
+		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
+		[HttpPost]
+		public async Task<JsonResult> ArchiveProduct(int productId)
+		{
+			var productsModel = new Tbl_Products();
+			await productsModel.ArchiveProductAsync(productId, _configuration.GetConnectionString("DefaultConnection"));
+			return Json(new { success = true });
+		}
+
 
 		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
 	}

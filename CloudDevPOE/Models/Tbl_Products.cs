@@ -39,6 +39,9 @@ namespace CloudDevPOE.Models
 		public bool ProductAvailability { get; set; }
 
 		//--------------------------------------------------------------------------------------------------------------------------//
+		public bool IsArchived { get; set; }
+
+		//--------------------------------------------------------------------------------------------------------------------------//
 		public Tbl_Product_Images ProductImagesModel { get; set; } = new Tbl_Product_Images();
 
 		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
@@ -100,23 +103,24 @@ namespace CloudDevPOE.Models
 				con.Open();
 				string productSql =
 				@"  SELECT
-                        tp.product_id,
-                        tp.name,
-                        tp.category,
-                        tp.description,
-                        tp.price,
-                        tp.availability,
-                        tpi.image_url
-                    FROM
-                        ((tbl_products tp
-                    INNER JOIN
-                        (
-                        SELECT MIN(image_id) AS image_id, product_id
-                        FROM tbl_product_images
-                        GROUP BY product_id
-                        ) AS first_image ON tp.product_id = first_image.product_id)
-                    INNER JOIN
-                        tbl_product_images tpi ON first_image.image_id = tpi.image_id)";
+                tp.product_id,
+                tp.name,
+                tp.category,
+                tp.description,
+                tp.price,
+                tp.availability,
+                tpi.image_url
+            FROM
+                ((tbl_products tp
+            INNER JOIN
+                (
+                SELECT MIN(image_id) AS image_id, product_id
+                FROM tbl_product_images
+                GROUP BY product_id
+                ) AS first_image ON tp.product_id = first_image.product_id)
+            INNER JOIN
+                tbl_product_images tpi ON first_image.image_id = tpi.image_id)
+            WHERE tp.is_archived = 0"; // Exclude archived products
 
 				using (var productCmd = new SqlCommand(productSql, con))
 				{
@@ -214,7 +218,7 @@ namespace CloudDevPOE.Models
                   GROUP BY product_id
               ) AS first_image ON tblp.product_id = first_image.product_id
               LEFT JOIN tbl_product_images tpi ON first_image.image_id = tpi.image_id
-              WHERE tblp.user_id = @UserID";
+              WHERE tblp.user_id = @UserID AND tblp.is_archived = 0";
 				using (var productCmd = new SqlCommand(productSql, con))
 				{
 					productCmd.Parameters.AddWithValue("@UserID", userID);
@@ -243,5 +247,44 @@ namespace CloudDevPOE.Models
 
 			return products;
 		}
+
+		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
+		public async Task AddQuantityAsync(int productId, int quantityToAdd, string connectionString)
+		{
+			using (var con = new SqlConnection(connectionString))
+			{
+				await con.OpenAsync();
+
+				string sql = "UPDATE tbl_products SET quantity = quantity + @QuantityToAdd WHERE product_id = @ProductId";
+
+				using (var cmd = new SqlCommand(sql, con))
+				{
+					cmd.Parameters.AddWithValue("@ProductId", productId);
+					cmd.Parameters.AddWithValue("@QuantityToAdd", quantityToAdd);
+
+					await cmd.ExecuteNonQueryAsync();
+				}
+			}
+		}
+
+		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
+		public async Task ArchiveProductAsync(int productId, string connectionString)
+		{
+			using (var con = new SqlConnection(connectionString))
+			{
+				await con.OpenAsync();
+
+				string sql = "UPDATE tbl_products SET is_archived = 1 WHERE product_id = @ProductId";
+
+				using (var cmd = new SqlCommand(sql, con))
+				{
+					cmd.Parameters.AddWithValue("@ProductId", productId);
+
+					await cmd.ExecuteNonQueryAsync();
+				}
+			}
+		}
+
+		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
 	}
 }

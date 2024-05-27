@@ -10,11 +10,42 @@
 			display: flex;
 			justify-content: space-between;
 			align-items: center;
+			padding: 10px;
+			background-color: #f8f9fa;
+			border: 1px solid #ddd;
+			border-radius: 5px;
 		}
 
 			.order-header .btn-link {
 				flex-grow: 1;
 				text-align: left;
+				font-weight: bold;
+				color: #333;
+				font-size: 16px;
+				padding: 0;
+				margin: 0;
+			}
+
+		.order-info {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			width: 100%;
+		}
+
+		.order-id,
+		.order-date,
+		.order-total {
+			margin-right: 15px;
+			display: flex;
+			flex-direction: column;
+		}
+
+			.order-id span,
+			.order-date span,
+			.order-total span {
+				font-weight: normal;
+				color: #666;
 			}
 
 		.cart-summary {
@@ -72,7 +103,20 @@
 							<div class="card-header" id="heading-@order.Cart.CartID">
 								<div class="order-header">
 									<button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse-@order.Cart.CartID" aria-expanded="true" aria-controls="collapse-@order.Cart.CartID">
-										Order ID: @order.Cart.CartID - Date: @order.TransactionDate - Total: @order.TotalValue.ToString("C", new System.Globalization.CultureInfo("en-ZA"))
+										<div class="order-info">
+											<div class="order-id">
+												<span>Order ID:</span>
+												@order.Cart.CartID
+											</div>
+											<div class="order-date">
+												<span>Date:</span>
+												@order.TransactionDate.ToString("dd MMM yyyy HH:mm")
+											</div>
+											<div class="order-total">
+												<span>Total:</span>
+												@order.TotalValue.ToString("C", new System.Globalization.CultureInfo("en-ZA"))
+											</div>
+										</div>
 									</button>
 								</div>
 							</div>
@@ -117,20 +161,28 @@
 							<th>Image</th>
 							<th>Name</th>
 							<th>Price</th>
+							<th>Stock</th>
 							<th>Actions</th>
 						</tr>
 					</thead>
 					<tbody>
 						@foreach (var product in Model.ListedProducts)
 						{
+								var productID = product.ProductID;
+								var availableQuantity = product.AvailableQuantity;
+								var minSpinValue = availableQuantity * -1;
 							<tr>
 								<td>@product.ProductID</td>
 								<td><img src="@product.ProductMainImageUrl" alt="@product.ProductName" class="img-thumbnail" width="100" height="auto" /></td>
 								<td>@product.ProductName</td>
 								<td>@product.ProductPrice.ToString("C", new System.Globalization.CultureInfo("en-ZA"))</td>
+								<td class="stock-amount">@product.AvailableQuantity</td>
 								<td>
-									<a href="@Url.Action("EditProduct", "Products", new { id = product.ProductID })" class="btn btn-sm btn-warning">Edit</a>
-									<a href="@Url.Action("DeleteProduct", "Products", new { id = product.ProductID })" class="btn btn-sm btn-danger">Delete</a>
+									<div class="stock-update">
+										<input type="number" class="form-control stock-input" data-product-id="@product.ProductID" min="@minSpinValue" value="0" />
+										<button class="btn btn-sm btn-success add-stock" data-product-id="@product.ProductID">Add Stock</button>
+									</div>
+									<button type="button" class="btn btn-danger archive-button" data-product-id="@product.ProductID">Delete</button>
 								</td>
 							</tr>
 						}
@@ -307,6 +359,97 @@
 					}
 				});
 			});
+
+			$('.add-stock').click(function () {
+				var button = $(this);
+				var productId = button.data('product-id');
+				var quantityToAdd = parseInt(button.siblings('.stock-input').val());
+
+				var actionText = quantityToAdd < 0 ? "remove" : "add";
+				var absoluteQuantity = Math.abs(quantityToAdd);
+
+				Swal.fire({
+					title: 'Are you sure?',
+					text: "You are about to " + actionText + " " + absoluteQuantity + " items to the stock of product " + productId,
+					icon: 'warning',
+					showCancelButton: true,
+					confirmButtonColor: '#3085d6',
+					cancelButtonColor: '#d33',
+					confirmButtonText: 'Yes, ' + actionText + ' it!'
+				}).then((result) => {
+					if (result.isConfirmed) {
+						$.post('@Url.Action("UpdateStock", "User")', { productId: productId, quantityToAdd: quantityToAdd })
+							.done(function (data) {
+								if (data.success) {
+									Swal.fire(
+										'Success!',
+										data.message,
+										'success'
+									);
+									// Update the stock amount in the table
+									var currentStock = parseInt(button.closest('tr').find('.stock-amount').text());
+									var newStock = currentStock + quantityToAdd;
+									button.closest('tr').find('.stock-amount').text(newStock);
+								} else {
+									Swal.fire(
+										'Error!',
+										data.message,
+										'error'
+									);
+								}
+							})
+							.fail(function () {
+								Swal.fire(
+									'Error!',
+									'An error occurred while updating the stock.',
+									'error'
+								);
+							});
+					}
+				});
+			});
+
+			$('.archive-button').click(function () {
+				var button = $(this);
+				var productId = button.data('product-id');
+
+				Swal.fire({
+					title: 'Are you sure?',
+					text: "You are about to delete the product with ID " + productId,
+					icon: 'warning',
+					showCancelButton: true,
+					confirmButtonColor: '#3085d6',
+					cancelButtonColor: '#d33',
+					confirmButtonText: 'Yes, delete it!'
+				}).then((result) => {
+					if (result.isConfirmed) {
+						$.ajax({
+							url: '@Url.Action("ArchiveProduct", "User")',
+							type: 'POST',
+							data: { productId: productId },
+							success: function (response) {
+								if (response.success) {
+									button.closest('tr').remove();
+									Swal.fire(
+										'Deleted!',
+										'The product has been deleted.',
+										'success'
+									);
+								} else {
+									Swal.fire(
+										'Error!',
+										'An error occurred while deleting the product.',
+										'error'
+									);
+								}
+							}
+						});
+					}
+				});
+			});
+
+
+
 		});
 	</script>
 </body>

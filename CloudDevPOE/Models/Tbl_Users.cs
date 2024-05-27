@@ -179,9 +179,10 @@ namespace CloudDevPOE.Models
 									ProductDescription = reader.GetString(4),
 									ProductPrice = reader.GetDecimal(5),
 									AvailableQuantity = reader.GetInt32(6),
-									SellerName = reader.GetString(8),
-									ProductMainImageUrl = reader.IsDBNull(9) ? "/images/Default/DefaultIcon.jpg" : reader.GetString(9)
+									SellerName = reader.GetString(7),
+									ProductMainImageUrl = reader.IsDBNull(8) ? "/images/Default/DefaultIcon.jpg" : reader.GetString(8)
 								};
+
 								user.ListedProducts.Add(product);
 							}
 						}
