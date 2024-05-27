@@ -169,6 +169,12 @@
 			<!-- My Listings Tab -->
 			<div class="tab-pane fade" id="my-listings" role="tabpanel" aria-labelledby="my-listings-tab">
 				<input type="text" id="my-listings-search" class="form-control mb-3" placeholder="Search My Listings...">
+				<div class="mb-3">
+					<button class="btn btn-outline-danger" id="filter-out-stock">Out of Stock</button>
+					<button class="btn btn-outline-warning" id="filter-low-stock">Low Stock</button>
+					<button class="btn btn-outline-success" id="filter-high-stock">High Stock</button>
+					<button class="btn btn-outline-secondary" id="filter-reset">Reset</button>
+				</div>
 				<table class="table mt-3">
 					<thead>
 						<tr>
@@ -194,7 +200,7 @@
 								<td class="stock-amount">@product.AvailableQuantity</td>
 								<td>
 									<div class="stock-update">
-										<input type="number" class="form-control stock-input" data-product-id="@product.ProductID" value="0" min="@minSpinValue"/>
+										<input type="number" class="form-control stock-input" data-product-id="@product.ProductID" value="0" min="@minSpinValue" />
 										<button class="btn btn-sm btn-success add-stock" data-product-id="@product.ProductID">Add Stock</button>
 									</div>
 									<button type="button" class="btn btn-danger archive-button" data-product-id="@product.ProductID">Delete</button>
@@ -204,7 +210,6 @@
 					</tbody>
 				</table>
 			</div>
-
 
 			<!-- Cart Tab -->
 			<div class="tab-pane fade" id="cart" role="tabpanel" aria-labelledby="cart-tab">
@@ -299,6 +304,56 @@
 					$(this).addClass('stock-high');
 				}
 			});
+
+			// Filter Out of Stock
+			$('#filter-out-stock').on('click', function () {
+				filterProducts('out');
+			});
+
+			// Filter Low Stock
+			$('#filter-low-stock').on('click', function () {
+				filterProducts('low');
+			});
+
+			// Filter High Stock
+			$('#filter-high-stock').on('click', function () {
+				filterProducts('high');
+			});
+
+			// Reset Filter
+			$('#filter-reset').on('click', function () {
+				$('#my-listings-body .listing-row').show();
+			});
+
+			// Function to filter products based on stock levels
+			function filterProducts(stockLevel) {
+				$('#my-listings-body .listing-row').each(function () {
+					var stockAmount = parseInt($(this).find('.stock-amount').text());
+					switch (stockLevel) {
+						case 'out':
+							if (stockAmount > 0) {
+								$(this).hide();
+							} else {
+								$(this).show();
+							}
+							break;
+						case 'low':
+							if (stockAmount >= 5) {
+								$(this).hide();
+							} else {
+								$(this).show();
+							}
+							break;
+						case 'high':
+							if (stockAmount < 5) {
+								$(this).hide();
+							} else {
+								$(this).show();
+							}
+							break;
+					}
+				});
+			}
 
 			$('.quantity-input').on('change', function () {
 				var cartItemId = $(this).data('cart-item-id');
@@ -520,5 +575,3 @@
 		});
 	</script>
 </body>
-
-
