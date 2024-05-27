@@ -1,6 +1,7 @@
 ﻿@model CloudDevPOE.Models.Tbl_Products
 @{
 	ViewData["Title"] = "Add Product";
+	var userID = ViewData["userID"];
 }
 <head>
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
@@ -268,7 +269,7 @@
 			const newImageBox = document.createElement('div');
 			newImageBox.classList.add('image-box');
 			newImageBox.innerHTML = `<img src="${croppedImageData}" alt="Cropped Image"/>
-											 <button type="button" class="remove-image" onclick="removeImage(event, '${file.name}')">&times;</button>`;
+												 <button type="button" class="remove-image" onclick="removeImage(event, '${file.name}')">&times;</button>`;
 			const container = document.getElementById('image-upload-container');
 			container.insertBefore(newImageBox, document.getElementById('add-image-box'));
 
@@ -283,8 +284,47 @@
 		}
 
 		document.getElementById('product-form').addEventListener('submit', function (event) {
+			// Safely get the user ID from the session
+			var userID = @userID;
+			if (!userID) {
+				// The user is not logged in, prevent form submission and show the login modal
+				event.preventDefault();
+				showLoginModalAndSubmitForm();
+				return;
+			}
+
 			event.preventDefault();
 
+			// Get the form values
+			var productName = document.getElementById('product-name').value;
+			var productCategory = document.getElementById('product-category').value;
+			var productDescription = document.getElementById('product-description').value;
+			var productPrice = document.getElementById('product-price').value;
+			var productQuantity = document.getElementById('product-quantity').value;
+
+			// Validate the form values
+			if (productName.length === 0 || productCategory.length === 0 || productDescription.length === 0 || productPrice.length === 0 || productQuantity.length === 0) {
+				alert('Fields cannot be blank.');
+				return;
+			}
+			if (productName.length > 50) {
+				alert('Product name cannot be longer than 50 characters.');
+				return;
+			}
+			if (productDescription.length > 1500) {
+				alert('Product description cannot be longer than 1500 characters.');
+				return;
+			}
+			if (isNaN(productPrice) || productPrice < 0 || productPrice > 99999999.99) {
+				alert('Product price must be a positive number and cannot be larger than 99999999.99.');
+				return;
+			}
+			if (!Number.isInteger(Number(productQuantity)) || productQuantity < 0) {
+				alert('Product quantity must be a positive integer.');
+				return;
+			}
+
+			// If the input is valid, continue with the form submission
 			const formData = new FormData(this);
 			accumulatedFiles.forEach((file) => {
 				formData.append('ProductImagesModel.ProductImages', file);

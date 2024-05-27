@@ -25,8 +25,6 @@ function showLoginModalAndSubmitForm() {
 		var input = $(this).val();
 		if (input.length > 50) {
 			$('#errorBar' + $(this).attr('name').split('-')[1].charAt(0).toUpperCase() + $(this).attr('name').split('-')[1].slice(1)).text("Cannot be longer than 50 characters.").show();
-		} else if (input.length === 0) {
-			$('#errorBar' + $(this).attr('name').split('-')[1].charAt(0).toUpperCase() + $(this).attr('name').split('-')[1].slice(1)).hide();
 		} else {
 			$('#errorBar' + $(this).attr('name').split('-')[1].charAt(0).toUpperCase() + $(this).attr('name').split('-')[1].slice(1)).hide();
 		}

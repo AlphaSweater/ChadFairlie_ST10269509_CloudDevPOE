@@ -48,6 +48,7 @@ namespace CloudDevPOE.Controllers
 		{
 			// Set the user details for the view and set the ViewData property
 			ViewData["UserDetails"] = SetUserDetails();
+			ViewData["userID"] = _httpContextAccessor.HttpContext?.Session.GetInt32("UserId");
 
 			return View();
 		}
