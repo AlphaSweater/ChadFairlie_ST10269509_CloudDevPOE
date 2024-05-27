@@ -59,6 +59,19 @@
 			z-index: 1000;
 			max-width: 300px;
 		}
+
+		/* Add the new styles for stock levels */
+		.stock-out {
+			background-color: #f8d7da;
+		}
+
+		.stock-low {
+			background-color: #fff3cd;
+		}
+
+		.stock-high {
+			background-color: #d4edda;
+		}
 	</style>
 </head>
 
@@ -233,6 +246,8 @@
 					<button class="CheckOut btn btn-primary btn-block">Checkout</button>
 				</div>
 			</div>
+		</div>
+	</div>
 
 	<script>
 		$(document).ready(function () {
@@ -268,6 +283,18 @@
 				$('#cart-body .cart-row').filter(function () {
 					$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
 				});
+			});
+
+			// Apply stock level classes
+			$('#my-listings-body .listing-row').each(function () {
+				var stockAmount = parseInt($(this).find('.stock-amount').text());
+				if (stockAmount === 0) {
+					$(this).addClass('stock-out');
+				} else if (stockAmount < 5) {
+					$(this).addClass('stock-low');
+				} else {
+					$(this).addClass('stock-high');
+				}
 			});
 
 			$('.quantity-input').on('change', function () {
@@ -333,8 +360,6 @@
 					}
 				});
 			});
-
-
 
 			$('.CheckOut').on('click', function (event) {
 				event.preventDefault();
@@ -420,6 +445,17 @@
 									var currentStock = parseInt(button.closest('tr').find('.stock-amount').text());
 									var newStock = currentStock + quantityToAdd;
 									button.closest('tr').find('.stock-amount').text(newStock);
+
+									// Update the row's class based on new stock level
+									var row = button.closest('tr');
+									row.removeClass('stock-out stock-low stock-high');
+									if (newStock === 0) {
+										row.addClass('stock-out');
+									} else if (newStock < 5) {
+										row.addClass('stock-low');
+									} else {
+										row.addClass('stock-high');
+									}
 								} else {
 									Swal.fire(
 										'Error!',
@@ -428,7 +464,8 @@
 									);
 								}
 							})
-							.fail(function () {
+							.fail(function (xhr, status, error) {
+								console.error("Error: " + error);
 								Swal.fire(
 									'Error!',
 									'An error occurred while updating the stock.',
@@ -438,48 +475,8 @@
 					}
 				});
 			});
-
-			$('.archive-button').click(function () {
-				var button = $(this);
-				var productId = button.data('product-id');
-
-				Swal.fire({
-					title: 'Are you sure?',
-					text: "You are about to delete the product with ID " + productId,
-					icon: 'warning',
-					showCancelButton: true,
-					confirmButtonColor: '#3085d6',
-					cancelButtonColor: '#d33',
-					confirmButtonText: 'Yes, delete it!'
-				}).then((result) => {
-					if (result.isConfirmed) {
-						$.ajax({
-							url: '@Url.Action("ArchiveProduct", "User")',
-							type: 'POST',
-							data: { productId: productId },
-							success: function (response) {
-								if (response.success) {
-									button.closest('tr').remove();
-									Swal.fire(
-										'Deleted!',
-										'The product has been deleted.',
-										'success'
-									);
-								} else {
-									Swal.fire(
-										'Error!',
-										'An error occurred while deleting the product.',
-										'error'
-									);
-								}
-							}
-						});
-					}
-				});
-			});
-
-
-
 		});
 	</script>
 </body>
+
+
