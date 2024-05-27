@@ -97,6 +97,17 @@
 			display: none; /* Initially hidden */
 			margin-top: -10px;
 		}
+
+		.switch-link {
+			color: var(--font-color);
+			text-decoration: none;
+		}
+
+		.switch-link:hover {
+			color: var(--font-color-sub);
+			text-decoration: underline;
+		}
+
 	</style>
 </head>
 
@@ -111,7 +122,8 @@
 				<input type="password" placeholder="Password" name="login-password" class="inputbox" required>
 				<div id="errorBar" class="error-bar"></div>
 				<button type="submit" class="button-confirm">Let's go →</button>
-				<button type="button" id="switchToSignup" class="button-switch">Sign Up</button>
+
+				<a href="#" id="switchToSignup" class="switch-link">Don't have an account with us yet? Register Here!</a>
 			</form>
 
 			<!-- Signup Form -->
@@ -132,7 +144,7 @@
 				<button type="submit" class="button-confirm">Sign Up</button>
 				<div id="errorBarSignup" class="error-bar"></div>
 
-				<button type="button" id="switchToLogin" class="button-switch">Log In</button>
+				<a href="#" id="switchToLogin" class="switch-link">Already have an account? Log In Here!</a>
 			</form>
 		</div>
 	</div>

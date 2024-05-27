@@ -259,6 +259,15 @@
 
 	<script>
 		$(document).ready(function () {
+			var hash = window.location.hash;
+			if (hash == '#cart') {
+				$('#accountTab a[href="#cart"]').tab('show');
+			}
+
+			$('#accountTab a').on('click', function () {
+				history.pushState("", document.title, window.location.pathname + window.location.search);
+			});
+
 			// Fetch the latest cart total from the server
 			$.ajax({
 				url: '/User/GetCartTotal',

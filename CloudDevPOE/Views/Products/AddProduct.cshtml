@@ -5,32 +5,35 @@
 <head>
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
 	<style>
-		:root {
-			--item-size: 150px;
-			--items-per-row: 3;
-			--margin: 2px;
-			--container-padding: 5px;
-			--total-margin: calc(var(--margin) * 2);
-			--container-width: calc((var(--item-size) + var(--total-margin)) * var(--items-per-row) + (var(--container-padding) * 2));
-		}
-
-		#crop-modal .modal-dialog {
-			max-width: 90vw;
-			max-height: 90vh;
-		}
-
-		#crop-modal .modal-body {
+		body {
+			font-family: 'Arial', sans-serif;
+			background-color: #fdf8f3;
+			margin: 0;
+			padding: 0;
 			display: flex;
 			justify-content: center;
 			align-items: center;
-			height: 70vh;
+			height: 100vh;
 		}
 
-		#crop-image {
-			max-width: 100%;
-			max-height: 100%;
-			width: auto;
-			height: auto;
+		.container {
+			background-color: #ffffff;
+			border-radius: 10px;
+			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+			padding: 30px;
+			width: 600px;
+			max-width: 90%;
+		}
+
+		h1 {
+			color: #333;
+			text-align: center;
+		}
+
+		p {
+			color: #666;
+			text-align: center;
+			margin-bottom: 10px;
 		}
 
 		.form-container {
@@ -38,26 +41,107 @@
 			flex-direction: column;
 		}
 
+			.form-container input,
+			.form-container textarea,
+			.form-container select {
+				width: 100%;
+				padding: 10px;
+				margin-bottom: 10px;
+				border: 1px solid #ccc;
+				border-radius: 5px;
+				font-size: 16px;
+			}
+
+			.form-container textarea {
+				resize: vertical;
+			}
+
 		.image-upload-container {
 			display: flex;
 			flex-wrap: wrap;
-			padding: var(--container-padding);
-			width: var(--container-width);
+			justify-content: center;
+			padding: 10px;
+			border: 2px dashed #ccc;
+			border-radius: 10px;
+			margin-bottom: 20px;
+			background-color: #f9f9f9;
 		}
 
 		.image-box, .upload-box {
-			width: var(--item-size);
-			min-height: var(--item-size);
-			height: auto;
-			margin: var(--margin);
+			position: relative;
+			width: 150px;
+			height: 150px;
+			margin: 5px;
 			display: flex;
 			justify-content: center;
 			align-items: center;
 			border: 1px solid #ccc;
-			cursor: pointer !important;
+			border-radius: 5px;
+			background-color: #fff;
+			cursor: pointer;
 		}
 
 			.image-box img {
+				max-width: 100%;
+				max-height: 100%;
+				border-radius: 5px;
+			}
+
+			.image-box .remove-image {
+				position: absolute;
+				top: -10px;
+				right: -10px;
+				background-color: #ff0000;
+				border: none;
+				border-radius: 50%;
+				cursor: pointer;
+				font-size: 24px;
+				padding: 0;
+				width: 30px;
+				height: 30px;
+				color: #fff;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+			}
+
+		.upload-box {
+			font-size: 48px;
+			color: #999;
+		}
+
+			.upload-box:hover {
+				color: #555;
+			}
+
+		button {
+			width: 100%;
+			padding: 10px;
+			background-color: #28a745;
+			color: #fff;
+			border: none;
+			border-radius: 5px;
+			font-size: 16px;
+			cursor: pointer;
+			transition: background-color 0.3s ease;
+		}
+
+			button:hover {
+				background-color: #218838;
+			}
+
+		.modal-header {
+			border-bottom: none;
+		}
+
+		.modal-body {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			max-height: 80vh;
+		}
+
+			.modal-body img {
 				max-width: 100%;
 				max-height: 100%;
 			}
@@ -65,133 +149,161 @@
 </head>
 
 <body>
-	<h1>Add Product</h1>
-	<p>Please fill in the details of the product you want to add.</p>
+	<div class="container">
+		<h1>Add Product</h1>
+		<p>Please fill in the details of the product you want to add.</p>
 
-	<form id="product-form" action="AddProduct" method="post" enctype="multipart/form-data">
-		<div class="form-container">
-			<input type="text" id="product-name" name="ProductName" placeholder="Product Name" required>
-			<input type="text" id="product-category" name="ProductCategory" placeholder="Product Category" required>
-			<textarea id="product-description" name="ProductDescription" placeholder="Product Description" required></textarea>
-			<input type="number" id="product-price" name="ProductPrice" placeholder="Product Price" required>
-			<input type="number" id="product-quantity" name="ProductQuantity" placeholder="Product Quantity" required>
+		<form id="product-form" action="AddProduct" method="post" enctype="multipart/form-data">
+			<div class="form-container">
+				<input type="text" id="product-name" name="ProductName" placeholder="Product Name" required>
+				<select id="product-category" name="ProductCategory" required>
+					<option value="" disabled selected>Select Category</option>
+					<option value="Accessories">Accessories</option>
+					<option value="Art & Decor">Art & Decor</option>
+					<option value="Bags & Purses">Bags & Purses</option>
+					<option value="Ceramics">Ceramics</option>
+					<option value="Clothing & Apparel">Clothing & Apparel</option>
+					<option value="Crafts & DIY">Crafts & DIY</option>
+					<option value="Food & Beverages">Food & Beverages</option>
+					<option value="Furniture">Furniture</option>
+					<option value="Gifts & Keepsakes">Gifts & Keepsakes</option>
+					<option value="Health & Beauty">Health & Beauty</option>
+					<option value="Home & Living">Home & Living</option>
+					<option value="Jewelry & Watches">Jewelry & Watches</option>
+					<option value="Kids & Baby">Kids & Baby</option>
+					<option value="Leather Goods">Leather Goods</option>
+					<option value="Pottery">Pottery</option>
+					<option value="Textiles & Fabrics">Textiles & Fabrics</option>
+					<option value="Toys & Games">Toys & Games</option>
+					<option value="Woodwork & Carving">Woodwork & Carving</option>
+					<option value="Misc">Misc</option>
+				</select>
+				<textarea id="product-description" name="ProductDescription" placeholder="Product Description" required></textarea>
+				<input type="number" id="product-price" name="ProductPrice" placeholder="Product Price" required>
+				<input type="number" id="product-quantity" name="ProductQuantity" placeholder="Product Quantity" required>
 
-			<div id="image-upload-container" class="image-upload-container">
-				<input type="file" id="image-upload-input" class="image-upload-input" accept="image/*" style="display:none;" onchange="handleImageUpload(event)" />
-				<div id="add-image-box" class="upload-box" onclick="document.getElementById('image-upload-input').click();">+</div>
+				<div id="image-upload-container" class="image-upload-container">
+					<input type="file" id="image-upload-input" class="image-upload-input" accept="image/*" style="display:none;" onchange="handleImageUpload(event)" />
+					<div id="add-image-box" class="upload-box" onclick="document.getElementById('image-upload-input').click();">+</div>
+				</div>
+
+				<button type="submit">Submit</button>
 			</div>
-
-			<button type="submit">Submit</button>
-		</div>
-	</form>
+		</form>
+	</div>
 
 	<!-- Image cropping modal -->
 	<div class="modal fade" id="crop-modal" tabindex="-1" role="dialog" aria-labelledby="cropModalLabel" aria-hidden="true">
 		<div class="modal-dialog modal-lg">
 			<div class="modal-content">
 				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 					<h4 class="modal-title" id="cropModalLabel">Edit Photo</h4>
 				</div>
 				<div class="modal-body">
 					<img id="crop-image" src="" alt="Image for cropping" />
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 					<button type="button" id="crop-button" class="btn btn-primary">Crop</button>
 				</div>
 			</div>
 		</div>
 	</div>
 
-	@section Scripts {
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
-		<script>
-			let accumulatedFiles = [];
-			let cropper = null;
-			let currentFile = null;
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+	<script>
+		let accumulatedFiles = [];
+		let cropper = null;
+		let currentFile = null;
 
-			function handleImageUpload(event) {
-				const files = event.target.files;
-				if (files.length > 0) {
-					currentFile = files[0];
-					const reader = new FileReader();
-					reader.onload = function (e) {
-						const image = document.getElementById('crop-image');
-						image.src = e.target.result;
-						$('#crop-modal').modal('show');
+		function handleImageUpload(event) {
+			const files = event.target.files;
+			if (files.length > 0) {
+				currentFile = files[0];
+				const reader = new FileReader();
+				reader.onload = function (e) {
+					const image = document.getElementById('crop-image');
+					image.src = e.target.result;
+					$('#crop-modal').modal('show');
 
-						if (cropper !== null) {
-							cropper.destroy();
-						}
+					if (cropper !== null) {
+						cropper.destroy();
+					}
 
-						setTimeout(() => {
-							cropper = new Cropper(image, {
-								aspectRatio: 4 / 5,
-								viewMode: 2,
-								dragMode: 'move',
-								autoCropArea: 1,
-								cropBoxResizable: true,
-								resize: true,
-								zoomable: true,
-							});
-						}, 200);
+					setTimeout(() => {
+						cropper = new Cropper(image, {
+							aspectRatio: 4 / 5,
+							viewMode: 2,
+							dragMode: 'move',
+							autoCropArea: 1,
+							cropBoxResizable: true,
+							resize: true,
+							zoomable: true,
+						});
+					}, 200);
 
-						document.getElementById('crop-button').removeEventListener('click', handleCropButton);
-						document.getElementById('crop-button').addEventListener('click', handleCropButton);
-					};
-					reader.readAsDataURL(currentFile);
-				}
+					document.getElementById('crop-button').removeEventListener('click', handleCropButton);
+					document.getElementById('crop-button').addEventListener('click', handleCropButton);
+				};
+				reader.readAsDataURL(currentFile);
 			}
+		}
 
-			function handleCropButton() {
-				const croppedImageData = cropper.getCroppedCanvas().toDataURL();
+		function handleCropButton() {
+			const croppedImageData = cropper.getCroppedCanvas().toDataURL();
 
-				const byteString = atob(croppedImageData.split(',')[1]);
-				const mimeString = croppedImageData.split(',')[0].split(':')[1].split(';')[0];
-				const ab = new ArrayBuffer(byteString.length);
-				const ia = new Uint8Array(ab);
-				for (let i = 0; i < byteString.length; i++) {
-					ia[i] = byteString.charCodeAt(i);
-				}
-				const blob = new Blob([ab], { type: mimeString });
-
-				const file = new File([blob], currentFile.name, { type: mimeString, lastModified: Date.now() });
-
-				accumulatedFiles.push(file);
-
-				const newImageBox = document.createElement('div');
-				newImageBox.classList.add('image-box');
-				newImageBox.innerHTML = `<img src="${croppedImageData}" alt="Cropped Image"/>`;
-				const container = document.getElementById('image-upload-container');
-				container.insertBefore(newImageBox, document.getElementById('add-image-box'));
-
-				$('#crop-modal').modal('hide');
+			const byteString = atob(croppedImageData.split(',')[1]);
+			const mimeString = croppedImageData.split(',')[0].split(':')[1].split(';')[0];
+			const ab = new ArrayBuffer(byteString.length);
+			const ia = new Uint8Array(ab);
+			for (let i = 0; i < byteString.length; i++) {
+				ia[i] = byteString.charCodeAt(i);
 			}
+			const blob = new Blob([ab], { type: mimeString });
 
-			document.getElementById('product-form').addEventListener('submit', function (event) {
-				event.preventDefault();
+			const file = new File([blob], currentFile.name, { type: mimeString, lastModified: Date.now() });
 
-				const formData = new FormData(this);
-				accumulatedFiles.forEach((file) => {
-					formData.append('ProductImagesModel.ProductImages', file);
-				});
+			accumulatedFiles.push(file);
 
-				fetch(this.action, {
-					method: 'POST',
-					body: formData,
-				})
-					.then(response => {
-						if (response.ok) {
-							window.location.href = '/Products/MyWork';
-						} else {
-							console.error('Server responded with an error status');
-						}
-					})
-					.catch((error) => {
-						console.error('Error:', error);
-					});
+			const newImageBox = document.createElement('div');
+			newImageBox.classList.add('image-box');
+			newImageBox.innerHTML = `<img src="${croppedImageData}" alt="Cropped Image"/>
+											 <button type="button" class="remove-image" onclick="removeImage(event, '${file.name}')">&times;</button>`;
+			const container = document.getElementById('image-upload-container');
+			container.insertBefore(newImageBox, document.getElementById('add-image-box'));
+
+			$('#crop-modal').modal('hide');
+		}
+
+		function removeImage(event, fileName) {
+			const imageBox = event.target.parentElement;
+			imageBox.remove();
+
+			accumulatedFiles = accumulatedFiles.filter(file => file.name !== fileName);
+		}
+
+		document.getElementById('product-form').addEventListener('submit', function (event) {
+			event.preventDefault();
+
+			const formData = new FormData(this);
+			accumulatedFiles.forEach((file) => {
+				formData.append('ProductImagesModel.ProductImages', file);
 			});
-		</script>
-	}
+
+			fetch(this.action, {
+				method: 'POST',
+				body: formData,
+			})
+				.then(response => {
+					if (response.ok) {
+						window.location.href = '/Products/MyWork';
+					} else {
+						console.error('Server responded with an error status');
+					}
+				})
+				.catch((error) => {
+					console.error('Error:', error);
+				});
+		});
+	</script>
 </body>

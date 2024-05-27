@@ -86,7 +86,8 @@ function showLoginModalAndSubmitForm() {
 
 	//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
 	// Switch to the login form
-	$('#switchToLogin').on('click', function () {
+	$('#switchToLogin').on('click', function (e) {
+		e.preventDefault();
 		$('#signupForm').hide();
 		$('#loginForm').show();
 	});
@@ -121,7 +122,8 @@ function showLoginModalAndSubmitForm() {
 
 	//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
 	// Switch to the signup form
-	$('#switchToSignup').on('click', function () {
+	$('#switchToSignup').on('click', function (e) {
+		e.preventDefault();
 		$('#loginForm').hide();
 		$('#signupForm').show();
 	});

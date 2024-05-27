@@ -26,7 +26,7 @@
 			<a href="@Url.Action("Logout", "User")">Logout</a>
 		</div>
 	</div>
-	<div class="bx-icon" onclick="location.href='@Url.Action("Cart", "Shop")'">
+	<div class="bx-icon" onclick="location.href='@Url.Action("UserProfile", "User")#cart'">
 		<i class='bx bx-cart'></i>
 		<span class="cart-badge">@Model.ActiveCartSize</span>
 	</div>
