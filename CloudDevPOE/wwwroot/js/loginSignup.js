@@ -17,9 +17,55 @@ function showLoginModalAndSubmitForm() {
 		$('#errorBar').hide();
 	});
 
-	// Hide the error bar when the user starts typing in the signup form
-	$('input[name="signup-name"], input[name="signup-surname"], input[name="signup-email"], input[name="signup-password"], input[name="signup-confirmPassword"]').on('input', function () {
-		$('#errorBarSignup').hide();
+	// Live validation for the signup form
+	$('input[name="signup-name"]').on('input', function () {
+		var name = $(this).val();
+		if (name.length > 50) {
+			$('#errorBarName').text("Name cannot be longer than 50 characters.").show();
+		} else {
+			$('#errorBarName').hide();
+		}
+	});
+
+	$('input[name="signup-surname"]').on('input', function () {
+		var surname = $(this).val();
+		if (surname.length > 50) {
+			$('#errorBarSurname').text("Surname cannot be longer than 50 characters.").show();
+		} else {
+			$('#errorBarSurname').hide();
+		}
+	});
+
+	$('input[name="signup-email"]').on('input', function () {
+		var email = $(this).val();
+		if (email.length > 255) {
+			$('#errorBarEmail').text("Email cannot be longer than 255 characters.").show();
+		} else if (!/^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/.test(email)) {
+			$('#errorBarEmail').text("Invalid Email Address.").show();
+		} else {
+			$('#errorBarEmail').hide();
+		}
+	});
+
+	$('input[name="signup-password"]').on('input', function () {
+		var password = $(this).val();
+		if (password.length > 128) {
+			$('#errorBarPassword').text("Password cannot be longer than 128 characters.").show();
+		} else if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(password)) {
+			$('#errorBarPassword').text("Password must be at least 8 characters and contain at least 1 uppercase letter, 1 lowercase letter, 1 digit, and 1 special character.").show();
+		} else {
+			$('#errorBarPassword').hide();
+		}
+	});
+
+	$('input[name="signup-confirmPassword"]').on('input', function () {
+		var confirmPassword = $(this).val();
+		var password = $('input[name="signup-password"]').val();
+		if (password !== confirmPassword) {
+			$('#errorBarConfirmPassword').text("Passwords do not match.").show();
+		} else {
+			$('#errorBarConfirmPassword').hide();
+		}
 	});
 
 	// Switch to the signup form
