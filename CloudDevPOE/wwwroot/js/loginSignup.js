@@ -1,4 +1,5 @@
-﻿function showLoginModalAndSubmitForm() {
+﻿/*LoginSignup Javascript file*/
+function showLoginModalAndSubmitForm() {
 	// Show the login modal
 	var modal = $('#loginModal');
 	modal.modal('show');
@@ -6,8 +7,14 @@
 	// Close the modal when the backdrop is clicked
 	modal.on('click', function (e) {
 		if ($(e.target).is('.modal')) {
+			console.log('Modal is about to be hidden');
 			modal.modal('hide');
 		}
+	});
+
+	// Hide the error bar when the user starts typing
+	$('input[name="email"], input[name="password"]').on('input', function () {
+		$('#errorBar').hide();
 	});
 
 	// Submit the login form
@@ -26,9 +33,13 @@
 					// Login was successful, refresh the page
 					location.reload();
 				} else {
-					// Login failed, display the error message
-					$('#loginError').text(data.message);
+					// Show the error message in the error bar
+					$('#errorBar').text(data.message).show();
 				}
+			},
+			error: function () {
+				// Show a generic error message
+				$('#errorBar').text("An error occurred while processing your request.").show();
 			}
 		});
 	});

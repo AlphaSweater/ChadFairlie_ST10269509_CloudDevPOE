@@ -1,6 +1,4 @@
-﻿@{
-}
-
+﻿
 <head>
     <style>
         .form {
@@ -103,14 +101,22 @@
             color: var(--font-color);
             cursor: pointer;
         }
+
+		.error-bar {
+			width: 100%;
+			background-color: #ffcccc; /* Light red */
+			color: #cc0000; /* Dark red */
+			padding: 10px;
+			text-align: center;
+			display: none; /* Initially hidden */
+		}
     </style>
 </head>
-
 
 <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <form id="loginForm" method="post" action="/User/Login" class="form">
+            <form id="loginForm" method="post" action="" class="form">
                 <div class="title">Welcome,<br><span>login to continue</span></div>
                 <input type="email" placeholder="Email" name="email" class="inputbox" required>
                 <input type="password" placeholder="Password" name="password" class="inputbox" required>
@@ -123,9 +129,10 @@
                         <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="56.693px" viewBox="0 0 56.693 56.693" version="1.1" id="Layer_1" height="56.693px" class="icon"><path d="M40.43,21.739h-7.645v-5.014c0-1.883,1.248-2.322,2.127-2.322c0.877,0,5.395,0,5.395,0V6.125l-7.43-0.029  c-8.248,0-10.125,6.174-10.125,10.125v5.518h-4.77v8.53h4.77c0,10.947,0,24.137,0,24.137h10.033c0,0,0-13.32,0-24.137h6.77  L40.43,21.739z"></path></svg>
                     </div>
                 </div>
-                <button class="button-confirm">Let`s go →</button>
+				<div id="errorBar" class="error-bar"></div>
+
+				<button type="submit" class="button-confirm">Let`s go →</button>
             </form>
         </div>
     </div>
 </div>
-
