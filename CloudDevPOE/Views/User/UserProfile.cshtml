@@ -95,18 +95,20 @@
 		<div class="tab-content" id="accountTabContent">
 			<!-- Account Details Tab -->
 			<div class="tab-pane fade show active" id="account-details" role="tabpanel" aria-labelledby="account-details-tab">
-				<form method="post" action="@Url.Action("UpdateAccountDetails", "User")">
-					<div class="form-group">
-						<label for="Name">Name</label>
-						<input type="text" class="form-control" id="Name" name="Name" value="@Model.Name" />
-					</div>
-					<div class="form-group">
-						<label for="Email">Email</label>
-						<input type="email" class="form-control" id="Email" name="Email" value="@Model.Email" />
-					</div>
-					<button type="submit" class="btn btn-primary">Update Details</button>
-				</form>
+				<div class="form-group">
+					<label for="Name">Name</label>
+					<input type="text" class="form-control" id="Name" name="Name" value="@Model.Name" readonly />
+				</div>
+				<div class="form-group">
+					<label for="Surname">Surname</label>
+					<input type="text" class="form-control" id="Surname" name="Surname" value="@Model.Surname" readonly />
+				</div>
+				<div class="form-group">
+					<label for="Email">Email</label>
+					<input type="email" class="form-control" id="Email" name="Email" value="@Model.Email" readonly />
+				</div>
 			</div>
+
 			<!-- Order History Tab -->
 			<div class="tab-pane fade" id="order-history" role="tabpanel" aria-labelledby="order-history-tab">
 				<input type="text" id="order-history-search" class="form-control mb-3" placeholder="Search Order History...">
