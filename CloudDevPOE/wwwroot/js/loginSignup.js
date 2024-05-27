@@ -4,6 +4,7 @@ function showLoginModalAndSubmitForm() {
 	var modal = $('#authModal');
 	modal.modal('show');
 
+	//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
 	// Close the modal when the backdrop is clicked
 	modal.on('click', function (e) {
 		if ($(e.target).is('.modal')) {
@@ -12,74 +13,85 @@ function showLoginModalAndSubmitForm() {
 		}
 	});
 
+	//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
 	// Hide the error bar when the user starts typing in the login form
 	$('input[name="login-email"], input[name="login-password"]').on('input', function () {
 		$('#errorBar').hide();
 	});
 
+	//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
 	// Live validation for the signup form
-	$('input[name="signup-name"]').on('input', function () {
-		var name = $(this).val();
-		if (name.length > 50) {
-			$('#errorBarName').text("Name cannot be longer than 50 characters.").show();
+	$('input[name="signup-name"], input[name="signup-surname"]').on('input', function () {
+		var input = $(this).val();
+		if (input.length > 50) {
+			$('#errorBar' + $(this).attr('name').split('-')[1].charAt(0).toUpperCase() + $(this).attr('name').split('-')[1].slice(1)).text("Cannot be longer than 50 characters.").show();
+		} else if (input.length === 0) {
+			$('#errorBar' + $(this).attr('name').split('-')[1].charAt(0).toUpperCase() + $(this).attr('name').split('-')[1].slice(1)).hide();
 		} else {
-			$('#errorBarName').hide();
+			$('#errorBar' + $(this).attr('name').split('-')[1].charAt(0).toUpperCase() + $(this).attr('name').split('-')[1].slice(1)).hide();
 		}
 	});
 
-	$('input[name="signup-surname"]').on('input', function () {
-		var surname = $(this).val();
-		if (surname.length > 50) {
-			$('#errorBarSurname').text("Surname cannot be longer than 50 characters.").show();
-		} else {
-			$('#errorBarSurname').hide();
-		}
-	});
-
-	$('input[name="signup-email"]').on('input', function () {
+	//--------------------------------------------------------------------------------------------------------------------------//
+	var emailErrorShown = false;
+	$('input[name="signup-email"]').on('focusout', function () {
 		var email = $(this).val();
 		if (email.length > 255) {
 			$('#errorBarEmail').text("Email cannot be longer than 255 characters.").show();
-		} else if (!/^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/.test(email)) {
-			$('#errorBarEmail').text("Invalid Email Address.").show();
-		} else {
+			emailErrorShown = true;
+		} else if (!/^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/.test(email) && email.length !== 0) {
+			$('#errorBarEmail').text("Please enter a valid email address.").show();
+			emailErrorShown = true;
+		}
+	}).on('input', function () {
+		if (emailErrorShown && /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/.test($(this).val())) {
 			$('#errorBarEmail').hide();
+			emailErrorShown = false;
 		}
 	});
 
-	$('input[name="signup-password"]').on('input', function () {
+	//--------------------------------------------------------------------------------------------------------------------------//
+	var passwordErrorShown = false;
+	$('input[name="signup-password"]').on('focusout', function () {
 		var password = $(this).val();
 		if (password.length > 128) {
 			$('#errorBarPassword').text("Password cannot be longer than 128 characters.").show();
-		} else if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(password)) {
+			passwordErrorShown = true;
+		} else if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(password) && password.length !== 0) {
 			$('#errorBarPassword').text("Password must be at least 8 characters and contain at least 1 uppercase letter, 1 lowercase letter, 1 digit, and 1 special character.").show();
-		} else {
+			passwordErrorShown = true;
+		}
+	}).on('input', function () {
+		if (passwordErrorShown && /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test($(this).val())) {
 			$('#errorBarPassword').hide();
+			passwordErrorShown = false;
 		}
 	});
 
-	$('input[name="signup-confirmPassword"]').on('input', function () {
+	//--------------------------------------------------------------------------------------------------------------------------//
+	var confirmPasswordErrorShown = false;
+	$('input[name="signup-confirmPassword"]').on('focusout', function () {
 		var confirmPassword = $(this).val();
 		var password = $('input[name="signup-password"]').val();
-		if (password !== confirmPassword) {
+		if (password !== confirmPassword && confirmPassword.length !== 0) {
 			$('#errorBarConfirmPassword').text("Passwords do not match.").show();
-		} else {
+			confirmPasswordErrorShown = true;
+		}
+	}).on('input', function () {
+		if (confirmPasswordErrorShown && $(this).val() === $('input[name="signup-password"]').val()) {
 			$('#errorBarConfirmPassword').hide();
+			confirmPasswordErrorShown = false;
 		}
 	});
 
-	// Switch to the signup form
-	$('#switchToSignup').on('click', function () {
-		$('#loginForm').hide();
-		$('#signupForm').show();
-	});
-
+	//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
 	// Switch to the login form
 	$('#switchToLogin').on('click', function () {
 		$('#signupForm').hide();
 		$('#loginForm').show();
 	});
 
+	//--------------------------------------------------------------------------------------------------------------------------//
 	// Submit the login form
 	$('#loginForm').off('submit').on('submit', function (e) {
 		e.preventDefault();
@@ -107,6 +119,14 @@ function showLoginModalAndSubmitForm() {
 		});
 	});
 
+	//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
+	// Switch to the signup form
+	$('#switchToSignup').on('click', function () {
+		$('#loginForm').hide();
+		$('#signupForm').show();
+	});
+
+	//--------------------------------------------------------------------------------------------------------------------------//
 	// Submit the signup form
 	$('#signupForm').off('submit').on('submit', function (e) {
 		e.preventDefault();
@@ -118,6 +138,10 @@ function showLoginModalAndSubmitForm() {
 		var confirmPassword = $('input[name="signup-confirmPassword"]').val();
 
 		// Validate the input
+		if (name.length === 0 || surname.length === 0 || email.length === 0 || password.length === 0 || confirmPassword.length === 0) {
+			$('#errorBarSignup').text("Fields cannot be blank.").show();
+			return;
+		}
 		if (name.length > 50) {
 			$('#errorBarSignup').text("Name cannot be longer than 50 characters.").show();
 			return;
@@ -167,4 +191,5 @@ function showLoginModalAndSubmitForm() {
 			}
 		});
 	});
+	//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
 }
