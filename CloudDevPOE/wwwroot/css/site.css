@@ -20,3 +20,9 @@ html {
 body {
 	margin-bottom: 60px;
 }
+
+@media (max-width: 1366px) {
+	html {
+		font-size: 12px; /* Adjust as needed */
+	}
+}

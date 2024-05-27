@@ -12,6 +12,11 @@
 	padding: 0 20px; /* Adjust the padding as needed */
 }
 
+.navbar-brand img {
+	width: 200px;
+	height: auto;
+}
+
 .nav-left, .nav-right {
 	display: flex;
 	align-items: center;
@@ -27,6 +32,19 @@ nav {
 		margin-right: 10px; /* Adjust as needed */
 	}
 
+@media (max-width: 1366px) {
+	.navbar-brand img {
+		width: 100px; /* Adjust as needed */
+	}
+
+	.group {
+		max-width: 150px; /* Adjust as needed */
+	}
+
+	.nav-link, .welcome-message {
+		font-size: 12px; /* Adjust as needed */
+	}
+}
 /* ===== SEARCH BAR ===== */
 .group {
 	display: flex;
@@ -70,6 +88,17 @@ nav {
 	height: 1rem;
 }
 
+@media (max-width: 1366px) {
+	.group {
+		display: flex;
+		line-height: 28px;
+		align-items: center;
+		position: relative;
+		max-width: 130px;
+		margin-right: 10px; /* Gap control */
+	}
+}
+
 /* ===== NAV BUTTONS ===== */
 .nav-buttons {
 	display: flex;
@@ -103,6 +132,34 @@ nav {
 	padding: 0;
 	text-align: center;
 	padding: 2px 0;
+}
+
+@media (max-width: 1366px) {
+	.nav-buttons {
+		display: flex;
+		gap: 5px; /* Gap control */
+		align-items: center;
+		justify-content: flex-start;
+	}
+
+	.nav-link {
+		min-width: 93px;
+		/*	height: 36px;*/
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border: 2px solid transparent;
+		border-radius: 8px;
+		background: none;
+		text-decoration: none;
+		color: #777;
+		font-family: inherit;
+		font-size: inherit;
+		cursor: pointer;
+		padding: 0;
+		text-align: center;
+		padding: 2px 0;
+	}
 }
 
 /* ===== ICONS AND BADGE ===== */
@@ -167,7 +224,6 @@ nav {
 			background-color: #f3f3f4;
 			color: black;
 		}
-
 
 /* Welcome message */
 .welcome-message {
