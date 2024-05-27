@@ -96,10 +96,11 @@
 			</div>
 			<!-- Order History Tab -->
 			<div class="tab-pane fade" id="order-history" role="tabpanel" aria-labelledby="order-history-tab">
+				<input type="text" id="order-history-search" class="form-control mb-3" placeholder="Search Order History...">
 				<div class="accordion" id="orderAccordion">
 					@foreach (var order in Model.PastOrders)
 					{
-						<div class="card">
+						<div class="card order-card">
 							<div class="card-header" id="heading-@order.Cart.CartID">
 								<div class="order-header">
 									<button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse-@order.Cart.CartID" aria-expanded="true" aria-controls="collapse-@order.Cart.CartID">
@@ -120,7 +121,6 @@
 									</button>
 								</div>
 							</div>
-
 							<div id="collapse-@order.Cart.CartID" class="collapse" aria-labelledby="heading-@order.Cart.CartID" data-parent="#orderAccordion">
 								<div class="card-body">
 									<table class="table mt-3">
@@ -152,8 +152,10 @@
 					}
 				</div>
 			</div>
+
 			<!-- My Listings Tab -->
 			<div class="tab-pane fade" id="my-listings" role="tabpanel" aria-labelledby="my-listings-tab">
+				<input type="text" id="my-listings-search" class="form-control mb-3" placeholder="Search My Listings...">
 				<table class="table mt-3">
 					<thead>
 						<tr>
@@ -165,13 +167,10 @@
 							<th>Actions</th>
 						</tr>
 					</thead>
-					<tbody>
+					<tbody id="my-listings-body">
 						@foreach (var product in Model.ListedProducts)
 						{
-								var productID = product.ProductID;
-								var availableQuantity = product.AvailableQuantity;
-								var minSpinValue = availableQuantity * -1;
-							<tr>
+							<tr class="listing-row">
 								<td>@product.ProductID</td>
 								<td><img src="@product.ProductMainImageUrl" alt="@product.ProductName" class="img-thumbnail" width="100" height="auto" /></td>
 								<td>@product.ProductName</td>
@@ -179,7 +178,7 @@
 								<td class="stock-amount">@product.AvailableQuantity</td>
 								<td>
 									<div class="stock-update">
-										<input type="number" class="form-control stock-input" data-product-id="@product.ProductID" min="@minSpinValue" value="0" />
+										<input type="number" class="form-control stock-input" data-product-id="@product.ProductID" value="0" />
 										<button class="btn btn-sm btn-success add-stock" data-product-id="@product.ProductID">Add Stock</button>
 									</div>
 									<button type="button" class="btn btn-danger archive-button" data-product-id="@product.ProductID">Delete</button>
@@ -189,8 +188,10 @@
 					</tbody>
 				</table>
 			</div>
+
 			<!-- Cart Tab -->
 			<div class="tab-pane fade" id="cart" role="tabpanel" aria-labelledby="cart-tab">
+				<input type="text" id="cart-search" class="form-control mb-3" placeholder="Search Cart...">
 				<div class="table-responsive mt-3">
 					<table class="table table-striped">
 						<thead>
@@ -203,10 +204,10 @@
 								<th>Actions</th>
 							</tr>
 						</thead>
-						<tbody>
+						<tbody id="cart-body">
 							@foreach (var item in Model.ActiveCart.Items)
 							{
-								<tr>
+								<tr class="cart-row">
 									<td><img src="@item.ImageUrl" alt="@item.ProductName" class="img-thumbnail" width="100" height="auto" /></td>
 									<td>@item.ProductName</td>
 									<td>
@@ -222,17 +223,7 @@
 						</tbody>
 					</table>
 				</div>
-				<div class="cart-summary">
-					<h3>Cart Total</h3>
-					<div class="d-flex justify-content-between align-items-center mb-3">
-						<span>Total:</span>
-						<span id="cart-total-summary">@Model.ActiveCart.TotalValue.ToString("C", new System.Globalization.CultureInfo("en-ZA"))</span>
-					</div>
-					<button class="CheckOut btn btn-primary btn-block">Checkout</button>
-				</div>
 			</div>
-		</div>
-	</div>
 
 	<script>
 		$(document).ready(function () {
@@ -244,6 +235,30 @@
 					// Update the cart total on the page
 					$('#cart-total-summary').text(result.newTotal);
 				}
+			});
+
+			// Order History Search
+			$('#order-history-search').on('keyup', function () {
+				var value = $(this).val().toLowerCase();
+				$('.order-card').filter(function () {
+					$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+				});
+			});
+
+			// My Listings Search
+			$('#my-listings-search').on('keyup', function () {
+				var value = $(this).val().toLowerCase();
+				$('#my-listings-body .listing-row').filter(function () {
+					$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+				});
+			});
+
+			// Cart Search
+			$('#cart-search').on('keyup', function () {
+				var value = $(this).val().toLowerCase();
+				$('#cart-body .cart-row').filter(function () {
+					$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+				});
 			});
 
 			$('.quantity-input').on('change', function () {
