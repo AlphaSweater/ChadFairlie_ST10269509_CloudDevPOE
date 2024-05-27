@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using CloudDevPOE.ViewModels
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -6,14 +7,19 @@
     <title>@ViewData["Title"] - CloudDevPOE</title>
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/CloudDevPOE.styles.css" asp-append-version="true" />
-
     <link rel="stylesheet" href="~/css/base.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/navbar.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/animated-background.css" asp-append-version="true" />
 
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+	<script src="~/js/loginSignup.js" asp-append-version="true"></script>
+
     <script src="~/js/site.js" asp-append-version="true"></script>
 
 
@@ -23,21 +29,8 @@
         @@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
         * {
-            --main-colour1: #EEBEFA;
-            --main-colour2: #96F2D7;
-            --main-colour3: #A5D8FF;
-            --main-colour4: #FDB686;
-            --main-colour5: #FFEC99;
-            --main-colour6: #FF9999;
-
-            --font-color: #333333;
-            --font-color-sub: #666666;
-            --background-color: #f0f0f0;
-
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
         }
 
         body {
@@ -45,7 +38,7 @@
             #e76c6a 28.56%, #e18b50 28.56%, #e18b50 42.84%, #3dabc3 42.84%, #3dabc3 57.12%, #2da696 57.12%,
             #2da696 71.4%, #48c9af 71.4%, #48c9af 85.68%, #0194c4 85.68%, #0194c4 100% );
             font-family: 'Poppins', sans-serif;
-            color: #333;
+			color: var(--color-dark);
             overflow: hidden;
             height: 100vh;
             width: 100vw;
@@ -55,13 +48,19 @@
             line-height: 1.6;
         }
 
+		.navbar {
+			position: sticky;
+			top: 0;
+			z-index: 1000; 
+		}
+
         .main-content {
             -ms-overflow-style: none;
             scrollbar-width: none;
-            border: 20px solid #f0f0f0;
+			border: 20px solid var(--color-light);
             width: 85%;
             height: 95%;
-            background-color: #f0f0f0;
+			background-color: var(--color-light);
             border-radius: 30px;
             overflow: auto;
             margin: 25px auto;
@@ -70,8 +69,6 @@
         .scrollable-content::-webkit-scrollbar {
             display: none;
         }
-
-
     </style>
 </head>
 <body>
@@ -142,43 +139,47 @@
             <span style="--i:26;"></span>
         </div>
     </div>
-    <div class="main-content">
-        <nav class="navbar">
-            <div style="width: 20px;"></div> <!-- 20px gap -->
-            <a class="navbar-brand" href="@Url.Action("Index", "Home")">
-                <img src="~/images/logos/logo_2.png" alt="Logo of KhumaloCraft Emporium" height="auto" width="200px"> <!-- Logo -->
-            </a>
-            <div style="width: 10px;"></div> <!-- 10px gap -->
-            <span class="nav-buttons">
-                <button class="nav-link" onclick="location.href='@Url.Action("Index", "Home")'">Home</button>
-                <button class="nav-link" onclick="location.href='@Url.Action("AboutUs", "Home")'">About Us</button>
-                <button class="nav-link" onclick="location.href='@Url.Action("ContactUs", "Home")'">Contact Us</button>
-                <button class="nav-link" onclick="location.href='@Url.Action("MyWork", "Products")'">My Work</button>
-                <button class="nav-link" onclick="location.href='@Url.Action("AddProduct", "Products")'">Add Product</button>
-                <button onclick="showLoginModal()">Log In</button>
-            </span>
 
-            <div style="width: 40px;"></div> <!-- 40px gap -->
-            <div class="group">
-                <svg class="icon" aria-hidden="true" viewBox="0 0 24 24">
-                    <g>
-                        <path d="M21.53 20.47l-3.66-3.66C19.195 15.24 20 13.214 20 11c0-4.97-4.03-9-9-9s-9 4.03-9 9 4.03 9 9 9c2.215 0 4.24-.804 5.808-2.13l3.66 3.66c.147.146.34.22.53.22s.385-.073.53-.22c.295-.293.295-.767.002-1.06zM3.5 11c0-4.135 3.365-7.5 7.5-7.5s7.5 3.365 7.5 7.5-3.365 7.5-7.5 7.5-7.5-3.365-7.5-7.5z"></path>
-                    </g>
-                </svg>
-                <input placeholder="Search" type="search" class="input">
-            </div>
+	<div class="main-content">
+		<nav class="navbar">
+			<div class="nav-left">
+				<a class="navbar-brand" href="@Url.Action("Index", "Home")">
+					<img src="~/images/logos/logo_2.png" alt="Logo of KhumaloCraft Emporium">
+				</a>
+				<span class="nav-buttons">
+					<button class="nav-link" onclick="location.href='@Url.Action("Index", "Home")'">Home</button>
+					<button class="nav-link" onclick="location.href='@Url.Action("AboutUs", "Home")'">About Us</button>
+					<button class="nav-link" onclick="location.href='@Url.Action("ContactUs", "Home")'">Contact Us</button>
+					<button class="nav-link" onclick="location.href='@Url.Action("MyWork", "Products")'">My Work</button>
+					<button class="nav-link" onclick="location.href='@Url.Action("AddProduct", "Products")'">Add Product</button>
+				</span>
+			</div>
 
-            <div style="width: 10px;"></div> <!-- 10px gap -->
-            <i class='bx bx-cog'></i> <!-- Settings icon -->
-            <div style="width: 10px;"></div> <!-- 10px gap -->
-            <i class='bx bx-user'></i> <!-- Account icon -->
-            <div style="width: 10px;"></div> <!-- 10px gap -->
-            <i class='bx bx-cart'></i> <!-- Cart icon -->
-            <div style="width: 30px;"></div> <!-- 30px gap -->
-        </nav>
-        @await Html.PartialAsync("_LoginForm")
-        @RenderBody()
-    </div>
+			<div class="nav-right">
+				<div class="group">
+					<svg class="icon" aria-hidden="true" viewBox="0 0 24 24">
+						<g>
+							<path d="M21.53 20.47l-3.66-3.66C19.195 15.24 20 13.214 20 11c0-4.97-4.03-9-9-9s-9 4.03-9 9 4.03 9 9 9c2.215 0 4.24-.804 5.808-2.13l3.66 3.66c.147.146.34.22.53.22s.385-.073.53-.22c.295-.293.295-.767.002-1.06zM3.5 11c0-4.135 3.365-7.5 7.5-7.5s7.5 3.365 7.5 7.5-3.365 7.5-7.5 7.5-7.5-3.365-7.5-7.5z"></path>
+						</g>
+					</svg>
+					<input placeholder="Search" type="search" class="input">
+				</div>
+
+ 				@{
+					var userDetails = ViewData["UserDetails"] as NavbarViewModel;
+				}
+
+				@await Html.PartialAsync("_UserInfo", userDetails)
+
+			</div>
+		</nav>
+		@await Html.PartialAsync("_LoginSignupForm")
+		@RenderBody()
+	</div>
+
+
+
+
 
     <script>
         var mainContent = document.querySelector('.main-content');

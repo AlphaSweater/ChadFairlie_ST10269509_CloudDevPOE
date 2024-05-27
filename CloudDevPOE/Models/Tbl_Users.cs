@@ -1,5 +1,6 @@
 ﻿// Ignore Spelling: Tbl
 
+using CloudDevPOE.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
@@ -36,7 +37,7 @@ namespace CloudDevPOE.Models
 		public string? Password { get; set; }
 
 		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
-		public int InsertUser(Tbl_Users m, string connectionString)
+		public int? InsertUser(Tbl_Users m, string connectionString)
 		{
 			using (var con = new SqlConnection(connectionString))
 			{
@@ -49,7 +50,7 @@ namespace CloudDevPOE.Models
 						var passwordHasher = new PasswordHasher<IdentityUser>();
 						var passwordHash = passwordHasher.HashPassword(user: null, password: m.Password);
 
-						string sql = "INSERT INTO tbl_users (name, surname, email, password_hash) VALUES (@UserName, @UserSurname, @UserEmail, @PasswordHash)";
+						string sql = "INSERT INTO tbl_users (name, surname, email, password_hash) OUTPUT INSERTED.user_id VALUES (@UserName, @UserSurname, @UserEmail, @PasswordHash)";
 						using (SqlCommand cmd = new SqlCommand(sql, con, transaction))
 						{
 							cmd.Parameters.AddWithValue("@UserName", m.Name);
@@ -57,9 +58,9 @@ namespace CloudDevPOE.Models
 							cmd.Parameters.AddWithValue("@UserEmail", m.Email);
 							cmd.Parameters.AddWithValue("@PasswordHash", passwordHash);
 
-							int result = cmd.ExecuteNonQuery();
+							var result = cmd.ExecuteScalar();
 							transaction.Commit(); // Commit the transaction
-							return result;
+							return (result != null) ? (int?)result : null;
 						}
 					}
 					catch (Exception)
@@ -101,6 +102,122 @@ namespace CloudDevPOE.Models
 					}
 				}
 			}
+		}
+
+		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
+		public async Task<UserAccountViewModel> GetUserDetailsAsync(int userID, string connectionString)
+		{
+			UserAccountViewModel user = new UserAccountViewModel();
+			using (var con = new SqlConnection(connectionString))
+			{
+				await con.OpenAsync();
+				using (SqlCommand cmd = new SqlCommand("dbo.GetUserDetails", con))
+				{
+					cmd.CommandType = CommandType.StoredProcedure;
+					cmd.Parameters.AddWithValue("@UserID", userID);
+					using (SqlDataReader reader = await cmd.ExecuteReaderAsync())
+					{
+						// Read user details
+						if (await reader.ReadAsync())
+						{
+							user.Name = reader["name"].ToString();
+							user.Surname = reader["surname"].ToString();
+							user.Email = reader["email"].ToString();
+						}
+
+						// Read active cart details
+						if (await reader.NextResultAsync())
+						{
+							user.ActiveCart = new CartViewModel();
+							user.ActiveCart.Items = new List<CartItemViewModel>();
+							while (await reader.ReadAsync())
+							{
+								var item = new CartItemViewModel
+								{
+									CartItemID = reader.GetInt32(0),
+									ProductID = reader.GetInt32(1),
+									ProductName = reader.GetString(2),
+									Price = reader.GetDecimal(3),
+									Quantity = reader.GetInt32(4),
+									Value = reader.GetDecimal(5),
+									ImageUrl = reader.IsDBNull(6) ? "/images/Default/DefaultIcon.jpg" : reader.GetString(6),
+									AvailableQuantity = reader.GetInt32(7)
+								};
+								user.ActiveCart.Items.Add(item);
+							}
+						}
+
+						// Read past orders
+						if (await reader.NextResultAsync())
+						{
+							Tbl_Carts carts = new Tbl_Carts();
+							user.PastOrders = new List<PastCartViewModel>();
+							while (await reader.ReadAsync())
+							{
+								var transaction = new PastCartViewModel
+								{
+									Cart = await carts.GetCartAsync(reader.GetInt32(0), connectionString),
+									TotalValue = reader.GetDecimal(1),
+									TransactionDate = reader.GetDateTime(2)
+								};
+								user.PastOrders.Add(transaction);
+							}
+						}
+
+						// Read listed products
+						if (await reader.NextResultAsync())
+						{
+							user.ListedProducts = new List<ProductDetailsViewModel>();
+							while (await reader.ReadAsync())
+							{
+								var product = new ProductDetailsViewModel
+								{
+									ProductID = reader.GetInt32(0),
+									SellerUserID = reader.GetInt32(1),
+									ProductName = reader.GetString(2),
+									ProductCategory = reader.GetString(3),
+									ProductDescription = reader.GetString(4),
+									ProductPrice = reader.GetDecimal(5),
+									AvailableQuantity = reader.GetInt32(6),
+									SellerName = reader.GetString(7),
+									ProductMainImageUrl = reader.IsDBNull(8) ? "/images/Default/DefaultIcon.jpg" : reader.GetString(8)
+								};
+
+								user.ListedProducts.Add(product);
+							}
+						}
+					}
+				}
+			}
+
+			return user;
+		}
+
+		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
+		public NavbarViewModel GetNameAndCartCount(int userID, string connectionString)
+		{
+			NavbarViewModel userNavInfo = new NavbarViewModel();
+			using (var con = new SqlConnection(connectionString))
+			{
+				con.Open();
+				string sql = "SELECT name FROM tbl_users WHERE user_id = @UserID";
+				using (SqlCommand cmd = new SqlCommand(sql, con))
+				{
+					cmd.Parameters.AddWithValue("@UserID", userID);
+					using (SqlDataReader reader = cmd.ExecuteReader())
+					{
+						if (reader.Read())
+						{
+							userNavInfo.Name = reader["name"].ToString();
+						}
+					}
+				}
+
+				Tbl_Carts carts = new Tbl_Carts();
+				userNavInfo.ActiveCartSize = carts.GetActiveCartItemCount(userID, connectionString);
+			}
+
+			return userNavInfo;
 		}
 	}
 }

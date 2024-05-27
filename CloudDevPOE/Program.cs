@@ -1,9 +1,3 @@
-using CloudDevPOE.Models;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-
 namespace CloudDevPOE
 {
 	public class Program
@@ -25,6 +19,10 @@ namespace CloudDevPOE
 
 			// Add IHttpContextAccessor to the DI container using the built-in method.
 			builder.Services.AddHttpContextAccessor();
+
+			// Explicitly add IConfiguration to the DI container.
+			builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
+
 
 			var app = builder.Build();
 

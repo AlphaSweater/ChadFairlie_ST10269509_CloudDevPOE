@@ -1,25 +1,24 @@
 ﻿// Ignore Spelling: Accessor
 
 using CloudDevPOE.Models;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using CloudDevPOE.ViewModels;
-using System.Data.SqlClient;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CloudDevPOE.Controllers
 {
-	public class ProductsController : Controller
+	public class ProductsController : BaseController
 	{
 		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
 		private readonly IHttpContextAccessor _httpContextAccessor;
+
 		private readonly IWebHostEnvironment _webHostEnvironment;
+
 		private readonly IConfiguration _configuration;
 
 		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
 		// Inject IHttpContextAccessor, IWebHostEnvironment and IConfiguration into the controller's constructor
 		public ProductsController(IHttpContextAccessor httpContextAccessor, IWebHostEnvironment webHostEnvironment, IConfiguration configuration)
+			: base(httpContextAccessor, webHostEnvironment, configuration)
 		{
 			_httpContextAccessor = httpContextAccessor;
 			_webHostEnvironment = webHostEnvironment;
@@ -30,6 +29,9 @@ namespace CloudDevPOE.Controllers
 		[HttpGet]
 		public IActionResult MyWork()
 		{
+			// Set the user details for the view and set the ViewData property
+			ViewData["UserDetails"] = SetUserDetails();
+
 			var connectionString = _configuration.GetConnectionString("DefaultConnection");
 			Tbl_Products productsModel = new Tbl_Products();
 
@@ -44,6 +46,10 @@ namespace CloudDevPOE.Controllers
 		[HttpGet]
 		public ActionResult AddProduct()
 		{
+			// Set the user details for the view and set the ViewData property
+			ViewData["UserDetails"] = SetUserDetails();
+			ViewData["userID"] = _httpContextAccessor.HttpContext?.Session.GetInt32("UserId");
+
 			return View();
 		}
 
@@ -85,8 +91,11 @@ namespace CloudDevPOE.Controllers
 
 		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
 		[HttpGet]
-		public IActionResult ViewProduct(int id)
+		public IActionResult ViewProduct(int id, string color)
 		{
+			// Set the user details for the view and set the ViewData property
+			ViewData["UserDetails"] = SetUserDetails();
+
 			var connectionString = _configuration.GetConnectionString("DefaultConnection");
 			Tbl_Products productsModel = new Tbl_Products();
 
@@ -97,8 +106,33 @@ namespace CloudDevPOE.Controllers
 				return NotFound();
 			}
 
+			productDetails.HighlightColor = color;
 			return View(productDetails);
 		}
+
+		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
+		[HttpPost]
+		public async Task<IActionResult> AddToCart(int productId, int quantity)
+		{
+			// Safely get the user ID from the session
+			int? userID = _httpContextAccessor.HttpContext?.Session.GetInt32("UserId");
+			if (!userID.HasValue)
+			{
+				// The user is not logged in, return a JSON result
+				return Json(new { success = false, message = "User is not logged in" });
+			}
+
+			var connectionString = _configuration.GetConnectionString("DefaultConnection");
+
+			Tbl_Carts cartsModel = new Tbl_Carts();
+			int cartId = await cartsModel.GetActiveCartIDAsync(userID.Value, connectionString);
+
+			Tbl_Cart_Items cartItemsModel = new Tbl_Cart_Items();
+			await cartItemsModel.AddItemToCartAsync(cartId, productId, quantity, connectionString);
+
+			return Json(new { success = true, message = "Product added to cart" });
+		}
+
 		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
 	}
 }

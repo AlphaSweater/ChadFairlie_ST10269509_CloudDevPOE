@@ -1,0 +1,82 @@
+﻿@model CloudDevPOE.ViewModels.NavbarViewModel
+
+<head>
+	<style>
+		.user-info {
+			display: flex;
+			align-items: center;
+		}
+
+			.user-info .welcome-message {
+				margin-right: 10px;
+			}
+
+	</style>
+</head>
+
+@if (Model != null)
+{
+	<div class="user-dropdown">
+		<div class="user-info">
+			<div class="welcome-message">Welcome, @Model.Name</div>
+			<i class='bx bx-user bx-icon'></i>
+		</div>
+		<div class="user-dropdown-menu">
+			<a href="@Url.Action("UserProfile", "User")">Profile</a>
+			<a href="@Url.Action("Logout", "User")">Logout</a>
+		</div>
+	</div>
+	<div class="bx-icon" onclick="location.href='@Url.Action("UserProfile", "User")#cart'">
+		<i class='bx bx-cart'></i>
+		<span class="cart-badge">@Model.ActiveCartSize</span>
+	</div>
+}
+else
+{
+	<div class="user-dropdown">
+		<i class='bx bx-user bx-icon'></i>
+		<div class="user-dropdown-menu">
+			<a href="#" onclick="showLoginModalAndSubmitForm(); return false;">Login</a>
+		</div>
+	</div>
+	<div class="bx-icon" onclick="showLoginModalAndSubmitForm(); return false;">
+		<i class='bx bx-cart'></i>
+	</div>
+}
+
+
+
+<script>
+	document.addEventListener('DOMContentLoaded', function () {
+		const userDropdown = document.querySelector('.user-dropdown');
+		const dropdownMenu = document.querySelector('.user-dropdown-menu');
+		let timeout;
+
+		userDropdown.addEventListener('mouseenter', () => {
+			clearTimeout(timeout);
+			dropdownMenu.style.opacity = '1';
+			dropdownMenu.style.pointerEvents = 'auto';
+			dropdownMenu.style.transform = 'translateY(0)';
+		});
+
+		userDropdown.addEventListener('mouseleave', () => {
+			timeout = setTimeout(() => {
+				dropdownMenu.style.opacity = '0';
+				dropdownMenu.style.pointerEvents = 'none';
+				dropdownMenu.style.transform = 'translateY(-10px)';
+			}, 200); // Adjust delay as needed
+		});
+
+		dropdownMenu.addEventListener('mouseenter', () => {
+			clearTimeout(timeout);
+		});
+
+		dropdownMenu.addEventListener('mouseleave', () => {
+			timeout = setTimeout(() => {
+				dropdownMenu.style.opacity = '0';
+				dropdownMenu.style.pointerEvents = 'none';
+				dropdownMenu.style.transform = 'translateY(-10px)';
+			}, 200); // Adjust delay as needed
+		});
+	});
+</script>

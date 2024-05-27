@@ -1,0 +1,588 @@
+﻿@model CloudDevPOE.ViewModels.UserAccountViewModel
+
+@{
+	ViewData["Title"] = "Account";
+}
+
+<head>
+	<style>
+		.order-header {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: 10px;
+			background-color: #f8f9fa;
+			border: 1px solid #ddd;
+			border-radius: 5px;
+		}
+
+			.order-header .btn-link {
+				flex-grow: 1;
+				text-align: left;
+				font-weight: bold;
+				color: #333;
+				font-size: 16px;
+				padding: 0;
+				margin: 0;
+			}
+
+		.order-info {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			width: 100%;
+		}
+
+		.order-id,
+		.order-date,
+		.order-total {
+			margin-right: 15px;
+			display: flex;
+			flex-direction: column;
+		}
+
+			.order-id span,
+			.order-date span,
+			.order-total span {
+				font-weight: normal;
+				color: #666;
+			}
+
+		.cart-summary {
+			position: fixed;
+			top: 265px;
+			right: 123px;
+			background-color: #f8f9fa;
+			border: 1px solid #ddd;
+			padding: 20px;
+			box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+			z-index: 1000;
+			max-width: 300px;
+		}
+
+		/* Add the new styles for stock levels */
+		.stock-out {
+			background-color: #f8d7da;
+		}
+
+		.stock-low {
+			background-color: #fff3cd;
+		}
+
+		.stock-high {
+			background-color: #d4edda;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="container mt-5">
+		<h1>User Account</h1>
+		<ul class="nav nav-tabs" id="accountTab" role="tablist">
+			<li class="nav-item">
+				<a class="nav-link active" id="account-details-tab" data-toggle="tab" href="#account-details" role="tab" aria-controls="account-details" aria-selected="true">Account Details</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" id="order-history-tab" data-toggle="tab" href="#order-history" role="tab" aria-controls="order-history" aria-selected="false">Order History</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" id="my-listings-tab" data-toggle="tab" href="#my-listings" role="tab" aria-controls="my-listings" aria-selected="false">My Listings</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" id="cart-tab" data-toggle="tab" href="#cart" role="tab" aria-controls="cart" aria-selected="false">Cart</a>
+			</li>
+		</ul>
+		<div class="tab-content" id="accountTabContent">
+			<!-- Account Details Tab -->
+			<div class="tab-pane fade show active" id="account-details" role="tabpanel" aria-labelledby="account-details-tab">
+				<div class="form-group">
+					<label for="Name">Name</label>
+					<input type="text" class="form-control" id="Name" name="Name" value="@Model.Name" readonly />
+				</div>
+				<div class="form-group">
+					<label for="Surname">Surname</label>
+					<input type="text" class="form-control" id="Surname" name="Surname" value="@Model.Surname" readonly />
+				</div>
+				<div class="form-group">
+					<label for="Email">Email</label>
+					<input type="email" class="form-control" id="Email" name="Email" value="@Model.Email" readonly />
+				</div>
+			</div>
+
+			<!-- Order History Tab -->
+			<div class="tab-pane fade" id="order-history" role="tabpanel" aria-labelledby="order-history-tab">
+				<input type="text" id="order-history-search" class="form-control mb-3" placeholder="Search Order History...">
+				<div class="accordion" id="orderAccordion">
+					@foreach (var order in Model.PastOrders)
+					{
+						<div class="card order-card">
+							<div class="card-header" id="heading-@order.Cart.CartID">
+								<div class="order-header">
+									<button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse-@order.Cart.CartID" aria-expanded="true" aria-controls="collapse-@order.Cart.CartID">
+										<div class="order-info">
+											<div class="order-id">
+												<span>Order ID:</span>
+												@order.Cart.CartID
+											</div>
+											<div class="order-date">
+												<span>Date:</span>
+												@order.TransactionDate.ToString("dd MMM yyyy HH:mm")
+											</div>
+											<div class="order-total">
+												<span>Total:</span>
+												@order.TotalValue.ToString("C", new System.Globalization.CultureInfo("en-ZA"))
+											</div>
+										</div>
+									</button>
+								</div>
+							</div>
+							<div id="collapse-@order.Cart.CartID" class="collapse" aria-labelledby="heading-@order.Cart.CartID" data-parent="#orderAccordion">
+								<div class="card-body">
+									<table class="table mt-3">
+										<thead>
+											<tr>
+												<th>Image</th>
+												<th>Product Name</th>
+												<th>Quantity</th>
+												<th>Single Price</th>
+												<th>Total Price</th>
+											</tr>
+										</thead>
+										<tbody>
+											@foreach (var item in order.Cart.Items)
+											{
+												<tr>
+													<td><img src="@item.ImageUrl" alt="@item.ProductName" class="img-thumbnail" width="50" height="auto" /></td>
+													<td>@item.ProductName</td>
+													<td>@item.Quantity</td>
+													<td>@item.Price.ToString("C", new System.Globalization.CultureInfo("en-ZA"))</td>
+													<td>@((item.Price * item.Quantity).ToString("C", new System.Globalization.CultureInfo("en-ZA")))</td>
+												</tr>
+											}
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					}
+				</div>
+			</div>
+
+			<!-- My Listings Tab -->
+			<div class="tab-pane fade" id="my-listings" role="tabpanel" aria-labelledby="my-listings-tab">
+				<input type="text" id="my-listings-search" class="form-control mb-3" placeholder="Search My Listings...">
+				<div class="mb-3">
+					<button class="btn btn-outline-danger" id="filter-out-stock">Out of Stock</button>
+					<button class="btn btn-outline-warning" id="filter-low-stock">Low Stock</button>
+					<button class="btn btn-outline-success" id="filter-high-stock">High Stock</button>
+					<button class="btn btn-outline-secondary" id="filter-reset">Reset</button>
+				</div>
+				<table class="table mt-3">
+					<thead>
+						<tr>
+							<th>Product ID</th>
+							<th>Image</th>
+							<th>Name</th>
+							<th>Price</th>
+							<th>Stock</th>
+							<th>Actions</th>
+						</tr>
+					</thead>
+					<tbody id="my-listings-body">
+						@foreach (var product in Model.ListedProducts)
+						{
+							var productID = product.ProductID;
+							var availableQuantity = product.AvailableQuantity;
+							var minSpinValue = availableQuantity * -0;
+							<tr class="listing-row">
+								<td>@product.ProductID</td>
+								<td><img src="@product.ProductMainImageUrl" alt="@product.ProductName" class="img-thumbnail" width="100" height="auto" /></td>
+								<td>@product.ProductName</td>
+								<td>@product.ProductPrice.ToString("C", new System.Globalization.CultureInfo("en-ZA"))</td>
+								<td class="stock-amount">@product.AvailableQuantity</td>
+								<td>
+									<div class="stock-update">
+										<input type="number" class="form-control stock-input" data-product-id="@product.ProductID" value="0" min="@minSpinValue" />
+										<button class="btn btn-sm btn-success add-stock" data-product-id="@product.ProductID">Add Stock</button>
+									</div>
+									<button type="button" class="btn btn-danger archive-button" data-product-id="@product.ProductID">Delete</button>
+								</td>
+							</tr>
+						}
+					</tbody>
+				</table>
+			</div>
+
+			<!-- Cart Tab -->
+			<div class="tab-pane fade" id="cart" role="tabpanel" aria-labelledby="cart-tab">
+				<input type="text" id="cart-search" class="form-control mb-3" placeholder="Search Cart...">
+				<div class="table-responsive mt-3">
+					<table class="table table-striped">
+						<thead>
+							<tr>
+								<th>Image</th>
+								<th>Product</th>
+								<th>Quantity</th>
+								<th>Price</th>
+								<th>Total</th>
+								<th>Actions</th>
+							</tr>
+						</thead>
+						<tbody id="cart-body">
+							@foreach (var item in Model.ActiveCart.Items)
+							{
+								<tr class="cart-row">
+									<td><img src="@item.ImageUrl" alt="@item.ProductName" class="img-thumbnail" width="100" height="auto" /></td>
+									<td>@item.ProductName</td>
+									<td>
+										<input type="number" class="form-control quantity-input" data-cart-item-id="@item.CartItemID" data-item-price="@item.Price" value="@item.Quantity" min="1" max="@item.AvailableQuantity" />
+									</td>
+									<td class="item-price">@item.Price.ToString("C", new System.Globalization.CultureInfo("en-ZA"))</td>
+									<td class="item-total" data-cart-item-id="@item.CartItemID">@((item.Price * item.Quantity).ToString("C", new System.Globalization.CultureInfo("en-ZA")))</td>
+									<td>
+										<a href="@Url.Action("RemoveCartItem", "User", new { cartItemId = item.CartItemID })" class="RemoveItem btn btn-sm btn-danger">Remove</a>
+									</td>
+								</tr>
+							}
+						</tbody>
+					</table>
+				</div>
+				<div class="cart-summary">
+					<h3>Cart Total</h3>
+					<div class="d-flex justify-content-between align-items-center mb-3">
+						<span>Total:</span>
+						<span id="cart-total-summary">@Model.ActiveCart.TotalValue.ToString("C", new System.Globalization.CultureInfo("en-ZA"))</span>
+					</div>
+					<button class="CheckOut btn btn-primary btn-block">Checkout</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		$(document).ready(function () {
+			var hash = window.location.hash;
+			if (hash == '#cart') {
+				$('#accountTab a[href="#cart"]').tab('show');
+			}
+
+			$('#accountTab a').on('click', function () {
+				history.pushState("", document.title, window.location.pathname + window.location.search);
+			});
+
+			// Fetch the latest cart total from the server
+			$.ajax({
+				url: '/User/GetCartTotal',
+				type: 'GET',
+				success: function (result) {
+					// Update the cart total on the page
+					$('#cart-total-summary').text(result.newTotal);
+				}
+			});
+
+			// Order History Search
+			$('#order-history-search').on('keyup', function () {
+				var value = $(this).val().toLowerCase();
+				$('.order-card').filter(function () {
+					$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+				});
+			});
+
+			// My Listings Search
+			$('#my-listings-search').on('keyup', function () {
+				var value = $(this).val().toLowerCase();
+				$('#my-listings-body .listing-row').filter(function () {
+					$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+				});
+			});
+
+			// Cart Search
+			$('#cart-search').on('keyup', function () {
+				var value = $(this).val().toLowerCase();
+				$('#cart-body .cart-row').filter(function () {
+					$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+				});
+			});
+
+			// Apply stock level classes
+			$('#my-listings-body .listing-row').each(function () {
+				var stockAmount = parseInt($(this).find('.stock-amount').text());
+				if (stockAmount <= 0) {
+					$(this).addClass('stock-out');
+				} else if (stockAmount < 5) {
+					$(this).addClass('stock-low');
+				} else {
+					$(this).addClass('stock-high');
+				}
+			});
+
+			// Filter Out of Stock
+			$('#filter-out-stock').on('click', function () {
+				filterProducts('out');
+			});
+
+			// Filter Low Stock
+			$('#filter-low-stock').on('click', function () {
+				filterProducts('low');
+			});
+
+			// Filter High Stock
+			$('#filter-high-stock').on('click', function () {
+				filterProducts('high');
+			});
+
+			// Reset Filter
+			$('#filter-reset').on('click', function () {
+				$('#my-listings-body .listing-row').show();
+			});
+
+			// Function to filter products based on stock levels
+			function filterProducts(stockLevel) {
+				$('#my-listings-body .listing-row').each(function () {
+					var stockAmount = parseInt($(this).find('.stock-amount').text());
+					switch (stockLevel) {
+						case 'out':
+							if (stockAmount > 0) {
+								$(this).hide();
+							} else {
+								$(this).show();
+							}
+							break;
+						case 'low':
+							if (stockAmount >= 5) {
+								$(this).hide();
+							} else {
+								$(this).show();
+							}
+							break;
+						case 'high':
+							if (stockAmount < 5) {
+								$(this).hide();
+							} else {
+								$(this).show();
+							}
+							break;
+					}
+				});
+			}
+
+			$('.quantity-input').on('change', function () {
+				var cartItemId = $(this).data('cart-item-id');
+				var quantity = $(this).val();
+				var itemPrice = $(this).data('item-price');
+
+				$.ajax({
+					url: '/User/UpdateCartQuantity',
+					type: 'POST',
+					async: true,
+					data: {
+						cartItemId: cartItemId,
+						quantity: quantity
+					},
+					success: function (result) {
+						$('#cart-total').text(result.newTotal);
+						$('#cart-total-summary').text(result.newTotal);
+
+						// Update the total price for the item
+						var itemTotal = itemPrice * quantity;
+						var formattedTotal = new Intl.NumberFormat('en-ZA', { style: 'currency', currency: 'ZAR' }).format(itemTotal);
+						formattedTotal = formattedTotal.replace(/^(\D+)\s/, '$1');
+						$('.item-total[data-cart-item-id="' + cartItemId + '"]').text(formattedTotal);
+					}
+				});
+			});
+
+			$('.archive-button').click(function () {
+				var button = $(this);
+				var productId = button.data('product-id');
+
+				Swal.fire({
+					title: 'Are you sure?',
+					text: "You are about to delete the product with ID " + productId,
+					icon: 'warning',
+					showCancelButton: true,
+					confirmButtonColor: '#3085d6',
+					cancelButtonColor: '#d33',
+					confirmButtonText: 'Yes, delete it!'
+				}).then((result) => {
+					if (result.isConfirmed) {
+						$.ajax({
+							url: '@Url.Action("ArchiveProduct", "User")',
+							type: 'POST',
+							data: { productId: productId },
+							success: function (response) {
+								if (response.success) {
+									button.closest('tr').remove();
+									Swal.fire(
+										'Deleted!',
+										'The product has been deleted.',
+										'success'
+									);
+								} else {
+									Swal.fire(
+										'Error!',
+										'An error occurred while deleting the product.',
+										'error'
+									);
+								}
+							}
+						});
+					}
+				});
+			});
+
+			$('.RemoveItem').on('click', function (event) {
+				event.preventDefault();
+				var url = $(this).attr('href');
+				var row = $(this).closest('tr');
+
+				Swal.fire({
+					title: 'Are you sure?',
+					text: "You won't be able to revert this!",
+					icon: 'warning',
+					showCancelButton: true,
+					confirmButtonText: 'Yes, remove it!',
+					cancelButtonText: 'No, cancel'
+				}).then((result) => {
+					if (result.isConfirmed) {
+						$.ajax({
+							url: url,
+							type: 'POST',
+							async: true,
+							success: function (result) {
+								// Remove the item row from the table
+								row.remove();
+
+								// Update the cart total on the page
+								$('#cart-total-summary').text(result.newTotal);
+							},
+							error: function (jqXHR, textStatus, errorThrown) {
+								console.error('AJAX error: ' + textStatus + ', ' + errorThrown);
+							}
+						});
+						Swal.fire(
+							'Removed!',
+							'Your item has been removed.',
+							'success'
+						);
+					}
+				});
+			});
+
+			$('.CheckOut').on('click', function (event) {
+				event.preventDefault();
+
+				// Check if there are any items in the cart
+				if ($('table.table-striped tbody tr').length === 0) {
+					Swal.fire({
+						icon: 'info',
+						title: 'Your cart is empty',
+						text: 'Please add some items to your cart before checking out.',
+					});
+					return;
+				}
+
+				// Confirm checkout action
+				Swal.fire({
+					title: 'Proceed to Checkout?',
+					text: "Are you sure you want to proceed to checkout?",
+					icon: 'question',
+					showCancelButton: true,
+					confirmButtonText: 'Yes, checkout!',
+					cancelButtonText: 'No, cancel'
+				}).then((result) => {
+					if (result.isConfirmed) {
+						// Disable the checkout button
+						$(this).prop('disabled', true);
+
+						$.ajax({
+							url: '/User/CheckoutCart',
+							type: 'POST',
+							async: true,
+							success: function (result) {
+								Swal.fire(
+									'Success!',
+									'Your order has been placed.',
+									'success'
+								).then(() => {
+									location.reload();
+								});
+							},
+							error: function () {
+								Swal.fire({
+									icon: 'error',
+									title: 'Oops...',
+									text: 'An error occurred during checkout.',
+								});
+
+								// Re-enable the checkout button
+								$('.CheckOut').prop('disabled', false);
+							}
+						});
+					}
+				});
+			});
+
+			$('.add-stock').click(function () {
+				var button = $(this);
+				var productId = button.data('product-id');
+				var quantityToAdd = parseInt(button.siblings('.stock-input').val());
+
+				var actionText = quantityToAdd < 0 ? "remove" : "add";
+				var absoluteQuantity = Math.abs(quantityToAdd);
+
+				Swal.fire({
+					title: 'Are you sure?',
+					text: "You are about to " + actionText + " " + absoluteQuantity + " items to the stock of product " + productId,
+					icon: 'warning',
+					showCancelButton: true,
+					confirmButtonColor: '#3085d6',
+					cancelButtonColor: '#d33',
+					confirmButtonText: 'Yes, ' + actionText + ' it!'
+				}).then((result) => {
+					if (result.isConfirmed) {
+						$.post('@Url.Action("UpdateStock", "User")', { productId: productId, quantityToAdd: quantityToAdd })
+							.done(function (data) {
+								if (data.success) {
+									Swal.fire(
+										'Success!',
+										data.message,
+										'success'
+									);
+									// Update the stock amount in the table
+									var currentStock = parseInt(button.closest('tr').find('.stock-amount').text());
+									var newStock = currentStock + quantityToAdd;
+									button.closest('tr').find('.stock-amount').text(newStock);
+
+									// Update the row's class based on new stock level
+									var row = button.closest('tr');
+									row.removeClass('stock-out stock-low stock-high');
+									if (newStock <= 0) {
+										row.addClass('stock-out');
+									} else if (newStock < 5) {
+										row.addClass('stock-low');
+									} else {
+										row.addClass('stock-high');
+									}
+								} else {
+									Swal.fire(
+										'Error!',
+										data.message,
+										'error'
+									);
+								}
+							})
+							.fail(function (xhr, status, error) {
+								console.error("Error: " + error);
+								Swal.fire(
+									'Error!',
+									'An error occurred while updating the stock.',
+									'error'
+								);
+							});
+					}
+				});
+			});
+		});
+	</script>
+</body>

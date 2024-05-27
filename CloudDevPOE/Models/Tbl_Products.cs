@@ -39,6 +39,9 @@ namespace CloudDevPOE.Models
 		public bool ProductAvailability { get; set; }
 
 		//--------------------------------------------------------------------------------------------------------------------------//
+		public bool IsArchived { get; set; }
+
+		//--------------------------------------------------------------------------------------------------------------------------//
 		public Tbl_Product_Images ProductImagesModel { get; set; } = new Tbl_Product_Images();
 
 		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
@@ -99,22 +102,25 @@ namespace CloudDevPOE.Models
 			{
 				con.Open();
 				string productSql =
-				@"	SELECT
-						tp.product_id,
-						tp.name,
-						tp.price,
-						tp.availability,
-						tpi.image_url
-					FROM
-						((tbl_products tp
-					INNER JOIN
-						(
-						SELECT MIN(image_id) AS image_id, product_id
-						FROM tbl_product_images
-						GROUP BY product_id
-						) AS first_image ON tp.product_id = first_image.product_id)
-					INNER JOIN
-						tbl_product_images tpi ON first_image.image_id = tpi.image_id)";
+				@"  SELECT
+            tp.product_id,
+            tp.name,
+            tp.category,
+            tp.description,
+            tp.price,
+            tp.availability,
+            tpi.image_url
+        FROM
+            ((tbl_products tp
+        INNER JOIN
+            (
+            SELECT MIN(image_id) AS image_id, product_id
+            FROM tbl_product_images
+            GROUP BY product_id
+            ) AS first_image ON tp.product_id = first_image.product_id)
+        INNER JOIN
+            tbl_product_images tpi ON first_image.image_id = tpi.image_id)
+        WHERE tp.is_archived = 0 AND tp.quantity > 0"; // Exclude archived products and products with quantity less than 1
 
 				using (var productCmd = new SqlCommand(productSql, con))
 				{
@@ -126,6 +132,8 @@ namespace CloudDevPOE.Models
 							{
 								ProductID = (int)reader["product_id"],
 								ProductName = reader["name"].ToString(),
+								ProductCategory = reader["category"].ToString(),
+								ProductDescription = reader["description"].ToString(),
 								ProductPrice = (decimal)reader["price"],
 								ProductAvailability = (bool)reader["availability"],
 								ProductMainImageUrl = reader["image_url"].ToString()
@@ -146,7 +154,10 @@ namespace CloudDevPOE.Models
 			{
 				con.Open();
 				// Fetch the product details
-				string productSql = "SELECT * FROM tbl_products WHERE product_id = @ProductID";
+				string productSql = @"SELECT tblp.*, tblu.name AS seller_name
+                              FROM tbl_products tblp
+                              INNER JOIN tbl_users tblu ON tblp.user_id = tblu.user_id
+                              WHERE tblp.product_id = @ProductID";
 				using (var productCmd = new SqlCommand(productSql, con))
 				{
 					productCmd.Parameters.AddWithValue("@ProductID", productID);
@@ -157,10 +168,12 @@ namespace CloudDevPOE.Models
 							productDetails = new ProductDetailsViewModel
 							{
 								ProductID = productID,
-								UserID = (int)reader["user_id"],
+								SellerUserID = (int)reader["user_id"],
+								SellerName = reader["seller_name"].ToString(),
 								ProductName = reader["name"].ToString(),
 								ProductCategory = reader["category"].ToString(),
 								ProductDescription = reader["description"].ToString(),
+								AvailableQuantity = (int)reader["quantity"],
 								ProductPrice = (decimal)reader["price"],
 								ImageUrls = new List<string>() // Initialize the list to be filled
 							};
@@ -187,5 +200,91 @@ namespace CloudDevPOE.Models
 			}
 			return productDetails;
 		}
+
+		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
+		public async Task<List<ProductDetailsViewModel>> GetListedProductsAsync(int userID, string connectionString)
+		{
+			List<ProductDetailsViewModel> products = new List<ProductDetailsViewModel>();
+
+			using (var con = new SqlConnection(connectionString))
+			{
+				await con.OpenAsync();
+				string productSql = @"SELECT tblp.*, tblu.name AS seller_name, tpi.image_url AS main_image_url
+              FROM tbl_products tblp
+              INNER JOIN tbl_users tblu ON tblp.user_id = tblu.user_id
+              LEFT JOIN (
+                  SELECT MIN(image_id) AS image_id, product_id
+                  FROM tbl_product_images
+                  GROUP BY product_id
+              ) AS first_image ON tblp.product_id = first_image.product_id
+              LEFT JOIN tbl_product_images tpi ON first_image.image_id = tpi.image_id
+              WHERE tblp.user_id = @UserID AND tblp.is_archived = 0";
+				using (var productCmd = new SqlCommand(productSql, con))
+				{
+					productCmd.Parameters.AddWithValue("@UserID", userID);
+					using (var reader = await productCmd.ExecuteReaderAsync())
+					{
+						while (await reader.ReadAsync())
+						{
+							var product = new ProductDetailsViewModel
+							{
+								ProductID = (int)reader["product_id"],
+								SellerUserID = (int)reader["user_id"],
+								SellerName = reader["seller_name"].ToString(),
+								ProductName = reader["name"].ToString(),
+								ProductCategory = reader["category"].ToString(),
+								ProductDescription = reader["description"].ToString(),
+								AvailableQuantity = (int)reader["quantity"],
+								ProductPrice = (decimal)reader["price"],
+								ProductMainImageUrl = reader["main_image_url"] as string // Set the main image URL
+							};
+
+							products.Add(product);
+						}
+					}
+				}
+			}
+
+			return products;
+		}
+
+		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
+		public async Task AddQuantityAsync(int productId, int quantityToAdd, string connectionString)
+		{
+			using (var con = new SqlConnection(connectionString))
+			{
+				await con.OpenAsync();
+
+				string sql = "UPDATE tbl_products SET quantity = quantity + @QuantityToAdd WHERE product_id = @ProductId";
+
+				using (var cmd = new SqlCommand(sql, con))
+				{
+					cmd.Parameters.AddWithValue("@ProductId", productId);
+					cmd.Parameters.AddWithValue("@QuantityToAdd", quantityToAdd);
+
+					await cmd.ExecuteNonQueryAsync();
+				}
+			}
+		}
+
+		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
+		public async Task ArchiveProductAsync(int productId, string connectionString)
+		{
+			using (var con = new SqlConnection(connectionString))
+			{
+				await con.OpenAsync();
+
+				string sql = "UPDATE tbl_products SET is_archived = 1 WHERE product_id = @ProductId";
+
+				using (var cmd = new SqlCommand(sql, con))
+				{
+					cmd.Parameters.AddWithValue("@ProductId", productId);
+
+					await cmd.ExecuteNonQueryAsync();
+				}
+			}
+		}
+
+		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
 	}
 }
