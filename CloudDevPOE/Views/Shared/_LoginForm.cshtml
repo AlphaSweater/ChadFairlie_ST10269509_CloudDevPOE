@@ -1,62 +1,5 @@
-﻿
-<head>
-    <style>
-        .form {
-            --font-color: #333333;
-            --font-color-sub: #666666;
-            --bg-color: #fff;
-            --main-color: #323232;
-            --highlight-color: #eebefa;
-            padding: 20px;
-            background: #f0f0f0;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            justify-content: center;
-            align-items: center;
-            gap: 20px;
-            border-radius: 5px;
-            border: 2px solid var(--main-color);
-            box-shadow: 4px 4px var(--main-color);
-        }
-
-        .title {
-            color: var(--font-color);
-            font-weight: 900;
-            font-size: 22px;
-            margin-bottom: 25px;
-        }
-
-            .title span {
-                color: var(--font-color-sub);
-                font-weight: 600;
-                font-size: 17px;
-            }
-
-        .inputbox {
-            width: 250px;
-            height: 40px;
-            border-radius: 5px;
-            border: 2px solid var(--main-color);
-            background-color: var(--bg-color);
-            box-shadow: 4px 4px var(--main-color);
-            font-size: 15px;
-            font-weight: 600;
-            color: var(--font-color);
-            padding: 5px 10px;
-            outline: none;
-        }
-
-            .inputbox::placeholder {
-                color: var(--font-color-sub);
-                opacity: 0.8;
-            }
-
-            .inputbox:focus {
-                transform: translateY(4px);
-                box-shadow: 1px 2px 0px 0px var(--highlight-color);
-            }
-
+﻿<head>
+	<style>
 		.modal-dialog {
 			display: flex;
 			align-items: center;
@@ -64,45 +7,84 @@
 			min-height: calc(100% - (1.75rem * 2));
 		}
 
-        .button-log {
-            cursor: pointer;
-            width: 40px;
-            height: 40px;
-            border-radius: 100%;
-            border: 2px solid var(--main-color);
-            background-color: var(--bg-color);
-            box-shadow: 4px 4px var(--main-color);
-            color: var(--font-color);
-            font-size: 25px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+		.form {
+			--font-color: #333333;
+			--font-color-sub: #666666;
+			--bg-color: #fff;
+			--main-color: #323232;
+			--highlight-color: #eebefa;
+            background: #f0f0f0;
+			display: flex;
+			flex-direction: column;
+			align-items: flex-start;
+			justify-content: center;
+			align-items: center;
+			gap: 20px;
+			border-radius: 10px;
+			padding: 50px;
+		}
 
-        .icon {
-            width: 24px;
-            height: 24px;
-            fill: var(--main-color);
-        }
+		.title {
+			color: var(--font-color);
+			font-weight: 900;
+			font-size: 26px;
+			text-align: center;
+		}
 
-        .button-log:active, .button-confirm:active {
-            box-shadow: 0px 0px var(--highlight-color);
-            transform: translate(3px, 3px);
-        }
+			.title span {
+				color: var(--font-color-sub);
+				font-weight: 600;
+				font-size: 20px;
+			}
 
-        .button-confirm {
-            margin: 50px auto 0 auto;
-            width: 120px;
-            height: 40px;
-            border-radius: 5px;
-            border: 2px solid var(--main-color);
-            background-color: var(--bg-color);
-            box-shadow: 4px 4px var(--main-color);
-            font-size: 17px;
-            font-weight: 600;
-            color: var(--font-color);
-            cursor: pointer;
-        }
+		.inputbox {
+			width: 300px;
+			height: 45px;
+			border-radius: 10px;
+			border: 2px solid var(--main-color);
+			background-color: var(--bg-color);
+			box-shadow: 4px 4px var(--main-color);
+			font-size: 17px;
+			font-weight: 600;
+			color: var(--font-color);
+			padding: 10px;
+			outline: none;
+			transition: box-shadow 0.2s, transform 0.2s;
+		}
+
+			.inputbox::placeholder {
+				color: var(--font-color-sub);
+				opacity: 0.8;
+			}
+
+			.inputbox:focus {
+				transform: translateY(4px);
+				box-shadow: 1px 2px 0px 0px var(--highlight-color);
+			}
+
+		.button-confirm {
+			margin: 20px auto 0 auto;
+			width: 150px;
+			height: 45px;
+			border-radius: 10px;
+			border: 2px solid var(--main-color);
+			background-color: var(--bg-color);
+			box-shadow: 4px 4px var(--main-color);
+			font-size: 18px;
+			font-weight: 600;
+			color: var(--font-color);
+			cursor: pointer;
+			transition: background-color 0.2s, transform 0.2s, box-shadow 0.2s;
+		}
+
+			.button-confirm:hover {
+				background-color: #f0f0f0;
+			}
+
+			.button-confirm:active {
+				box-shadow: 0px 0px var(--highlight-color);
+				transform: translateY(2px);
+			}
 
 		.error-bar {
 			width: 100%;
@@ -110,23 +92,42 @@
 			color: #cc0000; /* Dark red */
 			padding: 10px;
 			text-align: center;
+			border-radius: 5px;
+			border: 1px solid #ffaaaa;
 			display: none; /* Initially hidden */
+			margin-top: -10px;
 		}
-    </style>
+	</style>
 </head>
 
-<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <form id="loginForm" method="post" action="" class="form">
-                <div class="title">Welcome,<br><span>login to continue</span></div>
-                <input type="email" placeholder="Email" name="email" class="inputbox" required>
-                <input type="password" placeholder="Password" name="password" class="inputbox" required>
-                
+<div class="modal fade" id="authModal" tabindex="-1" role="dialog" aria-labelledby="authModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<!-- Login Form -->
+			<form id="loginForm" method="post" action="" class="form">
+				<div class="title">Welcome,<br><span>login to continue</span></div>
+				<img src="~/images/logos/logo_1.png" alt="Logo" style="width: 250px; height: auto; display: block; margin: 0 auto;">
+				<input type="email" placeholder="Email" name="login-email" class="inputbox" required>
+				<input type="password" placeholder="Password" name="login-password" class="inputbox" required>
 				<div id="errorBar" class="error-bar"></div>
+				<button type="submit" class="button-confirm">Let's go →</button>
+				<button type="button" id="switchToSignup" class="button-switch">Sign Up</button>
+			</form>
 
-				<button type="submit" class="button-confirm">Let`s go →</button>
-            </form>
-        </div>
-    </div>
+			<!-- Signup Form -->
+			<form id="signupForm" method="post" action="" class="form" style="display: none;">
+				<div class="title">Welcome,<br><span>create an account</span></div>
+				<img src="~/images/logos/logo_1.png" alt="Logo" style="width: 250px; height: auto; display: block; margin: 0 auto;">
+				<input type="text" placeholder="Name" name="signup-name" class="inputbox" required>
+				<input type="text" placeholder="Surname" name="signup-surname" class="inputbox" required>
+				<input type="email" placeholder="Email" name="signup-email" class="inputbox" required>
+				<input type="password" placeholder="Password" name="signup-password" class="inputbox" required>
+				<input type="password" placeholder="Confirm Password" name="signup-confirmPassword" class="inputbox" required>
+				<div id="errorBarSignup" class="error-bar"></div>
+				<button type="submit" class="button-confirm">Sign Up</button>
+				<button type="button" id="switchToLogin" class="button-switch">Log In</button>
+			</form>
+		</div>
+	</div>
 </div>
+

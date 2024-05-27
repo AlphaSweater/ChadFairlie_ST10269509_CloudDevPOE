@@ -212,6 +212,7 @@ namespace CloudDevPOE.Controllers
 
 			return Json(new { success = true, message = "Stock updated successfully" });
 		}
+
 		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
 		[HttpPost]
 		public async Task<JsonResult> ArchiveProduct(int productId)
@@ -220,7 +221,6 @@ namespace CloudDevPOE.Controllers
 			await productsModel.ArchiveProductAsync(productId, _configuration.GetConnectionString("DefaultConnection"));
 			return Json(new { success = true });
 		}
-
 
 		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
 	}
