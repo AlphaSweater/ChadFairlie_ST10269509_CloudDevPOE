@@ -142,13 +142,14 @@ namespace CloudDevPOE.Models
 			{
 				con.Open();
 				string sql = @"SELECT SUM(p.price * ci.quantity) AS TotalValue
-					   FROM tbl_cart_items ci
-					   JOIN tbl_products p ON ci.product_id = p.product_id
-					   WHERE ci.cart_id = @CartID";
+                FROM tbl_cart_items ci
+                JOIN tbl_products p ON ci.product_id = p.product_id
+                WHERE ci.cart_id = @CartID";
 				using (SqlCommand cmd = new SqlCommand(sql, con))
 				{
 					cmd.Parameters.AddWithValue("@CartID", cartId);
-					total = (decimal)cmd.ExecuteScalar();
+					object result = cmd.ExecuteScalar();
+					total = result == DBNull.Value ? 0 : (decimal)result;
 				}
 			}
 

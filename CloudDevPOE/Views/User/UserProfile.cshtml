@@ -299,6 +299,7 @@
 			$('.RemoveItem').on('click', function (event) {
 				event.preventDefault();
 				var url = $(this).attr('href');
+				var row = $(this).closest('tr');
 
 				Swal.fire({
 					title: 'Are you sure?',
@@ -314,11 +315,14 @@
 							type: 'POST',
 							async: true,
 							success: function (result) {
-								$('#cart-total').text(result.newTotal);
-								$('#cart-total-summary').text(result.newTotal);
-
 								// Remove the item row from the table
-								$(event.target).closest('tr').remove();
+								row.remove();
+
+								// Update the cart total on the page
+								$('#cart-total-summary').text(result.newTotal);
+							},
+							error: function (jqXHR, textStatus, errorThrown) {
+								console.error('AJAX error: ' + textStatus + ', ' + errorThrown);
 							}
 						});
 						Swal.fire(
@@ -329,6 +333,8 @@
 					}
 				});
 			});
+
+
 
 			$('.CheckOut').on('click', function (event) {
 				event.preventDefault();
