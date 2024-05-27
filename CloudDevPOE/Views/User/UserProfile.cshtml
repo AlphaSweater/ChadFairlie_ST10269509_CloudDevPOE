@@ -183,6 +183,9 @@
 					<tbody id="my-listings-body">
 						@foreach (var product in Model.ListedProducts)
 						{
+							var productID = product.ProductID;
+							var availableQuantity = product.AvailableQuantity;
+							var minSpinValue = availableQuantity * -0;
 							<tr class="listing-row">
 								<td>@product.ProductID</td>
 								<td><img src="@product.ProductMainImageUrl" alt="@product.ProductName" class="img-thumbnail" width="100" height="auto" /></td>
@@ -191,7 +194,7 @@
 								<td class="stock-amount">@product.AvailableQuantity</td>
 								<td>
 									<div class="stock-update">
-										<input type="number" class="form-control stock-input" data-product-id="@product.ProductID" value="0" />
+										<input type="number" class="form-control stock-input" data-product-id="@product.ProductID" value="0" min="@minSpinValue"/>
 										<button class="btn btn-sm btn-success add-stock" data-product-id="@product.ProductID">Add Stock</button>
 									</div>
 									<button type="button" class="btn btn-danger archive-button" data-product-id="@product.ProductID">Delete</button>
@@ -288,7 +291,7 @@
 			// Apply stock level classes
 			$('#my-listings-body .listing-row').each(function () {
 				var stockAmount = parseInt($(this).find('.stock-amount').text());
-				if (stockAmount === 0) {
+				if (stockAmount <= 0) {
 					$(this).addClass('stock-out');
 				} else if (stockAmount < 5) {
 					$(this).addClass('stock-low');
@@ -319,6 +322,45 @@
 						var formattedTotal = new Intl.NumberFormat('en-ZA', { style: 'currency', currency: 'ZAR' }).format(itemTotal);
 						formattedTotal = formattedTotal.replace(/^(\D+)\s/, '$1');
 						$('.item-total[data-cart-item-id="' + cartItemId + '"]').text(formattedTotal);
+					}
+				});
+			});
+
+			$('.archive-button').click(function () {
+				var button = $(this);
+				var productId = button.data('product-id');
+
+				Swal.fire({
+					title: 'Are you sure?',
+					text: "You are about to delete the product with ID " + productId,
+					icon: 'warning',
+					showCancelButton: true,
+					confirmButtonColor: '#3085d6',
+					cancelButtonColor: '#d33',
+					confirmButtonText: 'Yes, delete it!'
+				}).then((result) => {
+					if (result.isConfirmed) {
+						$.ajax({
+							url: '@Url.Action("ArchiveProduct", "User")',
+							type: 'POST',
+							data: { productId: productId },
+							success: function (response) {
+								if (response.success) {
+									button.closest('tr').remove();
+									Swal.fire(
+										'Deleted!',
+										'The product has been deleted.',
+										'success'
+									);
+								} else {
+									Swal.fire(
+										'Error!',
+										'An error occurred while deleting the product.',
+										'error'
+									);
+								}
+							}
+						});
 					}
 				});
 			});
@@ -449,7 +491,7 @@
 									// Update the row's class based on new stock level
 									var row = button.closest('tr');
 									row.removeClass('stock-out stock-low stock-high');
-									if (newStock === 0) {
+									if (newStock <= 0) {
 										row.addClass('stock-out');
 									} else if (newStock < 5) {
 										row.addClass('stock-low');
