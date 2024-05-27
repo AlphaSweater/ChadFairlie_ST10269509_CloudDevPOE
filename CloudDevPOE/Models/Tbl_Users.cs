@@ -37,7 +37,7 @@ namespace CloudDevPOE.Models
 		public string? Password { get; set; }
 
 		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
-		public int InsertUser(Tbl_Users m, string connectionString)
+		public int? InsertUser(Tbl_Users m, string connectionString)
 		{
 			using (var con = new SqlConnection(connectionString))
 			{
@@ -50,7 +50,7 @@ namespace CloudDevPOE.Models
 						var passwordHasher = new PasswordHasher<IdentityUser>();
 						var passwordHash = passwordHasher.HashPassword(user: null, password: m.Password);
 
-						string sql = "INSERT INTO tbl_users (name, surname, email, password_hash) VALUES (@UserName, @UserSurname, @UserEmail, @PasswordHash)";
+						string sql = "INSERT INTO tbl_users (name, surname, email, password_hash) OUTPUT INSERTED.user_id VALUES (@UserName, @UserSurname, @UserEmail, @PasswordHash)";
 						using (SqlCommand cmd = new SqlCommand(sql, con, transaction))
 						{
 							cmd.Parameters.AddWithValue("@UserName", m.Name);
@@ -58,9 +58,9 @@ namespace CloudDevPOE.Models
 							cmd.Parameters.AddWithValue("@UserEmail", m.Email);
 							cmd.Parameters.AddWithValue("@PasswordHash", passwordHash);
 
-							int result = cmd.ExecuteNonQuery();
+							var result = cmd.ExecuteScalar();
 							transaction.Commit(); // Commit the transaction
-							return result;
+							return (result != null) ? (int?)result : null;
 						}
 					}
 					catch (Exception)

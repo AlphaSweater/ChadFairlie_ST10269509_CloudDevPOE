@@ -24,13 +24,6 @@ namespace CloudDevPOE.Controllers
 		}
 
 		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
-		[HttpGet]
-		public ActionResult SignUp()
-		{
-			return View();
-		}
-
-		//--------------------------------------------------------------------------------------------------------------------------//
 		[HttpPost]
 		public IActionResult SignUp(Tbl_Users user)
 		{
@@ -39,13 +32,19 @@ namespace CloudDevPOE.Controllers
 				var connectionString = _configuration.GetConnectionString("DefaultConnection");
 
 				// Pass the connection string to Insert_User
-				int rowsAffected = user.InsertUser(user, connectionString);
-				if (rowsAffected > 0)
+				int? userId = user.InsertUser(user, connectionString);
+				if (userId.HasValue)
 				{
-					return RedirectToAction("Index", "Home");
+					// Set the user's ID in the session
+					_httpContextAccessor.HttpContext.Session.SetInt32("UserId", userId.Value);
+					return Json(new { success = true });
+				}
+				else
+				{
+					return Json(new { success = false, message = "Failed to create user." });
 				}
 			}
-			return View(user);
+			return Json(new { success = false, message = "Invalid data." });
 		}
 
 		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//

@@ -178,8 +178,17 @@ function showLoginModalAndSubmitForm() {
 			data: { name: name, surname: surname, email: email, password: password },
 			success: function (data) {
 				if (data.success) {
-					// Signup was successful, refresh the page
-					location.reload();
+					// Signup was successful, show the SweetAlert2 confirmation message
+					Swal.fire({
+						icon: 'success',
+						title: 'Signup successful',
+						text: 'You have been signed up and logged in successfully.',
+					}).then((result) => {
+						// Refresh the page after the user closes the SweetAlert2 message
+						if (result.isConfirmed) {
+							location.reload();
+						}
+					});
 				} else {
 					// Show the error message in the error bar
 					$('#errorBarSignup').text(data.message).show();
