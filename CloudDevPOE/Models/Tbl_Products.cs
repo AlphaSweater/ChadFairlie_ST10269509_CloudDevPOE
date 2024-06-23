@@ -146,6 +146,54 @@ namespace CloudDevPOE.Models
 		}
 
 		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
+		public ProductSummaryViewModel GetProductSummaryById(int productId, string connectionString)
+		{
+			ProductSummaryViewModel productSummary = null;
+
+			using (var con = new SqlConnection(connectionString))
+			{
+				con.Open();
+				string productSql =
+				@"SELECT
+            tp.product_id,
+            tp.name,
+            tp.category,
+            tp.description,
+            tp.price,
+            tp.availability,
+            tpi.image_url
+        FROM
+            tbl_products tp
+        INNER JOIN
+            tbl_product_images tpi ON tp.product_id = tpi.product_id
+        WHERE tp.product_id = @ProductId AND tp.is_archived = 0";
+
+				using (var productCmd = new SqlCommand(productSql, con))
+				{
+					productCmd.Parameters.AddWithValue("@ProductId", productId);
+
+					using (var reader = productCmd.ExecuteReader())
+					{
+						if (reader.Read())
+						{
+							productSummary = new ProductSummaryViewModel
+							{
+								ProductID = (int)reader["product_id"],
+								ProductName = reader["name"].ToString(),
+								ProductCategory = reader["category"].ToString(),
+								ProductDescription = reader["description"].ToString(),
+								ProductPrice = (decimal)reader["price"],
+								ProductAvailability = (bool)reader["availability"],
+								ProductMainImageUrl = reader["image_url"].ToString()
+							};
+						}
+					}
+				}
+			}
+			return productSummary;
+		}
+
+		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
 		public ProductDetailsViewModel ViewProduct(int productID, string connectionString)
 		{
 			ProductDetailsViewModel productDetails = null;

@@ -1,6 +1,7 @@
 ﻿// Ignore Spelling: Accessor
 
 using CloudDevPOE.Models;
+using CloudDevPOE.Services;
 using CloudDevPOE.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,19 +16,22 @@ namespace CloudDevPOE.Controllers
 
 		private readonly IConfiguration _configuration;
 
+		private readonly SearchService _searchService;
+
 		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
 		// Inject IHttpContextAccessor, IWebHostEnvironment and IConfiguration into the controller's constructor
-		public ProductsController(IHttpContextAccessor httpContextAccessor, IWebHostEnvironment webHostEnvironment, IConfiguration configuration)
+		public ProductsController(IHttpContextAccessor httpContextAccessor, IWebHostEnvironment webHostEnvironment, IConfiguration configuration, SearchService searchService)
 			: base(httpContextAccessor, webHostEnvironment, configuration)
 		{
 			_httpContextAccessor = httpContextAccessor;
 			_webHostEnvironment = webHostEnvironment;
 			_configuration = configuration;
+			_searchService = searchService;
 		}
 
 		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
 		[HttpGet]
-		public IActionResult MyWork()
+		public async Task<IActionResult> MyWork(string search = "")
 		{
 			// Set the user details for the view and set the ViewData property
 			ViewData["UserDetails"] = SetUserDetails();
@@ -35,10 +39,27 @@ namespace CloudDevPOE.Controllers
 			var connectionString = _configuration.GetConnectionString("DefaultConnection");
 			Tbl_Products productsModel = new Tbl_Products();
 
-			// Fetch the list of product summaries
-			List<ProductSummaryViewModel> productSummaries = productsModel.ListProducts(connectionString);
+			List<ProductSummaryViewModel> productSummaries;
 
-			// Pass the list to the MyWork view
+			if (string.IsNullOrWhiteSpace(search))
+			{
+				// Fetch all products if no search term is provided
+				productSummaries = productsModel.ListProducts(connectionString);
+			}
+			else
+			{
+				// Perform search using Azure Cognitive Search
+				var searchResults = await _searchService.SearchProductsAsync(search);
+				productSummaries = searchResults.Select(doc =>
+				{
+					int searchId = int.Parse(doc["product_id"].ToString());
+
+					var productSummary = productsModel.GetProductSummaryById(searchId, connectionString);
+
+					return productSummary;
+				}).ToList();
+			}
+
 			return View(productSummaries);
 		}
 
@@ -91,7 +112,7 @@ namespace CloudDevPOE.Controllers
 
 		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
 		[HttpGet]
-		public IActionResult ViewProduct(int id, string color)
+		public IActionResult ViewProduct(int id, string color = "--color-light-purple")
 		{
 			// Set the user details for the view and set the ViewData property
 			ViewData["UserDetails"] = SetUserDetails();
@@ -131,6 +152,23 @@ namespace CloudDevPOE.Controllers
 			await cartItemsModel.AddItemToCartAsync(cartId, productId, quantity, connectionString);
 
 			return Json(new { success = true, message = "Product added to cart" });
+		}
+
+		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//
+		[HttpGet]
+		public async Task<IActionResult> GetSuggestions(string query)
+		{
+			var suggestions = await _searchService.GetSuggestionsAsync(query);
+			var suggestionResults = suggestions.Select(doc => new
+			{
+				Id = doc["product_id"].ToString(),
+				Name = doc["name"].ToString(),
+				Category = doc["category"].ToString(),
+				Price = doc["price"].ToString(),
+				Description = doc["description"].ToString()
+			});
+
+			return Json(suggestionResults);
 		}
 
 		//<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>//

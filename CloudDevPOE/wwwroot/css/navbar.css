@@ -89,6 +89,28 @@ nav {
 	height: 1rem;
 }
 
+/* Suggestions container */
+.suggestions-container {
+	position: absolute;
+	width: 100%; /* Adjust width as needed */
+	max-height: 200px; /* Adjust max-height as needed */
+	overflow-y: auto;
+	background-color: #fff;
+	border: 1px solid #ccc;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	z-index: 1000;
+}
+
+.suggestion-item {
+	padding: 10px;
+	cursor: pointer;
+	border-bottom: 1px solid #eee; /* Optional: Add a border between suggestions */
+}
+
+	.suggestion-item:last-child {
+		border-bottom: none; /* Remove border from last suggestion item */
+	}
+
 @media (max-width: 85.375em) { /* 1366px */
 	.group {
 		display: flex;
