@@ -183,14 +183,16 @@
     <script>
         var mainContent = document.querySelector('.main-content');
         var scrollSpeed = 0.9; // Adjust this value to change the scroll speed
+		var disableCustomScroll = false; // Flag to control custom scroll behavior
 
-        document.body.addEventListener('wheel', function (e) {
-            if (!mainContent.contains(e.target)) {
-                var to = mainContent.scrollTop + e.deltaY * scrollSpeed;
-                mainContent.scrollTop = to;
-                e.preventDefault();
-            }
-        });
+
+		document.body.addEventListener('wheel', function (e) {
+			if (!mainContent.contains(e.target) && !disableCustomScroll) {
+				var to = mainContent.scrollTop + e.deltaY * scrollSpeed;
+				mainContent.scrollTop = to;
+				e.preventDefault();
+			}
+		});
 
 		document.addEventListener("DOMContentLoaded", function () {
 			var searchBox = document.getElementById("searchBox");
@@ -218,17 +220,29 @@
 				}
 			}
 
+			function disableScroll() {
+				disableCustomScroll = true; // Disable custom scroll
+			}
+
+			function enableScroll() {
+				disableCustomScroll = false; // Re-enable custom scroll
+			}
+
 			function displaySuggestions(suggestions) {
 				clearSuggestions();
 				let suggestionsContainer = document.createElement("div");
 				suggestionsContainer.className = "suggestions-container";
 
+				// Add event listeners to disable and enable custom scroll
+				suggestionsContainer.addEventListener('mouseenter', disableScroll);
+				suggestionsContainer.addEventListener('mouseleave', enableScroll);
+
 				suggestions.forEach(suggestion => {
 					let suggestionElement = document.createElement("div");
 					suggestionElement.className = "suggestion-item";
 					suggestionElement.innerHTML = `<h4>${suggestion.name}</h4>
-							<p>Category: ${suggestion.category}</p>
-							<p>Description: ${suggestion.description}</p>`;
+						<p>Category: ${suggestion.category}</p>
+						<p>Description: ${suggestion.description}</p>`;
 					suggestionElement.addEventListener("click", function () {
 						window.location.href = `/Products/ViewProduct?id=${suggestion.id}`;
 					});
@@ -242,6 +256,7 @@
 
 				document.body.appendChild(suggestionsContainer);
 			}
+
 
 			function clearSuggestions() {
 				let suggestionsContainer = document.querySelector(".suggestions-container");
