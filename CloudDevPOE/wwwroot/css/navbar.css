@@ -1,69 +1,60 @@
 ﻿/* ==================== NAVIGATION BAR CSS ==================== */
 .navbar {
-	position: sticky;
-	background-color: white;
-	top: 0;
-	width: 100%;
-	border-radius: 0.625rem; /* 10px */
-	z-index: 1000;
 	display: flex;
-	justify-content: space-between;
+	flex-wrap: nowrap !important;
+	background-color: white;
+	border-radius: 10px;
+	z-index: 1000;
 	align-items: center;
-	padding: 0 1.25rem; /* 20px */
+	padding: 0 1.25rem;
 }
 
 .navbar-brand img {
-	width: 12.5rem; /* 200px */
+	width: 12.5rem;
 	height: auto;
 }
 
 .nav-left, .nav-right {
 	display: flex;
 	align-items: center;
+	flex-shrink: 1;
+}
+
+.nav-right {
+	justify-content: flex-end;
+	flex-shrink: 6;
 }
 
 nav {
 	display: flex;
-	flex-wrap: wrap;
+	flex-wrap: nowrap;
 	align-items: center;
 }
 
 	nav .link, nav .dropdown, nav .group {
-		margin-right: 0.625rem; /* 10px */
+		margin-right: 0.625rem;
 	}
-
-@media (max-width: 85.375em) { /* 1366px */
-	.navbar-brand img {
-		width: 6.25rem; /* 100px */
-	}
-
-	.group {
-		max-width: 9.375rem; /* 150px */
-	}
-
-	.nav-link, .welcome-message {
-		font-size: 0.75rem; /* 12px */
-	}
-}
 
 /* ===== SEARCH BAR ===== */
 .group {
 	display: flex;
-	line-height: 1.75rem; /* 28px */
+	flex-wrap: nowrap;
+	line-height: 1.75rem;
 	align-items: center;
 	position: relative;
-	max-width: 11.875rem; /* 190px */
-	margin-right: 0.9375rem; /* 15px */
+	margin-right: 0.9375rem;
+	flex-shrink: 2;
+	min-width: 100px; /* Set a min-width to prevent it from shrinking too much */
 }
 
 .input {
 	width: 100%;
-	height: 2.5rem; /* 40px */
-	line-height: 1.75rem; /* 28px */
+	height: 2.5rem;
+	line-height: 1.75rem;
 	padding: 0 1rem;
 	padding-left: 2.5rem;
-	border: 0.125rem solid transparent; /* 2px */
-	border-radius: 0.5rem; /* 8px */
+	border: 0.125rem solid transparent;
+	border-radius: 0.5rem;
 	outline: none;
 	background-color: #f3f3f4;
 	color: #0d0c22;
@@ -78,7 +69,7 @@ nav {
 		outline: none;
 		border-color: rgba(234,76,137,0.4);
 		background-color: #fff;
-		box-shadow: 0 0 0 0.25rem rgb(234 76 137 / 10%); /* 4px */
+		box-shadow: 0 0 0 0.25rem rgb(234 76 137 / 10%);
 	}
 
 .icon {
@@ -92,8 +83,8 @@ nav {
 /* Suggestions container */
 .suggestions-container {
 	position: absolute;
-	width: 100%; /* Adjust width as needed */
-	max-height: 70vh; /* Adjust max-height as needed */
+	width: 100%;
+	max-height: 70vh;
 	overflow-y: auto;
 	background-color: #fff;
 	border: 1px solid #ccc;
@@ -104,28 +95,16 @@ nav {
 .suggestion-item {
 	padding: 10px;
 	cursor: pointer;
-	border-bottom: 1px solid #eee; /* Optional: Add a border between suggestions */
+	border-bottom: 1px solid #eee;
 }
 
 	.suggestion-item:last-child {
-		border-bottom: none; /* Remove border from last suggestion item */
+		border-bottom: none;
 	}
-
-@media (max-width: 85.375em) { /* 1366px */
-	.group {
-		display: flex;
-		line-height: 1.75rem; /* 28px */
-		align-items: center;
-		position: relative;
-		max-width: 8.125rem; /* 130px */
-		margin-right: 0.625rem; /* 10px */
-	}
-}
 
 /* ===== NAV BUTTONS ===== */
 .nav-buttons {
 	display: flex;
-	gap: 15px; /* Gap control */
 	align-items: center;
 	justify-content: flex-start;
 }
@@ -139,8 +118,6 @@ nav {
 }
 
 .nav-link {
-	min-width: 93px;
-	/*	height: 36px;*/
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -157,33 +134,14 @@ nav {
 	padding: 2px 0;
 }
 
-@media (max-width: 1366px) {
-	.nav-buttons {
-		display: flex;
-		gap: 5px; /* Gap control */
-		align-items: center;
-		justify-content: flex-start;
-	}
-
-	.nav-link {
-		min-width: 93px;
-		/*	height: 36px;*/
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		border: 2px solid transparent;
-		border-radius: 8px;
-		background: none;
-		text-decoration: none;
+	/* Reused styles for nav buttons */
+	.nav-link:hover, .user-dropdown-menu {
+		outline: none;
+		border-color: rgba(234,76,137,0.4);
+		background-color: #fff;
+		box-shadow: 0 0 0 4px rgb(234 76 137 / 10%);
 		color: #777;
-		font-family: inherit;
-		font-size: inherit;
-		cursor: pointer;
-		padding: 0;
-		text-align: center;
-		padding: 2px 0;
 	}
-}
 
 /* ===== ICONS AND BADGE ===== */
 .bx-icon {
@@ -214,7 +172,6 @@ nav {
 	position: absolute;
 	top: calc(100% + 10px);
 	right: 0;
-	background-color: white;
 	padding: 10px;
 	border-radius: 8px;
 	box-shadow: 0 0 0 4px rgb(234 76 137 / 10%);
@@ -265,30 +222,70 @@ nav {
 		color: rgba(234,76,137,1);
 	}
 
-/* Reused styles for nav buttons */
-.nav-link:hover, .user-dropdown-menu {
-	outline: none;
-	border-color: rgba(234,76,137,0.4);
-	background-color: #fff;
-	box-shadow: 0 0 0 4px rgb(234 76 137 / 10%);
-	color: #777;
+/* Adjust Font Sizes and Margins for Smaller Screens */
+@media (max-width: 1366px) {
+	.navbar-brand img {
+		width: 6.25rem; /* 100px */
+	}
+
+	.group {
+		max-width: 8.125rem; /* 130px */
+	}
+
+	.nav-link, .welcome-message {
+		font-size: 0.75rem; /* 12px */
+		padding: 0 0.5rem; /* Adjust padding */
+	}
+
+	.nav-buttons {
+		gap: 10px; /* Adjust gap */
+	}
 }
 
-.nav-link {
-	min-width: 93px;
-	/*	height: 36px;*/
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	border: 2px solid transparent;
-	border-radius: 8px;
-	background: none;
-	text-decoration: none;
-	color: #777;
-	font-family: inherit;
-	font-size: inherit;
-	cursor: pointer;
-	padding: 0;
-	text-align: center;
-	padding: 2px 0;
+/* Further Adjustments for Even Smaller Screens */
+@media (max-width: 1024px) {
+	.navbar-brand img {
+		width: 5rem; /* 80px */
+	}
+
+	.group {
+		max-width: 6.25rem; /* 100px */
+	}
+
+	.nav-link, .welcome-message {
+		font-size: 0.7rem; /* 11.2px */
+		padding: 0 0.3rem; /* Adjust padding */
+	}
+
+	.nav-buttons {
+		gap: 5px; /* Adjust gap */
+	}
+
+	.navbar {
+		padding: 0 0.625rem; /* 10px */
+	}
+}
+
+/* Additional Styling for Very Small Screens (Optional) */
+@media (max-width: 768px) {
+	.navbar-brand img {
+		width: 4rem; /* 64px */
+	}
+
+	.group {
+		max-width: 5rem; /* 80px */
+	}
+
+	.nav-link, .welcome-message {
+		font-size: 0.6rem; /* 9.6px */
+		padding: 0 0.2rem; /* Adjust padding */
+	}
+
+	.nav-buttons {
+		gap: 3px; /* Adjust gap */
+	}
+
+	.navbar {
+		padding: 0 0.3125rem; /* 5px */
+	}
 }
