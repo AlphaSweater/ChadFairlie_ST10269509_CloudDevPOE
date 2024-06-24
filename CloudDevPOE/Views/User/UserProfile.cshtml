@@ -316,7 +316,7 @@
 				var stockAmount = parseInt($(this).find('.stock-amount').text());
 				if (stockAmount <= 0) {
 					$(this).addClass('stock-out');
-				} else if (stockAmount < 5) {
+				} else if (stockAmount < 5 && stockAmount > 0 {
 					$(this).addClass('stock-low');
 				} else {
 					$(this).addClass('stock-high');
