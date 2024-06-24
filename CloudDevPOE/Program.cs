@@ -1,3 +1,10 @@
+using Azure.Search.Documents;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
+using System;
+using Azure;
+using CloudDevPOE.Services;
+
 namespace CloudDevPOE
 {
 	public class Program
@@ -23,6 +30,21 @@ namespace CloudDevPOE
 			// Explicitly add IConfiguration to the DI container.
 			builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
 
+			// Add the SearchClient
+			builder.Services.AddSingleton(serviceProvider =>
+			{
+				var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+				var searchServiceName = configuration["SearchServiceName"];
+				var apiKey = new AzureKeyCredential(configuration["SearchApiKey"]);
+				var indexName = configuration["SearchIndexName"];
+
+				var endpoint = $"https://{searchServiceName}.search.windows.net";
+
+				return new SearchClient(new Uri(endpoint), indexName, apiKey);
+			});
+
+			// Add the SearchService
+			builder.Services.AddSingleton<SearchService>();
 
 			var app = builder.Build();
 

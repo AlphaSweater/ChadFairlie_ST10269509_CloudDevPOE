@@ -1,11 +1,5 @@
 html {
-	font-size: 14px;
-}
-
-@media (min-width: 768px) {
-	html {
-		font-size: 16px;
-	}
+	font-size: 16px;
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
@@ -21,8 +15,21 @@ body {
 	margin-bottom: 60px;
 }
 
+/* Adjust Font Sizes Based on Screen Width */
 @media (max-width: 1366px) {
 	html {
-		font-size: 12px; /* Adjust as needed */
+		font-size: 14px;
+	}
+}
+
+@media (max-width: 1024px) {
+	html {
+		font-size: 12px;
+	}
+}
+
+@media (max-width: 768px) {
+	html {
+		font-size: 10px;
 	}
 }
