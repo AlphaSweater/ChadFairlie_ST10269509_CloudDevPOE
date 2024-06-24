@@ -316,7 +316,7 @@
 				var stockAmount = parseInt($(this).find('.stock-amount').text());
 				if (stockAmount <= 0) {
 					$(this).addClass('stock-out');
-				} else if (stockAmount < 5 && stockAmount > 0 {
+				} else if (stockAmount < 5 && stockAmount > 0) {
 					$(this).addClass('stock-low');
 				} else {
 					$(this).addClass('stock-high');
@@ -363,7 +363,7 @@
 							}
 							break;
 						case 'high':
-							if (stockAmount < 5) {
+							if (stockAmount < 5 && stockAmount > 0) {
 								$(this).hide();
 							} else {
 								$(this).show();
@@ -566,7 +566,7 @@
 									row.removeClass('stock-out stock-low stock-high');
 									if (newStock <= 0) {
 										row.addClass('stock-out');
-									} else if (newStock < 5) {
+									} else if (newStock < 5 && newStock > 0) {
 										row.addClass('stock-low');
 									} else {
 										row.addClass('stock-high');
